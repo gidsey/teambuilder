@@ -1,5 +1,8 @@
-from django.shortcuts import render
+
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 
 def index(request):
-    return render(request, 'index.html')
+    return HttpResponseRedirect(reverse("projects:project_listing"))
+

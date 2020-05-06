@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def project_listing(request):
+    return render(request, 'projects/project_listing.html')
