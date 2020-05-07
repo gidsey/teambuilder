@@ -8,10 +8,10 @@
       <form method="POST" action="{% url 'accounts:sign_up' %}">
           {% csrf_token %}
 
-        <input type="email" placeholder="Email Address" />
-        <input type="password" placeholder="Password" />
-        <input type="password" placeholder="Confirm Password" />
-<hr>
+{#        <input type="email" placeholder="Email Address" />#}
+{#        <input type="password" placeholder="Password" />#}
+{#        <input type="password" placeholder="Confirm Password" />#}
+{#<hr>#}
 
         {{ form.email }}
         {{ form.password1 }}
