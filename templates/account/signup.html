@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% load account %}
-{% load static %}
+
 {% block title %}Sign Up | Create your account{% endblock %}
 {% block body %}
   <div class="bounds">
@@ -12,8 +12,7 @@
         {{ form.password1 }}
         {{ form.password2 }}
         <button class="button-primary">Sign Up</button>
-
-{#        <a class="button" href="{% url "account_signin" %}">Sign In</a>#}
+        <a class="button" href="{% url "account_login" %}">Sign In</a>
       </form>
     </div>
   </div>
