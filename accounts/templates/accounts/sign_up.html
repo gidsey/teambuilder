@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}Sign Up | Create your account{% endblock %}
+{% block body %}
+  <div class="bounds">
+    <div class="grid-30 centered">
+      <h2>Sign Up</h2>
+{#      <form method="POST" action="{% url 'accounts:sign_up' %}">#}
+           <form>
+          {% csrf_token %}
+        {{ form.email }}
+        {{ form.password1 }}
+        {{ form.password2 }}
+        <button class="button-primary">Sign Up</button>
+
+{#        <a class="button" href="{% url "accounts:sign_in" %}">Sign In</a>#}
+      </form>
+    </div>
+  </div>
+{%  endblock %}

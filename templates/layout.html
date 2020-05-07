@@ -1,4 +1,5 @@
 {% load static %}
+{% load account %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,15 +64,24 @@
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <nav>
                     <ul class="circle--inline">
-                        <li><a href="signup.html">Sign Up</a></li>
-                        <li><a href="signin.html">Sign In</a></li>
+                        <li><a href="{% url "account_signup" %}">Sign Up</a></li>
+                        <li><a href="{% url "account_login" %}">Sign In</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
     </div>
 </header>
-
+<div class="bounds">
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li{% if message.tags %}
+                    class="no-bullets alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 {% block body %}{% endblock %}
 
 </body>
