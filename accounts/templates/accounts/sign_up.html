@@ -5,12 +5,20 @@
   <div class="bounds">
     <div class="grid-30 centered">
       <h2>Sign Up</h2>
-      <form>
+      <form method="POST" action="{% url 'accounts:sign_up' %}">
+          {% csrf_token %}
+
         <input type="email" placeholder="Email Address" />
         <input type="password" placeholder="Password" />
         <input type="password" placeholder="Confirm Password" />
+<hr>
+
+        {{ form.email }}
+        {{ form.password1 }}
+        {{ form.password2 }}
         <button class="button-primary">Sign Up</button>
-        <a class="button" href="signin.html">Sign In</a>
+
+        <a class="button" href="{% url "accounts:sign_in" %}">Sign In</a>
       </form>
     </div>
   </div>
