@@ -1,21 +1,27 @@
-from django import forms
-
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from allauth.account.forms import SignupForm
+from django.forms import widgets
 
 
-# ---Signup form
-class SignUpForm(UserCreationForm):
-    """Define the SignUpForm which extends UserCreationForm"""
-    email = forms.EmailField(required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
-    email.widget.attrs.update({'placeholder': 'Email Address'})
+class CustomSignUpForm(SignupForm):
+    """
+    Customise the placeholder text on the SignUpForm,
+    extending the django allauth form.
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = (
-            'email',
-            'password1',
-            'password2',
-        )
+        self.fields['email'].widget = widgets.TextInput(
+            attrs={
+                'placeholder': 'Email Address',
+            })
+
+        self.fields['password1'].widget = widgets.PasswordInput(
+            attrs={
+                'placeholder': 'Password',
+            })
+
+        self.fields['password2'].widget = widgets.PasswordInput(
+            attrs={
+                'placeholder': 'Confirm Password',
+            })
+

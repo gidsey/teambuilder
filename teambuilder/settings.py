@@ -151,6 +151,11 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.CustomSignUpForm',
+}
+
+
 INTERNAL_IPS = [
     # ...
     '127.0.0.1',

@@ -67,12 +67,21 @@
                         <li><a href="{% url "account_signup" %}">Sign Up</a></li>
                         <li><a href="{% url "account_login" %}">Sign In</a></li>
                     </ul>
-                </nav
+                </nav>
             </div>
         </div>
     </div>
 </header>
-
+<div class="bounds">
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li{% if message.tags %}
+                    class="no-bullets alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 {% block body %}{% endblock %}
 
 </body>
