@@ -5,8 +5,14 @@ from . import views
 app_name = "accounts"  # required when using namespace in URLS
 
 urlpatterns = [
-    path('sign_in/', views.sign_in, name='sign_in'),
-    path('sign_up/', views.sign_up, name='sign_up'),
+    path('profile/', views.profile, name='profile'),
+    path('profile/create/', views.profile_create, name='profile_create')
+
+
+    # path('profile/edit/', views.profile_edit, name='profile_edit'),
+
+
+
     # path('sign_out/', views.sign_out, name='sign_out'),
     # path('create_profile/', views.create_profile, name='create_profile'),
     # path('profile/edit/', views.edit_profile, name='edit_profile'),
