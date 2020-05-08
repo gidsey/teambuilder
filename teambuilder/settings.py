@@ -154,6 +154,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/accounts/profile/creat
 
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignUpForm',
+    'login': 'accounts.forms.CustomLoginForm'
 }
 
 
