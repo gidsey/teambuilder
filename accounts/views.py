@@ -18,6 +18,7 @@ def profile_create(request):
     Populate the Profile after the user has been created.
     """
     profile_form = forms.ProfileForm()
+    avatar_form = forms.AvatarForm()
     user = request.user
     if request.method == 'POST':
         try:
@@ -26,6 +27,7 @@ def profile_create(request):
             user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
 
         profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
+
         if profile_form.is_valid():
             profile_form.save()
             messages.success(
@@ -34,8 +36,18 @@ def profile_create(request):
             )
             return HttpResponseRedirect(reverse('accounts:profile'))
 
+        avatar_form = forms.AvatarForm(instance=user.profile, data=request.POST, files=request.FILES)
+        if avatar_form.is_valid():
+            avatar_form.save()
+            messages.success(
+                request,
+                "Avatar image updated successfully."
+            )
+            return HttpResponseRedirect(reverse('accounts:profile'))
+
     return render(request, 'accounts/profile_create.html', {
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'avatar_form': avatar_form,
     })
 
 
