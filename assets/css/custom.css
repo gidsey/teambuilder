@@ -1,0 +1,9 @@
+/*Custom CSS Styles*/
+
+
+.teambuilder_textarea {
+    overflow: hidden;
+    resize: none;
+    height: 462px;
+    display: inline-block;
+}
