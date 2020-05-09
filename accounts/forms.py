@@ -73,9 +73,10 @@ class ProfileForm(forms.ModelForm):
         )
 
 
-# ---Avatar form
 class AvatarForm(forms.ModelForm):
-    """Define the Avatar Form."""
+    """
+    Define the Avatar Form.
+    """
     x = forms.FloatField(widget=forms.HiddenInput())
     y = forms.FloatField(widget=forms.HiddenInput())
     width = forms.FloatField(widget=forms.HiddenInput())
@@ -109,4 +110,3 @@ class AvatarForm(forms.ModelForm):
         resized_image.save(photo.avatar.path)
 
         return photo
-# # ---/Avatar form

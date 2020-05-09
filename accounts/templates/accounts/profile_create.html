@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% load static %}
 {% load account %}
-{% block css %}<link rel="stylesheet" href="{% static "css/cropper.min.css" %}">{% endblock %}
+{% load widget_tweaks %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/cropper.min.css" %}">{% endblock %}
 {% block title %}Create Profile{% endblock %}
 {% block body %}
     <div class="circle--actions--bar">
@@ -22,7 +24,7 @@
 
 
                 <div class="circle--fluid--cell circle--fluid--secondary">
-                    <input type="submit" class="button-primary" value="Save Changes">
+                    <input type="submit" name="update_profile" class="button-primary" value="Save Changes">
                 </div>
             </div>
 
@@ -30,72 +32,73 @@
                 {% csrf_token %}
                 {{ profile_form.fullname }}
                 {{ profile_form.bio }}
-        <div class="circle--article--body">
-        </div>
+                <div class="circle--article--body">
+                </div>
+                <h2>Past Projects</h2>
+                <table class="u-full-width circle--table">
+                    <thead>
+                    <tr>
+                        <th>Project Title</th>
+                        <th class="circle--cell--right">Project Needs</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="clickable-row" data-href="project.html">
+                        <td>
+                            <h3>Invoice Delivery Tool</h3>
+                        </td>
+                        <td class="circle--cell--right">
+                            <span class="secondary-label">Rails Developer</span>
+                        </td>
+                    </tr>
+                    <tr class="clickable-row" data-href="project.html">
+                        <td>
+                            <h3>Twitter Client</h3>
+                        </td>
+                        <td class="circle--cell--right">
+                            <span class="secondary-label">Designer</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-        <h2>Past Projects</h2>
-        <table class="u-full-width circle--table">
-            <thead>
-            <tr>
-                <th>Project Title</th>
-                <th class="circle--cell--right">Project Needs</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="clickable-row" data-href="project.html">
-                <td>
-                    <h3>Invoice Delivery Tool</h3>
-                </td>
-                <td class="circle--cell--right">
-                    <span class="secondary-label">Rails Developer</span>
-                </td>
-            </tr>
-            <tr class="clickable-row" data-href="project.html">
-                <td>
-                    <h3>Twitter Client</h3>
-                </td>
-                <td class="circle--cell--right">
-                    <span class="secondary-label">Designer</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </form>
-    </div>
+            </div></form>
     <div class="grid-25 grid-push-5">
 
-{#        <div class="circle--secondary--module">#}
-{#            <div class="circle--primary--avatar">#}
-{#                <a class="button">#}
-{#                    Upload Photo#}
-{#                    <input type="file">#}
-{#                </a>#}
-{#            </div>#}
-{#        </div>#}
+        {#        <div class="circle--secondary--module">#}
+        {#            <div class="circle--primary--avatar">#}
+        {#                <a class="button">#}
+        {#                    Upload Photo#}
+        {#                    <input type="file">#}
+        {#                </a>#}
+        {#            </div>#}
+        {#        </div>#}
 
         <div class="circle--secondary--module">
+            >>{{ user.profile.fullname }}<<
+            >>{{ current_user }}<<
             <div class="circle--primary--avatar">
-        {% if not current_user.profile.avatar.url %}
-            <img class="img-thumbnail mt-4" src="/media/placeholder/default.png" width="200px"
-                 alt="Default Avatar">
-        {% endif %}
-        <img class="img-thumbnail mt-4" src="{{ current_user.profile.avatar.url }}" width="200px"
-             alt="{{ current_user.first_name }} {{ current_user.last_name }}">
-        <form method="post" enctype="multipart/form-data" id="formUpload">
-            {% csrf_token %}
-            {{ avatar_form.non_field_errors }}
-            {% for hidden_field in avatar_form.hidden_fields %}
-                {{ hidden_field.errors }}
-                {{ hidden_field }}
-            {% endfor %}
-            <div class="button-primary">
-                <span>Change</span>
-                <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
+                {% if not current_user.profile.avatar.url %}
+                    <img class="img-thumbnail mt-4" src="/media/placeholder/default.png" width="200px"
+                         alt="Default Avatar">
+                {% endif %}
+                <img class="img-thumbnail mt-4" src="{{ current_user.profile.avatar.url }}" width="200px"
+                     alt="{{ current_user.first_name }} {{ current_user.last_name }}">
+                <form method="post" enctype="multipart/form-data" id="formUpload">
+                    {% csrf_token %}
+                    {{ avatar_form.non_field_errors }}
+                    {% for hidden_field in avatar_form.hidden_fields %}
+                        {{ hidden_field.errors }}
+                        {{ hidden_field }}
+                    {% endfor %}
+                    <div class="button button-primary btn-sm px-4 py-2 mt-2 e-button sudo_btn">
+                        <span>Change</span>
+                        <input id="id_avatar" name="update_avatar" type="file" name="avatar" accept="image/*" class="upload">
+                    </div>
+                </form>
+
             </div>
-        </form>
-        {% include "accounts/image_editor_modal.html" %}
-            </div>
-        </div>
+        </div>{% include "accounts/image_editor_modal.html" %}
 
         <div class="circle--secondary--module">
             <h4>My Skills</h4>
