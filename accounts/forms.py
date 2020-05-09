@@ -1,5 +1,8 @@
 from allauth.account.forms import SignupForm, LoginForm
 from django.forms import widgets
+from django import forms
+
+from . import models
 
 
 class CustomSignUpForm(SignupForm):
@@ -25,6 +28,7 @@ class CustomSignUpForm(SignupForm):
                 'placeholder': 'Confirm Password',
             })
 
+
 class CustomLoginForm(LoginForm):
     """
     Customise the placeholder text on the Login form,
@@ -38,3 +42,14 @@ class CustomLoginForm(LoginForm):
                 'placeholder': 'Email Address',
             })
 
+
+class ProfileForm(forms.ModelForm):
+    """
+    Define the Profile Form.
+    """
+    class Meta:
+        model = models.Profile
+        fields = (
+            'fullname',
+            'bio',
+        )

@@ -13,6 +13,7 @@ class Profile(models.Model):
     Define the Profile Model (linked to the User Model).
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    fullname = models.CharField(max_length=255)
     bio = models.TextField(blank=True)
     avatar = models.ImageField(
         upload_to=user_directory_path,
