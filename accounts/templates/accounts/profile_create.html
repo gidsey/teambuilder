@@ -10,7 +10,7 @@
         <nav class="bounds">
             <ul class="circle--pill--list">
                 <li><a href="applications.html">Applications</a></li>
-                <li><a class="selected" href="profile.html">Profile</a></li>
+                <li><a class="selected" href="{% url "accounts:profile" %}">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -75,15 +75,14 @@
         {#        </div>#}
 
         <div class="circle--secondary--module">
-            >>{{ user.profile.fullname }}<<
-            >>{{ current_user }}<<
             <div class="circle--primary--avatar">
+
                 {% if not current_user.profile.avatar.url %}
-                    <img class="img-thumbnail mt-4" src="/media/placeholder/default.png" width="200px"
+                    <img src="/media/placeholder/default.png" width="200px"
                          alt="Default Avatar">
                 {% endif %}
-                <img class="img-thumbnail mt-4" src="{{ current_user.profile.avatar.url }}" width="200px"
-                     alt="{{ current_user.first_name }} {{ current_user.last_name }}">
+                <img src="{{ current_user.profile.avatar.url }}" width="200px"
+                     alt="{{ current_user.profile.fullname }}" class="avatar_img">
                 <form method="post" enctype="multipart/form-data" id="formUpload">
                     {% csrf_token %}
                     {{ avatar_form.non_field_errors }}
@@ -91,8 +90,8 @@
                         {{ hidden_field.errors }}
                         {{ hidden_field }}
                     {% endfor %}
-                    <div class="button button-primary btn-sm px-4 py-2 mt-2 e-button sudo_btn">
-                        <span>Change</span>
+                   <div class="button">
+                        <span>Upload Photo</span>
                         <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
                     </div>
                 </form>
