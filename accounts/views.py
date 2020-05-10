@@ -13,6 +13,11 @@ def profile(request):
 
 
 @login_required
+def profile_test(request):
+    return render(request, 'accounts/profile_test.html')
+
+
+@login_required
 def profile_create(request):
     """
     Populate the Profile after the user has been created.
