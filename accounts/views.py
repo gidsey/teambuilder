@@ -44,7 +44,7 @@ def profile_create(request):
                 )
                 return HttpResponseRedirect(reverse('accounts:profile'))
 
-        elif 'update_avatar' in request.POST:
+        else:
             try:
                 user.profile = request.user.profile  # Set Profile instance for the current user
             except models.Profile.DoesNotExist:
@@ -57,7 +57,7 @@ def profile_create(request):
                     request,
                     "Avatar image updated successfully."
                 )
-                return HttpResponseRedirect(reverse('accounts:profile'))
+                return HttpResponseRedirect(reverse('accounts:profile_create'))
 
     return render(request, 'accounts/profile_create.html', {
         'current_user': request.user,
