@@ -23,3 +23,5 @@ class Profile(models.Model):
         default='placeholder/default.png',
     )
 
+
+
