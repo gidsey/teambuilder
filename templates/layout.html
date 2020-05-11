@@ -93,7 +93,9 @@
                         <li><a href="{% url "account_signup" %}">Sign Up</a></li>
                         <li><a href="{% url "account_login" %}">Sign In</a></li>
                         {% else %}
-                            <li><a href="{% url "accounts:profile" %}">{% user_display user %}</a></li>
+                            <li><a href="{% url "accounts:profile" %}"><img src="{{ user.profile.avatar.url }}"
+                                                                           alt="{{ user.profile.fullname }}" class="avatar_header"></a></li>
+{#                            <li><a href="{% url "accounts:profile" %}">{% user_display user %}</a></li>#}
                             <li><a href="{% url "account_logout" %}">Logout</a></li>
                         {% endif %}
                     </ul>

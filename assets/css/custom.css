@@ -9,6 +9,13 @@
 }
 
 
-.avatar_img {
+.avatar_editing {
+    height:200px;
     opacity: 30%;
+}
+
+.avatar_header {
+    height: 36px;
+    border-radius: 50%;
+    border: solid #e1e1e1 2px;
 }

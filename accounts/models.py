@@ -23,5 +23,6 @@ class Profile(models.Model):
         default='placeholder/default.png',
     )
 
-
+    def __str__(self):
+        return self.fullname
 

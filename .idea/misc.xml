@@ -4,6 +4,7 @@
     <option name="languageLevel" value="ES6" />
   </component>
   <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/_design_reference/bios.txt" />
     <file url="file://$PROJECT_DIR$/README.txt" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (teambuilder)" project-jdk-type="Python SDK" />

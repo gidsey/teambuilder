@@ -81,8 +81,8 @@
                     <img src="/media/placeholder/default.png" width="200px"
                          alt="Default Avatar">
                 {% endif %}
-                <img src="{{ current_user.profile.avatar.url }}" width="200px"
-                     alt="{{ current_user.profile.fullname }}" class="avatar_img">
+                <img src="{{ current_user.profile.avatar.url }}"
+                     alt="{{ current_user.profile.fullname }}" class="avatar_editing">
                 <form method="post" enctype="multipart/form-data" id="formUpload">
                     {% csrf_token %}
                     {{ avatar_form.non_field_errors }}
