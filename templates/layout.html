@@ -20,8 +20,8 @@
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,500' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Cousine' rel='stylesheet' type='text/css'>
 
-        <!-- Font Awesome Icons
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- Font Awesome Icons
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <script src="https://kit.fontawesome.com/bd0f673c70.js" crossorigin="anonymous"></script>
 
 
@@ -71,7 +71,8 @@
     <div class="bounds">
         <div class="circle--fluid">
             <div class="circle--fluid--cell">
-                <h1 class="hide-text circle--logo"><a class="logo" href="{% url "projects:project_listing" %}">Circle</a></h1>
+                <h1 class="hide-text circle--logo"><a class="logo"
+                                                      href="{% url "projects:project_listing" %}">Circle</a></h1>
             </div>
             <div class="circle--fluid--cell circle--fluid--primary">
                 <div class="circle--search">
@@ -90,12 +91,18 @@
                 <nav>
                     <ul class="circle--inline">
                         {% if not user.is_authenticated %}
-                        <li><a href="{% url "account_signup" %}">Sign Up</a></li>
-                        <li><a href="{% url "account_login" %}">Sign In</a></li>
+                            <li><a href="{% url "account_signup" %}">Sign Up</a></li>
+                            <li><a href="{% url "account_login" %}">Sign In</a></li>
                         {% else %}
-                            <li><a href="{% url "accounts:profile" %}"><img src="{{ user.profile.avatar.url }}"
-                                                                           alt="{{ user.profile.fullname }}" class="avatar_header"></a></li>
-{#                            <li><a href="{% url "accounts:profile" %}">{% user_display user %}</a></li>#}
+                            <li>{% if not current_user.profile.avatar.url %}
+                                <a href="{% url "accounts:profile" %}"><img src="/media/placeholder/default.jpg"
+                                                                            class="avatar_header
+                                                                            alt="Default Avatar"></a>
+                            {% else %}
+                                <a href="{% url "accounts:profile" %}"><img src="{{ user.profile.avatar.url }}"
+                                                                            alt="{{ user.profile.fullname }}"
+                                                                            class="avatar_header"></a></li>
+                            {% endif %}
                             <li><a href="{% url "account_logout" %}">Logout</a></li>
                         {% endif %}
                     </ul>
@@ -104,17 +111,6 @@
         </div>
     </div>
 </header>
-<div class="bounds">
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li{% if message.tags %}
-                    class="no-bullets alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 {% block body %}{% endblock %}
-</div>
-{% block javascript %}{% endblock %}
 </body>
 </html>

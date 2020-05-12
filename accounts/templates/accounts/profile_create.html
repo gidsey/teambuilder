@@ -15,13 +15,14 @@
         </nav>
     </div>
 
+    {% include "accounts/messages.html" %}
+
     <div class="bounds circle--page">
         <form method="POST" action="{% url 'accounts:profile_create' %}">
             <div class="circle--page--header circle--fluid">
                 <div class="circle--fluid--cell circle--fluid--primary">
                     <h2>Profile</h2>
                 </div>
-
 
                 <div class="circle--fluid--cell circle--fluid--secondary">
                     <input type="submit" name="update_profile" class="button-primary" value="Save Changes">
@@ -65,20 +66,11 @@
             </div></form>
     <div class="grid-25 grid-push-5">
 
-        {#        <div class="circle--secondary--module">#}
-        {#            <div class="circle--primary--avatar">#}
-        {#                <a class="button">#}
-        {#                    Upload Photo#}
-        {#                    <input type="file">#}
-        {#                </a>#}
-        {#            </div>#}
-        {#        </div>#}
-
         <div class="circle--secondary--module">
             <div class="circle--primary--avatar">
 
                 {% if not current_user.profile.avatar.url %}
-                    <img src="/media/placeholder/default.png" width="200px"
+                    <img src="/media/placeholder/default.jpg" class="avatar_editing"
                          alt="Default Avatar">
                 {% endif %}
                 <img src="{{ current_user.profile.avatar.url }}"

@@ -20,7 +20,7 @@ class Profile(models.Model):
         max_length=255,
         null=True,
         blank=True,
-        default='placeholder/default.png',
+        default='placeholder/default.jpg',
     )
 
     def __str__(self):

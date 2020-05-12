@@ -1,13 +1,16 @@
 /*Custom CSS Styles*/
 
 
-.teambuilder_textarea {
-    overflow: hidden;
-    resize: none;
-    height: 462px;
-    display: inline-block;
-}
+/*.teambuilder_textarea {*/
+/*    overflow: hidden;*/
+/*    resize: none;*/
+/*    height: 462px;*/
+/*    display: inline-block;*/
+/*}*/
 
+.avatar {
+    height: 200px;
+}
 
 .avatar_editing {
     height:200px;
@@ -18,4 +21,8 @@
     height: 36px;
     border-radius: 50%;
     border: solid #e1e1e1 2px;
+}
+
+.no-bullets {
+    list-style: none;
 }
