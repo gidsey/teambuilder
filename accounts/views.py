@@ -19,59 +19,9 @@ def profile_test(request):
 
 
 @login_required
-def profile_create(request):
-    """
-    Populate the Profile after the user has been created.
-    """
-    profile_form = forms.ProfileForm()
-    avatar_form = forms.AvatarForm()
-    user = request.user
-
-    #  Profile Changes
-    if request.method == 'POST':
-        if 'update_profile' in request.POST:
-            try:
-                user.profile = request.user.profile  # Set Profile instance for the current user
-            except models.Profile.DoesNotExist:
-                user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
-
-            profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
-
-            if profile_form.is_valid():
-                profile_form.save()
-                messages.success(
-                    request,
-                    "Profile saved successfully."
-                )
-                return HttpResponseRedirect(reverse('accounts:profile'))
-
-        else:
-            try:
-                user.profile = request.user.profile  # Set Profile instance for the current user
-            except models.Profile.DoesNotExist:
-                user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
-            avatar_form = forms.AvatarForm(instance=user.profile, data=request.POST, files=request.FILES)
-
-            if avatar_form.is_valid():
-                avatar_form.save()
-                messages.success(
-                    request,
-                    "Avatar image updated successfully."
-                )
-                return HttpResponseRedirect(reverse('accounts:profile_create'))
-
-    return render(request, 'accounts/profile_create.html', {
-        'current_user': request.user,
-        'profile_form': profile_form,
-        'avatar_form': avatar_form,
-    })
-
-
-
-@login_required
 def profile_edit(request):
     """
-    Populate the Profile after the user has been created.
+    Edit the User Profile.
     """
     profile_form = forms.ProfileForm()
     avatar_form = forms.AvatarForm()
@@ -108,10 +58,64 @@ def profile_edit(request):
                     request,
                     "Avatar image updated successfully."
                 )
-                return HttpResponseRedirect(reverse('accounts:profile_create'))
+                return HttpResponseRedirect(reverse('accounts:profile_edit'))
 
-    return render(request, 'accounts/profile_create.html', {
+    else:
+        fullname = user.profile.fullname
+        bio = user.profile.bio
+        profile_form = forms.ProfileForm(initial={'fullname': fullname, 'bio': bio})
+
+    return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
     })
+
+
+# @login_required
+# def profile_create(request):
+#     """
+#     Populate the Profile after the user has been created.
+#     """
+#     profile_form = forms.ProfileForm()
+#     avatar_form = forms.AvatarForm()
+#     user = request.user
+#
+#     #  Profile Changes
+#     if request.method == 'POST':
+#         if 'update_profile' in request.POST:
+#             try:
+#                 user.profile = request.user.profile  # Set Profile instance for the current user
+#             except models.Profile.DoesNotExist:
+#                 user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
+#
+#             profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
+#
+#             if profile_form.is_valid():
+#                 profile_form.save()
+#                 messages.success(
+#                     request,
+#                     "Profile saved successfully."
+#                 )
+#                 return HttpResponseRedirect(reverse('accounts:profile'))
+#
+#         else:
+#             try:
+#                 user.profile = request.user.profile  # Set Profile instance for the current user
+#             except models.Profile.DoesNotExist:
+#                 user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
+#             avatar_form = forms.AvatarForm(instance=user.profile, data=request.POST, files=request.FILES)
+#
+#             if avatar_form.is_valid():
+#                 avatar_form.save()
+#                 messages.success(
+#                     request,
+#                     "Avatar image updated successfully."
+#                 )
+#                 return HttpResponseRedirect(reverse('accounts:profile_create'))
+#
+#     return render(request, 'accounts/profile_create.html', {
+#         'current_user': request.user,
+#         'profile_form': profile_form,
+#         'avatar_form': avatar_form,
+#     })
