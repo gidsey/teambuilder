@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'widget_tweaks',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -154,7 +153,7 @@ ACCOUNT_EMAIL_VERIFICATION = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/accounts/profile/create/"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/accounts/profile/edit/"
 
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignUpForm',

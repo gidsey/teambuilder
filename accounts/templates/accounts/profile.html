@@ -14,6 +14,8 @@
     </div>
 
     <div class="bounds circle--page">
+    {% include "messages.html" %}
+
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
                 <h2>Profile</h2>
@@ -22,8 +24,6 @@
                 <a class="button icon-on-left" href="{% url "accounts:profile_edit" %}">Edit</a>
             </div>
         </div>
-
-        {% include "accounts/messages.html" %}
 
         <div class="grid-70">
             <h1>{{ user.profile.fullname }}</h1>

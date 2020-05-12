@@ -94,7 +94,7 @@
                             <li><a href="{% url "account_signup" %}">Sign Up</a></li>
                             <li><a href="{% url "account_login" %}">Sign In</a></li>
                         {% else %}
-                            <li>{% if not current_user.profile.avatar.url %}
+                            <li>{% if not user.profile.avatar.url %}
                                 <a href="{% url "accounts:profile" %}"><img src="/media/placeholder/default.jpg"
                                                                             class="avatar_header
                                                                             alt="Default Avatar"></a>
