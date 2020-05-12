@@ -63,7 +63,11 @@ def profile_edit(request):
     else:
         fullname = user.profile.fullname
         bio = user.profile.bio
-        profile_form = forms.ProfileForm(initial={'fullname': fullname, 'bio': bio})
+        profile_form = forms.ProfileForm(
+            initial={
+                'fullname': fullname,
+                'bio': bio
+            })
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
