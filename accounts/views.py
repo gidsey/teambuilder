@@ -61,15 +61,25 @@ def profile_edit(request):
                 return HttpResponseRedirect(reverse('accounts:profile_edit'))
 
     else:
-        fullname = user.profile.fullname
-        bio = user.profile.bio
-        profile_form = forms.ProfileForm(
-            initial={
-                'fullname': fullname,
-                'bio': bio
-            })
+        try:
+            fullname = user.profile.fullname
+            bio = user.profile.bio
+            profile_form = forms.ProfileForm(
+                initial={
+                    'fullname': fullname,
+                    'bio': bio
+                })
+        except models.Profile.DoesNotExist:
+            profile_form = forms.ProfileForm
+
 
     return render(request, 'accounts/profile_edit.html', {
+#         if 'update_profile' in request.POST:
+#             try:
+#                 user.profile = request.user.profile  # Set Profile instance for the current user
+#             except models.Profile.DoesNotExist:
+#                 user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
+#
         'current_user': request.user,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
@@ -87,12 +97,6 @@ def profile_edit(request):
 #
 #     #  Profile Changes
 #     if request.method == 'POST':
-#         if 'update_profile' in request.POST:
-#             try:
-#                 user.profile = request.user.profile  # Set Profile instance for the current user
-#             except models.Profile.DoesNotExist:
-#                 user.profile = models.Profile(user=request.user)  # Set the Profile instance for a new user
-#
 #             profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
 #
 #             if profile_form.is_valid():

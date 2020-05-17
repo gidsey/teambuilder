@@ -30,8 +30,10 @@
 
             <div class="grid-70">
                 {% csrf_token %}
+                {% if profile_form %}
                 {{ profile_form.fullname }}
                  {{ profile_form.bio }}
+                {%  endif %}
                 <div class="circle--article--body">
                 </div>
                 <h2>Past Projects</h2>
