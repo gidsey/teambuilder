@@ -78,8 +78,8 @@
                      alt="{{ current_user.profile.fullname }}" class="avatar_editing">
                 <form method="post" enctype="multipart/form-data" id="formUpload">
                     {% csrf_token %}
-                    {{ profile_form.non_field_errors }}
-                    {% for hidden_field in profile_form.hidden_fields %}
+                    {{ avatar_form.non_field_errors }}
+                    {% for hidden_field in avatar_form.hidden_fields %}
                         {{ hidden_field.errors }}
                         {{ hidden_field }}
                     {% endfor %}
