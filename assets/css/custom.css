@@ -26,3 +26,9 @@
 .no-bullets {
     list-style: none;
 }
+
+.help_text {
+    margin: -10px 0 0 10px;
+    font-size: small;
+    color: #4e555b;
+}

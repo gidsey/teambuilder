@@ -26,3 +26,28 @@ class Profile(models.Model):
     def __str__(self):
         return self.fullname
 
+
+class Skill(models.Model):
+    """
+    Hold the list of pre-defined and custom skills.
+    """
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=1, default='p')  # p (preset) or c (custom).
+
+    def __str__(self):
+        return self.name
+
+
+class UserSkill(models.Model):
+    """
+    Link the user on or many skills.
+    """
+    user = models.ForeignKey(User, related_name='user_skill', on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, related_name='skill_user', on_delete=models.CASCADE)
+
+
+
+
+
+
+
