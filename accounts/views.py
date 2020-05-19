@@ -25,6 +25,7 @@ def profile_edit(request):
     """
     user = request.user
     profile_form = forms.ProfileForm
+    skill_form = forms.SkillForm
     avatar_form = forms.AvatarForm
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
@@ -73,6 +74,7 @@ def profile_edit(request):
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
         'profile_form': profile_form,
+        'skill_form': skill_form,
         'avatar_form': avatar_form,
     })
 

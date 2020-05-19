@@ -97,6 +97,10 @@
 
         <div class="circle--secondary--module">
             <h4>My Skills</h4>
+
+            {% for skill in  skill_form %}
+            {{ skill }}
+            {% endfor %}
             <ul class="circle--clone--list">
                 <li>
                     <input type="text" placeholder="Skill"/>

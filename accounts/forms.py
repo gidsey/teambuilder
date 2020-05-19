@@ -73,6 +73,19 @@ class ProfileForm(forms.ModelForm):
         )
 
 
+class SkillForm(forms.ModelForm):
+    """
+    Capture the user's skills.
+    """
+    name = forms.CharField()
+
+    class Meta:
+        model = models.Skill
+        fields = (
+            'name',
+        )
+
+
 class AvatarForm(forms.ModelForm):
     """
     Capture the user's Avatar data.
