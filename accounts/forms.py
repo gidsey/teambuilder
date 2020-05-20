@@ -7,6 +7,11 @@ from django.forms import widgets
 
 from . import models
 
+FAVORITE_COLORS_CHOICES = [
+    ('blue', 'Blue'),
+    ('green', 'Green'),
+    ('black', 'Black'),
+]
 
 class CustomSignUpForm(SignupForm):
     """
@@ -73,30 +78,30 @@ class ProfileForm(forms.ModelForm):
         )
 
 
-class SkillForm(forms.ModelForm):
+class UserSkill(forms.ModelForm):
     """
     Capture the user's skills.
     """
 
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('choices')
-        super(SkillForm, self).__init__(*args, **kwargs)
+        super(UserSkill, self).__init__(*args, **kwargs)
         print(choices)
 
     name = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-
+    )
+    favorite_colors = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=FAVORITE_COLORS_CHOICES,
     )
 
-    # def __init__(self, *args, **kwargs):
-    #     super(SkillForm, self).__init__(*args, **kwargs)
-    #     self.fields['name'].widget = forms.CheckboxSelectMultiple()
-
     class Meta:
-        model = models.Skill
+        model = models.UserSkill
         fields = (
-            'name',
+            'skill',
         )
 
 

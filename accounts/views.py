@@ -26,7 +26,7 @@ def profile_edit(request):
     """
     user = request.user
     profile_form = forms.ProfileForm
-    skill_form = forms.SkillForm
+    skill_form = forms.UserSkill
     avatar_form = forms.AvatarForm
 
     # Get list of pre-defined skills
@@ -35,7 +35,7 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
     predefined_skills = [skill for skill in skills]
-    skill_form = forms.SkillForm(choices=predefined_skills)
+    skill_form = forms.UserSkill(choices=predefined_skills)
     # print(skills)
     # print(predefined_skills)
 
