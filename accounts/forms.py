@@ -77,7 +77,21 @@ class SkillForm(forms.ModelForm):
     """
     Capture the user's skills.
     """
-    name = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
+        super(SkillForm, self).__init__(*args, **kwargs)
+        print(choices)
+
+    name = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+
+    )
+
+    # def __init__(self, *args, **kwargs):
+    #     super(SkillForm, self).__init__(*args, **kwargs)
+    #     self.fields['name'].widget = forms.CheckboxSelectMultiple()
 
     class Meta:
         model = models.Skill

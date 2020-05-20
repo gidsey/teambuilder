@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 
 from . import forms
 from . import models
@@ -27,6 +28,16 @@ def profile_edit(request):
     profile_form = forms.ProfileForm
     skill_form = forms.SkillForm
     avatar_form = forms.AvatarForm
+
+    # Get list of pre-defined skills
+    try:
+        skills = models.Skill.objects.all().order_by('name')
+    except ObjectDoesNotExist:
+        raise Http404
+    predefined_skills = [skill for skill in skills]
+    skill_form = forms.SkillForm(choices=predefined_skills)
+    # print(skills)
+    # print(predefined_skills)
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
