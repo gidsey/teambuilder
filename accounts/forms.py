@@ -13,6 +13,7 @@ FAVORITE_COLORS_CHOICES = [
     ('black', 'Black'),
 ]
 
+
 class CustomSignUpForm(SignupForm):
     """
     Customise the placeholder text on the SignUp form,
@@ -87,16 +88,19 @@ class UserSkill(forms.ModelForm):
         choices = kwargs.pop('choices')
         super(UserSkill, self).__init__(*args, **kwargs)
         print(choices)
+        self.fields['name'].choices = choices
 
     name = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
+
     )
-    favorite_colors = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-        choices=FAVORITE_COLORS_CHOICES,
-    )
+
+    # favorite_colors = forms.MultipleChoiceField(
+    #     required=False,
+    #     widget=forms.CheckboxSelectMultiple,
+    #     choices=FAVORITE_COLORS_CHOICES,
+    # )
 
     class Meta:
         model = models.UserSkill

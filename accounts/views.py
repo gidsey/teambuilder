@@ -5,6 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect
 
+from . utils import machine_name
+
 from . import forms
 from . import models
 
@@ -34,10 +36,9 @@ def profile_edit(request):
         skills = models.Skill.objects.all().order_by('name')
     except ObjectDoesNotExist:
         raise Http404
-    predefined_skills = [skill for skill in skills]
-    skill_form = forms.UserSkill(choices=predefined_skills)
-    # print(skills)
-    # print(predefined_skills)
+    predefined_skills = [(machine_name(skill.name), skill.name) for skill in skills]
+    predefined_skills = [(skill.id, skill.name) for skill in skills]
+    skill_form = forms.UserSkill(choices=predefined_skills, instance=user)
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
