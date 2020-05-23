@@ -4,14 +4,7 @@ from PIL import Image
 from allauth.account.forms import SignupForm, LoginForm
 from django.forms import widgets
 
-
 from . import models
-
-FAVORITE_COLORS_CHOICES = [
-    ('blue', 'Blue'),
-    ('green', 'Green'),
-    ('black', 'Black'),
-]
 
 
 class CustomSignUpForm(SignupForm):
@@ -95,16 +88,9 @@ class UserSkill(forms.ModelForm):
 
     )
 
-    # favorite_colors = forms.MultipleChoiceField(
-    #     required=False,
-    #     widget=forms.CheckboxSelectMultiple,
-    #     choices=FAVORITE_COLORS_CHOICES,
-    # )
-
     class Meta:
         model = models.UserSkill
         fields = (
-            'user',
             'skill',
         )
 

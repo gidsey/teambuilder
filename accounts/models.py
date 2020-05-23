@@ -44,7 +44,7 @@ class UserSkill(models.Model):
     """
     user = models.ForeignKey(User, related_name='user_skill', on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, related_name='skill_user', on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
+
 
 
 

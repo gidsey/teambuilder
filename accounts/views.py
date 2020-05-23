@@ -43,14 +43,15 @@ def profile_edit(request):
             user.profile = request.user.profile
         except models.Profile.DoesNotExist:
             user.profile = models.Profile(user=request.user)
-
-        try:
-            user_skill = models.UserSkill.objects.get(user=user.id)
-        except models.UserSkill.DoesNotExist:
-            user_skill = models.UserSkill(user=user)
+        #
+        # try:
+        #     user.skill = models.UserSkill.objects.get(user=user.id)
+        # except models.UserSkill.DoesNotExist:
+        #     user_skill = models.UserSkill(user=user)
 
         profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
-        skill_form = forms.UserSkill(choices=predefined_skills, instance=user)
+        skill_form = forms.UserSkill(choices=predefined_skills, data=request.POST)
+        print(skill_form.data)
 
         if profile_form.is_valid() and skill_form.is_valid():
             profile_form.save()
