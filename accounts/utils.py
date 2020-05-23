@@ -1,8 +1,8 @@
 
 
-def machine_name(input):
+def machine_name(label):
     """
-    Remove white space and upper case characters from string inut.
+    Remove white space and upper case characters from string input.
     """
-    return input.lower().replace(' ', '_')
+    return label.lower().replace(' ', '_')
 

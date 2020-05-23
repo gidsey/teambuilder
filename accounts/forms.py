@@ -87,7 +87,6 @@ class UserSkill(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('choices')
         super(UserSkill, self).__init__(*args, **kwargs)
-        print(choices)
         self.fields['name'].choices = choices
 
     name = forms.MultipleChoiceField(
@@ -105,6 +104,7 @@ class UserSkill(forms.ModelForm):
     class Meta:
         model = models.UserSkill
         fields = (
+            'user',
             'skill',
         )
 

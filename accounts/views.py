@@ -5,8 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect
 
-from . utils import machine_name
-
 from . import forms
 from . import models
 
@@ -36,9 +34,9 @@ def profile_edit(request):
         skills = models.Skill.objects.all().order_by('name')
     except ObjectDoesNotExist:
         raise Http404
-    predefined_skills = [(machine_name(skill.name), skill.name) for skill in skills]
+
     predefined_skills = [(skill.id, skill.name) for skill in skills]
-    skill_form = forms.UserSkill(choices=predefined_skills, instance=user)
+    skill_form = forms.UserSkill(choices=predefined_skills)
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
@@ -46,10 +44,17 @@ def profile_edit(request):
         except models.Profile.DoesNotExist:
             user.profile = models.Profile(user=request.user)
 
-        profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
+        try:
+            user_skill = models.UserSkill.objects.get(user=user.id)
+        except models.UserSkill.DoesNotExist:
+            user_skill = models.UserSkill(user=user)
 
-        if profile_form.is_valid():
+        profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
+        skill_form = forms.UserSkill(choices=predefined_skills, instance=user)
+
+        if profile_form.is_valid() and skill_form.is_valid():
             profile_form.save()
+            skill_form.save()
             messages.success(
                 request,
                 "Profile saved successfully."
