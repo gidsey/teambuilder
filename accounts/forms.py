@@ -51,8 +51,10 @@ class ProfileForm(forms.ModelForm):
     """
     Define the Profile Form.
     """
-    fullname = forms.CharField(max_length=255)
-    bio = forms.CharField(widget=forms.Textarea, required=False)
+    prefix = 'profile'
+
+    fullname = forms.CharField(max_length=255, label='')
+    bio = forms.CharField(widget=forms.Textarea, label='', required=False)
 
     fullname.widget.attrs.update({
         'class': 'circle--input--h1',
@@ -62,7 +64,7 @@ class ProfileForm(forms.ModelForm):
     bio.widget.attrs.update(
         {'class': 'teambuilder_textarea',
          'placeholder': 'Tell us about yourself...'
-    })
+         })
 
     class Meta:
         model = models.Profile
@@ -76,6 +78,7 @@ class UserSkill(forms.ModelForm):
     """
     Capture the user's skills.
     """
+    prefix = 'skill'
 
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('choices')

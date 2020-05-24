@@ -25,8 +25,8 @@ def profile_edit(request):
     Edit the User Profile.
     """
     user = request.user
-    profile_form = forms.ProfileForm
-    skill_form = forms.UserSkill
+    profile_form = forms.ProfileForm(prefix="profile")
+    # skill_form = forms.UserSkill(prefix="skill")
     avatar_form = forms.AvatarForm
 
     # Get list of pre-defined skills
@@ -36,7 +36,7 @@ def profile_edit(request):
         raise Http404
 
     predefined_skills = [(skill.id, skill.name) for skill in skills]
-    skill_form = forms.UserSkill(choices=predefined_skills)
+    skill_form = forms.UserSkill(choices=predefined_skills, prefix="skill")
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
@@ -49,8 +49,8 @@ def profile_edit(request):
         # except models.UserSkill.DoesNotExist:
         #     user_skill = models.UserSkill(user=user)
 
-        profile_form = forms.ProfileForm(data=request.POST, instance=user.profile)
-        skill_form = forms.UserSkill(choices=predefined_skills, data=request.POST)
+        profile_form = forms.ProfileForm(data=request.POST, instance=user.profile, prefix="profile")
+        skill_form = forms.UserSkill(choices=predefined_skills, data=request.POST, prefix="skill")
         print(skill_form.data)
 
         if profile_form.is_valid() and skill_form.is_valid():
@@ -85,7 +85,8 @@ def profile_edit(request):
                 initial={
                     'fullname': fullname,
                     'bio': bio
-                })
+                }, prefix='profile')
+            # skill_form = forms.UserSkill(prefix='skill')
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm
 
