@@ -94,7 +94,9 @@ class UserSkill(forms.ModelForm):
     class Meta:
         model = models.UserSkill
         fields = (
+            'user',
             'skill',
+
         )
 
 

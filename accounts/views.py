@@ -53,7 +53,7 @@ def profile_edit(request):
         skill_form = forms.UserSkill(choices=predefined_skills, data=request.POST, prefix="skill")
         print(skill_form.data)
 
-        if profile_form.is_valid() and skill_form.is_valid():
+        if profile_form.is_valid() or skill_form.is_valid():
             profile_form.save()
             skill_form.save()
             messages.success(
