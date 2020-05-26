@@ -22,6 +22,7 @@ class Profile(models.Model):
         blank=True,
         default='placeholder/default.jpg',
     )
+    skills = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.fullname
@@ -38,12 +39,12 @@ class Skill(models.Model):
         return self.name
 
 
-class UserSkill(models.Model):
-    """
-    Link the user on or many skills.
-    """
-    user = models.ForeignKey(User, related_name='user_skill', on_delete=models.CASCADE)
-    skill = models.ForeignKey(Skill, related_name='skill_user', on_delete=models.CASCADE)
+# class UserSkill(models.Model):
+#     """
+#     Link the user on or many skills.
+#     """
+#     user = models.ForeignKey(User, related_name='user_skill', on_delete=models.CASCADE)
+#     skill = models.ForeignKey(Skill, related_name='skill_user', on_delete=models.CASCADE)
 
 
 

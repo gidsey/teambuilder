@@ -51,10 +51,17 @@ class ProfileForm(forms.ModelForm):
     """
     Define the Profile Form.
     """
+
     prefix = 'profile'
+
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['skills'].choices = choices
 
     fullname = forms.CharField(max_length=255, label='')
     bio = forms.CharField(widget=forms.Textarea, label='', required=False)
+    skills = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple)
 
     fullname.widget.attrs.update({
         'class': 'circle--input--h1',
@@ -71,33 +78,33 @@ class ProfileForm(forms.ModelForm):
         fields = (
             'fullname',
             'bio',
+            'skills',
         )
 
 
-class UserSkill(forms.ModelForm):
-    """
-    Capture the user's skills.
-    """
-    prefix = 'skill'
-
-    def __init__(self, *args, **kwargs):
-        choices = kwargs.pop('choices')
-        super(UserSkill, self).__init__(*args, **kwargs)
-        self.fields['name'].choices = choices
-
-    name = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-
-    )
-
-    class Meta:
-        model = models.UserSkill
-        fields = (
-            'user',
-            'skill',
-
-        )
+# class UserSkill(forms.ModelForm):
+#     """
+#     Capture the user's skills.
+#     """
+#     prefix = 'skill'
+#
+#     def __init__(self, *args, **kwargs):
+#         choices = kwargs.pop('choices')
+#         super(UserSkill, self).__init__(*args, **kwargs)
+#         self.fields['name'].choices = choices
+#
+#     name = forms.MultipleChoiceField(
+#         required=False,
+#         widget=forms.CheckboxSelectMultiple,
+#     )
+#
+#     class Meta:
+#         model = models.Profile
+#         fields = (
+#             'user',
+#             'skill',
+#
+#         )
 
 
 class AvatarForm(forms.ModelForm):
