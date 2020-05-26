@@ -33,9 +33,8 @@ def profile_edit(request):
         raise Http404
 
     predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
-    print(predefined_skills)
     user = request.user
-    profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
+    # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
@@ -80,14 +79,15 @@ def profile_edit(request):
             fullname = user.profile.fullname
             bio = user.profile.bio
             profile_form = forms.ProfileForm(
+                prefix='profile',
                 choices=predefined_skills,
                 initial={
                     'fullname': fullname,
                     'bio': bio
-                }, prefix='profile')
+                })
 
         except models.Profile.DoesNotExist:
-            profile_form = forms.ProfileForm(prefix='profile')
+            profile_form = forms.ProfileForm(prefix='profile', choices=predefined_skills)
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,

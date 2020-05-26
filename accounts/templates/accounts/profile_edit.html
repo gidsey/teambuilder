@@ -30,10 +30,11 @@
 
             <div class="grid-70">
                 {% csrf_token %}
-                {{ profile_form }}
-                    <p class="help_text">Note: markdown can be used - see
-                        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
-                            cheat sheet</a>.</p>
+                {{ profile_form.fullname }}
+                {{ profile_form.bio }}
+                <p class="help_text">Note: markdown can be used - see
+                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
+                        cheat sheet</a>.</p>
                 <div class="circle--article--body">
                 </div>
                 <h2>Past Projects</h2>
@@ -95,12 +96,11 @@
                 <div class="circle--secondary--module">
                     <h4>My Skills</h4>
 
-                    {% for checkbox in skill_form.name %}
+                    {% for checkbox in profile_form.skills %}
                         <div>
                             {{ checkbox }}
                         </div>
                     {% endfor %}
-
 
                     <ul class="circle--clone--list">
                         <li>
