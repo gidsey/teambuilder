@@ -11,6 +11,10 @@ from . import forms
 from . import models
 
 
+def convert_to_tuple(my_list):
+
+    return tuple(i for i in my_list)
+
 @login_required
 def profile(request):
     return render(request, 'accounts/profile.html')
@@ -32,7 +36,8 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
 
-    predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
+    # predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
+    predefined_skills = [(skill.id, skill.name)for skill in skills]
     user = request.user
     # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
@@ -47,11 +52,10 @@ def profile_edit(request):
             choices=predefined_skills,
             data=request.POST,
             instance=user.profile,
-            prefix="profile"
+            prefix="profile",
         )
 
         if profile_form.is_valid():
-            print('profile_form.data {}'.format(profile_form.data))
             profile_form.save()
             messages.success(
                 request,
@@ -78,13 +82,25 @@ def profile_edit(request):
         try:
             fullname = user.profile.fullname
             bio = user.profile.bio
+            print(user.profile.skills)
+            m = set(skill for skill in user.profile.skills)
+            saved_skills = tuple(m)
+
+            print(saved_skills)
+            # print('skills: {}'.format(skills))
+            # saved_skills = tuple(skills)
+            # print(saved_skills)
             profile_form = forms.ProfileForm(
                 prefix='profile',
                 choices=predefined_skills,
                 initial={
                     'fullname': fullname,
-                    'bio': bio
-                })
+                    'bio': bio,
+                    # 'skills': saved_skills,
+
+                    # 'skills': ('android_developer', 'designer', 'ux_designer')
+                },
+            )
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=predefined_skills)
