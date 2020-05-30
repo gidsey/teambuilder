@@ -36,8 +36,8 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
 
-    predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
-    #   predefined_skills = [(skill.id, skill.name)for skill in skills]
+    # predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
+    predefined_skills = [(skill.id, skill.name)for skill in skills]
     user = request.user
     # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
@@ -56,10 +56,8 @@ def profile_edit(request):
         )
 
         if profile_form.is_valid():
-            print(profile_form.cleaned_data['skills'])
             for skill in profile_form.cleaned_data['skills']:
-                print(skill)
-                print(len(skill))
+                models.UserSkill.objects.create(user_id=request.user.id, skill_id=int(skill))
             profile_form.save()
             messages.success(
                 request,
@@ -86,14 +84,22 @@ def profile_edit(request):
         try:
             fullname = user.profile.fullname
             bio = user.profile.bio
-            saved_skills = user.profile.skills
+            saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id)
+            for skill in saved_skills:
+                print(skill.skill_id)
+            saved_skills_list = [skill.skill_id for skill in saved_skills]
+            print('saved_skills_list {}'.format(saved_skills_list))
+            saved_skills_tuple = tuple(saved_skills_list)
+            print('saved_skills_tuple {}'.format(saved_skills_tuple))
+
+            # print('saved_skills: {}'.format(saved_skills))
             profile_form = forms.ProfileForm(
                 prefix='profile',
                 choices=predefined_skills,
                 initial={
                     'fullname': fullname,
                     'bio': bio,
-                    'skills': saved_skills,
+                    'skills': saved_skills_tuple,
                     # 'skills': ('android_developer', 'designer', 'ux_designer')
                 },
             )
