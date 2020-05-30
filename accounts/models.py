@@ -22,7 +22,6 @@ class Profile(models.Model):
         blank=True,
         default='placeholder/default.jpg',
     )
-    # skills = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.fullname

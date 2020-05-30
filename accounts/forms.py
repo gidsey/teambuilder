@@ -62,6 +62,7 @@ class ProfileForm(forms.ModelForm):
     fullname = forms.CharField(max_length=255, label='')
     bio = forms.CharField(widget=forms.Textarea, label='', required=False)
     skills = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple)
+    custom_skills = forms.CharField(max_length=255, required=False)
 
     fullname.widget.attrs.update({
         'class': 'circle--input--h1',
@@ -73,13 +74,20 @@ class ProfileForm(forms.ModelForm):
          'placeholder': 'Tell us about yourself...'
          })
 
+    custom_skills.widget.attrs.update({
+        'placeholder': 'Skill',
+    })
+
     class Meta:
         model = models.Profile
         fields = (
             'fullname',
             'bio',
             'skills',
+            'custom_skills',
         )
+
+
 
 
 # class UserSkill(forms.ModelForm):
