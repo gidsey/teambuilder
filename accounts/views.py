@@ -36,8 +36,8 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
 
-    # predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
-    predefined_skills = [(skill.id, skill.name)for skill in skills]
+    predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
+    #   predefined_skills = [(skill.id, skill.name)for skill in skills]
     user = request.user
     # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
@@ -56,6 +56,10 @@ def profile_edit(request):
         )
 
         if profile_form.is_valid():
+            print(profile_form.cleaned_data['skills'])
+            for skill in profile_form.cleaned_data['skills']:
+                print(skill)
+                print(len(skill))
             profile_form.save()
             messages.success(
                 request,
@@ -63,41 +67,33 @@ def profile_edit(request):
             )
             return HttpResponseRedirect(reverse('accounts:profile'))
 
-    elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
-        try:
-            user.profile = request.user.profile
-        except models.Profile.DoesNotExist:
-            user.profile = models.Profile(user=request.user)
-
-        avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
-
-        if avatar_form.is_valid():
-            avatar_form.save()
-            messages.success(
-                request,
-                "Avatar added successfully."
-            )
-            return HttpResponseRedirect(reverse('accounts:profile_edit'))
+    # elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
+    #     try:
+    #         user.profile = request.user.profile
+    #     except models.Profile.DoesNotExist:
+    #         user.profile = models.Profile(user=request.user)
+    #
+    #     avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
+    #
+    #     if avatar_form.is_valid():
+    #         avatar_form.save()
+    #         messages.success(
+    #             request,
+    #             "Avatar added successfully."
+    #         )
+    #         return HttpResponseRedirect(reverse('accounts:profile_edit'))
     else:
         try:
             fullname = user.profile.fullname
             bio = user.profile.bio
-            print(user.profile.skills)
-            m = set(skill for skill in user.profile.skills)
-            saved_skills = tuple(m)
-
-            print(saved_skills)
-            # print('skills: {}'.format(skills))
-            # saved_skills = tuple(skills)
-            # print(saved_skills)
+            saved_skills = user.profile.skills
             profile_form = forms.ProfileForm(
                 prefix='profile',
                 choices=predefined_skills,
                 initial={
                     'fullname': fullname,
                     'bio': bio,
-                    # 'skills': saved_skills,
-
+                    'skills': saved_skills,
                     # 'skills': ('android_developer', 'designer', 'ux_designer')
                 },
             )
