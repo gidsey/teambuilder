@@ -17,7 +17,6 @@ def profile(request):
         skill_user__user=request.user,
         skill_user__is_skill=True
     )
-    # print('user_skills: {}'.format(user_skills))
     return render(request, 'accounts/profile.html', {
         'user_skills': user_skills,
     })
@@ -35,7 +34,7 @@ def profile_edit(request):
         raise Http404
 
     # predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
-    predefined_skills = [(skill.id, skill.name)for skill in skills]
+    predefined_skills = [(skill.id, skill.name) for skill in skills]
     user = request.user
     # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
@@ -96,13 +95,7 @@ def profile_edit(request):
             fullname = user.profile.fullname
             bio = user.profile.bio
             saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id, is_skill=True)
-
-            saved_skills_list = [skill.skill_id for skill in saved_skills]
-            # print('saved_skills_list {}'.format(saved_skills_list))
-            saved_skills_tuple = tuple(saved_skills_list)
-            # print('saved_skills_tuple {}'.format(saved_skills_tuple))
-
-            # print('saved_skills: {}'.format(saved_skills))
+            saved_skills_tuple = tuple([skill.skill_id for skill in saved_skills])
             profile_form = forms.ProfileForm(
                 prefix='profile',
                 choices=predefined_skills,
@@ -110,7 +103,6 @@ def profile_edit(request):
                     'fullname': fullname,
                     'bio': bio,
                     'skills': saved_skills_tuple,
-                    # 'skills': ('android_developer', 'designer', 'ux_designer')
                 },
             )
 
