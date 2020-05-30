@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
-{% load account %}
 {% load account_extras %}
-
+{% load account %}
 {% block title %}Profile{% endblock %}
 {% block body %}
     <div class="circle--actions--bar">
@@ -14,7 +13,7 @@
     </div>
 
     <div class="bounds circle--page">
-    {% include "messages.html" %}
+        {% include "messages.html" %}
 
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
@@ -76,13 +75,13 @@
 
             <div class="circle--secondary--module">
                 <h4>My Skills</h4>
-                <ul class="unloaded">
-                    <li>Skill 1</li>
-                    <li>Skill 2</li>
-                    <li>Skill 3</li>
-                    <li>Skill 4</li>
-                    <li>Skill 5</li>
-                </ul>
+                {% if user_skills %}
+                    <ul class="unloaded">
+                        {% for skill in user_skills %}
+                            <li>{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
             <div class="circle--secondary--module">

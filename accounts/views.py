@@ -11,18 +11,16 @@ from . import forms
 from . import models
 
 
-def convert_to_tuple(my_list):
-
-    return tuple(i for i in my_list)
-
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html')
-
-
-@login_required
-def profile_test(request):
-    return render(request, 'accounts/profile_test.html')
+    user_skills = models.Skill.objects.all().filter(
+        skill_user__user=request.user,
+        skill_user__is_skill=True
+    )
+    # print('user_skills: {}'.format(user_skills))
+    return render(request, 'accounts/profile.html', {
+        'user_skills': user_skills,
+    })
 
 
 @login_required
