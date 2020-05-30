@@ -56,9 +56,22 @@ def profile_edit(request):
         )
 
         if profile_form.is_valid():
-            for skill in profile_form.cleaned_data['skills']:
-                models.UserSkill.objects.create(user_id=request.user.id, skill_id=int(skill))
-            profile_form.save()
+            user_profile = profile_form.save(commit=False)
+            db_true = set([skill.skill_id for skill in models.UserSkill.objects.all().filter(user_id=request.user.id)])
+            form_true = set([int(skill) for skill in profile_form.cleaned_data['skills']])
+            set_to_false = db_true - form_true
+            set_to_true = form_true - set_to_false
+
+            for skill in set_to_false:
+                models.UserSkill.objects.filter(user_id=request.user.id, skill_id=skill).update(is_skill=False)
+
+            for skill in set_to_true:
+                try:
+                    models.UserSkill.objects.get(user_id=request.user.id, skill_id=skill, is_skill=True)
+                except ObjectDoesNotExist:
+                    models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
+
+            user_profile.save()
             messages.success(
                 request,
                 "Profile saved successfully."
@@ -84,13 +97,12 @@ def profile_edit(request):
         try:
             fullname = user.profile.fullname
             bio = user.profile.bio
-            saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id)
-            for skill in saved_skills:
-                print(skill.skill_id)
+            saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id, is_skill=True)
+
             saved_skills_list = [skill.skill_id for skill in saved_skills]
-            print('saved_skills_list {}'.format(saved_skills_list))
+            # print('saved_skills_list {}'.format(saved_skills_list))
             saved_skills_tuple = tuple(saved_skills_list)
-            print('saved_skills_tuple {}'.format(saved_skills_tuple))
+            # print('saved_skills_tuple {}'.format(saved_skills_tuple))
 
             # print('saved_skills: {}'.format(saved_skills))
             profile_form = forms.ProfileForm(
