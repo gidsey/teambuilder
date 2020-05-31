@@ -75,7 +75,7 @@ class ProfileForm(forms.ModelForm):
          })
 
     custom_skills.widget.attrs.update({
-        'placeholder': 'Skill',
+        'placeholder': 'New Skill...',
     })
 
     class Meta:
