@@ -88,33 +88,6 @@ class ProfileForm(forms.ModelForm):
         )
 
 
-
-
-# class UserSkill(forms.ModelForm):
-#     """
-#     Capture the user's skills.
-#     """
-#     prefix = 'skill'
-#
-#     def __init__(self, *args, **kwargs):
-#         choices = kwargs.pop('choices')
-#         super(UserSkill, self).__init__(*args, **kwargs)
-#         self.fields['name'].choices = choices
-#
-#     name = forms.MultipleChoiceField(
-#         required=False,
-#         widget=forms.CheckboxSelectMultiple,
-#     )
-#
-#     class Meta:
-#         model = models.Profile
-#         fields = (
-#             'user',
-#             'skill',
-#
-#         )
-
-
 class AvatarForm(forms.ModelForm):
     """
     Capture the user's Avatar data.
