@@ -7,4 +7,7 @@
 [Grading Rubric](https://documentcloud.adobe.com/link/review?uri=urn%3Aaaid%3Ascds%3AUS%3A615b178b-748c-4465-9ecd-bfc2527515e2)  
 
 ## Attributions
+
+Django Formsets tutorial by [Nicole Harris](https://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html)
+Django Dynamic Formsets by [Stanislaus Madueke](https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst)
 Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)
