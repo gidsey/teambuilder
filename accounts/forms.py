@@ -1,8 +1,8 @@
-from django import forms
-from PIL import Image
-
 from allauth.account.forms import SignupForm, LoginForm
+from django import forms
+from django.forms.formsets import formset_factory
 from django.forms import widgets
+from PIL import Image
 
 from . import models
 
@@ -86,6 +86,22 @@ class ProfileForm(forms.ModelForm):
             'skills',
             'custom_skills',
         )
+
+
+class CustomSkillsForm(forms.Form):
+    """
+    Form to capture the custom skills
+    added by each user.
+    """
+    name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'New skill (FS)',
+        }),
+    )
+
+
+CustomSkillsFormSet = formset_factory(CustomSkillsForm)
 
 
 class AvatarForm(forms.ModelForm):

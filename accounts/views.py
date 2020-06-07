@@ -52,7 +52,9 @@ def profile_edit(request):
             prefix="profile",
         )
 
-        if profile_form.is_valid():
+        custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
+
+        if profile_form.is_valid() and custom_skills_formset.is_valid():
             user_profile = profile_form.save(commit=False)
             print('profile_form data: {}'.format(profile_form.data))
             print('profile_form clean_data: {}'.format(profile_form.cleaned_data))
@@ -70,6 +72,14 @@ def profile_edit(request):
                     models.UserSkill.objects.get(user_id=request.user.id, skill_id=skill, is_skill=True)
                 except ObjectDoesNotExist:
                     models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
+
+            custom_skill_list = []
+
+            for custom_skill_form in custom_skills_formset:
+                skill = custom_skill_form.cleaned_data.get('name')
+                custom_skill_list.append(skill)
+
+            print(custom_skill_list)
 
             user_profile.save()
             messages.success(
@@ -99,6 +109,7 @@ def profile_edit(request):
             bio = user.profile.bio
             saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id, is_skill=True)
             saved_skills_tuple = tuple([skill.skill_id for skill in saved_skills])
+            custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
             profile_form = forms.ProfileForm(
                 prefix='profile',
                 choices=predefined_skills,
@@ -107,14 +118,17 @@ def profile_edit(request):
                     'bio': bio,
                     'skills': saved_skills_tuple,
                 },
+
             )
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=predefined_skills)
+            custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
+        'custom_skills_formset': custom_skills_formset,
     })
 

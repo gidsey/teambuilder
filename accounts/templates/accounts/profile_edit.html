@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
 {% load static %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static "css/cropper.min.css" %}">
+    <script type="text/javascript">
+    $(function() {
+        $('#custom-skills-forms').formset({
+            prefix: "{{ custom_skills_formset.prefix }}"
+        });
+    });
+    </script>
+{% endblock %}
 
-{% block css %}
-    <link rel="stylesheet" href="{% static "css/cropper.min.css" %}">{% endblock %}
 {% block title %}Edit Profile{% endblock %}
 {% block body %}
     <div class="circle--actions--bar">
@@ -102,6 +110,15 @@
                         </div>
                     {% endfor %}
 
+
+                <div id="custom-skills-forms">
+                {% for form in custom_skills_formset %}
+                    <div id="{{ form.prefix }}-row">
+                        {{ form }}
+                    </div>
+                {% endfor %}
+                </div>
+
                     <ul class="circle--clone--list">
                         <li>
                             {{ profile_form.custom_skills }}
@@ -110,6 +127,7 @@
                             <a class="circle--clone--remove">Remove</a>
                         </li>
                     </ul>
+                {{ custom_skills_formset.management_form }}
         </form>
     </div>
 
