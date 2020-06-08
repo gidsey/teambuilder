@@ -8,6 +8,6 @@
 
 ## Attributions
 
-Django Formsets tutorial by [Nicole Harris](https://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html)
-Django Dynamic Formsets by [Stanislaus Madueke](https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst)
-Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)
+Django Formsets tutorial by [Nicole Harris](https://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html)  
+Django Dynamic Formsets by [Stanislaus Madueke](https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst)  
+Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)   
