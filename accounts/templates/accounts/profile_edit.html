@@ -5,7 +5,12 @@
     <script type="text/javascript">
     $(function() {
         $('#custom-skills-forms').formset({
-            prefix: "{{ custom_skills_formset.prefix }}"
+            prefix: "{{ custom_skills_formset.prefix }}",
+            addText: 'Add Skill',
+            deleteText: 'Remove',
+            addCssClass: "circle--clone--add",
+            deleteCssClass: "circle--clone--remove",
+            formCssClass: "circle--clone--list--custom--skills"
         });
     });
     </script>
@@ -119,14 +124,14 @@
                 {% endfor %}
                 </div>
 
-                    <ul class="circle--clone--list">
-                        <li>
-                            {{ profile_form.custom_skills }}
+{#                    <ul class="circle--clone--list">#}
+{#                        <li>#}
+{#                            {{ profile_form.custom_skills }}#}
 {#                            <input type="text" placeholder="Skill" />#}
-                            <a class="circle--clone--add">Add Skill</a>
-                            <a class="circle--clone--remove">Remove</a>
-                        </li>
-                    </ul>
+{#                            <a class="circle--clone--add">Add Skill</a>#}
+{#                            <a class="circle--clone--remove">Remove</a>#}
+{#                        </li>#}
+{#                    </ul>#}
                 {{ custom_skills_formset.management_form }}
         </form>
     </div>
