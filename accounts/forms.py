@@ -93,10 +93,15 @@ class CustomSkillsForm(forms.Form):
     Form to capture the custom skills
     added by each user.
     """
+
+    def __init__(self, *args, **kwargs):
+        super(CustomSkillsForm, self).__init__(*args, **kwargs)
+        self.fields['name'].label = ""
+
     name = forms.CharField(
         max_length=255,
         widget=forms.TextInput(attrs={
-            'placeholder': 'New skill (FS)',
+            'placeholder': 'New skill',
         }),
     )
 
