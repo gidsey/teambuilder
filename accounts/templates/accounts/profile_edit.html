@@ -3,16 +3,16 @@
 {% block extrahead %}
     <link rel="stylesheet" href="{% static "css/cropper.min.css" %}">
     <script type="text/javascript">
-    $(function() {
-        $('#custom-skills-forms').formset({
-            prefix: "{{ custom_skills_formset.prefix }}",
-            addText: 'Add Skill',
-            deleteText: 'Remove',
-            addCssClass: "circle--clone--add",
-            deleteCssClass: "circle--clone--remove",
-            formCssClass: "circle--clone--list--custom--skills"
+        $(function () {
+            $('#custom-skills-forms').formset({
+                prefix: "{{ custom_skills_formset.prefix }}",
+                addText: 'Add Skill',
+                deleteText: 'Remove',
+                addCssClass: "circle--clone--add",
+                deleteCssClass: "circle--clone--remove",
+                formCssClass: "circle--clone--list--custom--skills"
+            });
         });
-    });
     </script>
 {% endblock %}
 
@@ -115,24 +115,17 @@
                         </div>
                     {% endfor %}
 
-
-                <div id="custom-skills-forms">
-                {% for form in custom_skills_formset %}
-                    <div id="{{ form.prefix }}-row">
-                        {{ form }}
+                    <div class="circle--clone--list">
+                        <div id="custom-skills-forms">
+                            {% for form in custom_skills_formset %}
+                                <div id="{{ form.prefix }}-row">
+                                    {{ form }}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                {% endfor %}
-                </div>
 
-{#                    <ul class="circle--clone--list">#}
-{#                        <li>#}
-{#                            {{ profile_form.custom_skills }}#}
-{#                            <input type="text" placeholder="Skill" />#}
-{#                            <a class="circle--clone--add">Add Skill</a>#}
-{#                            <a class="circle--clone--remove">Remove</a>#}
-{#                        </li>#}
-{#                    </ul>#}
-                {{ custom_skills_formset.management_form }}
+                    {{ custom_skills_formset.management_form }}
         </form>
     </div>
 

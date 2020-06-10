@@ -57,7 +57,6 @@ def profile_edit(request):
         if profile_form.is_valid() and custom_skills_formset.is_valid():
             user_profile = profile_form.save(commit=False)
             print('profile_form clean_data: {}'.format(profile_form.cleaned_data))
-            # print('custom_skills: {}'.format(profile_form.data['profile-custom_skills']))
             db_true = set([skill.skill_id for skill in models.UserSkill.objects.all().filter(user_id=request.user.id)])
             form_true = set([int(skill) for skill in profile_form.cleaned_data['skills']])
             set_to_false = db_true - form_true

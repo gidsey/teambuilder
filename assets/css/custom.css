@@ -1,19 +1,12 @@
 /*Custom CSS Styles*/
 
 
-/*.teambuilder_textarea {*/
-/*    overflow: hidden;*/
-/*    resize: none;*/
-/*    height: 462px;*/
-/*    display: inline-block;*/
-/*}*/
-
 .avatar {
     height: 200px;
 }
 
 .avatar_editing {
-    height:200px;
+    height: 200px;
     opacity: 30%;
 }
 
@@ -31,4 +24,11 @@
     margin: -10px 0 0 10px;
     font-size: small;
     color: #4e555b;
+}
+
+.circle--clone--add, .circle--clone--remove {
+    color: rgb(102, 102, 102);
+    text-decoration: rgb(102, 102, 102);
+    font-size: 14px;
+    margin: -10px 0 20px 0;
 }
