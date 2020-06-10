@@ -5,8 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect
 
-from .utils import machine_name
-
 from . import forms
 from . import models
 
@@ -33,7 +31,6 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
 
-    # predefined_skills = [(machine_name(str(skill)), str(skill)) for skill in skills]
     predefined_skills = [(skill.id, skill.name) for skill in skills]
     predefined_skills.sort(key=lambda tup: tup[1].lower())
     user = request.user
