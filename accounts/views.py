@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 
 from . import forms
@@ -25,14 +26,17 @@ def profile_edit(request):
     """
     Edit the User Profile.
     """
-    # Get list of pre-defined skills
+    # Get list of pre-defined and custom skills for the current user
     try:
-        skills = models.Skill.objects.all().order_by('name')
+        skills = models.Skill.objects.all().filter(
+            Q(type__exact='c') and Q(skill_user__user_id=request.user) |
+            Q(type__exact='p')
+        )
     except ObjectDoesNotExist:
         raise Http404
 
     predefined_skills = [(skill.id, skill.name) for skill in skills]
-    predefined_skills.sort(key=lambda tup: tup[1].lower())
+    predefined_skills.sort(key=lambda tup: tup[1].lower())  # Order the list by skill
     user = request.user
     # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
     avatar_form = forms.AvatarForm
@@ -64,16 +68,11 @@ def profile_edit(request):
                 if skill:  # prevent 'None' being saved to list
                     custom_skill_list.append(skill)
 
-            print('custom_skill_list: {}'.format(custom_skill_list))
-
             for custom_skill in custom_skill_list:
                 obj, created = models.Skill.objects.get_or_create(
                     name=custom_skill,
                     type='c'
                 )
-                print('obj {}'.format(obj))
-                print('created {}'.format(created))
-                print('obj.id {}'.format(obj.id))
                 form_true.append(obj.id)
 
             form_true = set(form_true)
@@ -93,6 +92,7 @@ def profile_edit(request):
                     models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
 
             user_profile.save()
+
             messages.success(
                 request,
                 "Profile saved successfully."
