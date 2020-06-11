@@ -11,3 +11,5 @@
 Django Formsets tutorial by [Nicole Harris](https://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html)  
 Django Dynamic Formsets by [Stanislaus Madueke](https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst)  
 Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)   
+Image editor based on a tutorial by [Vitor Freitas](https://simpleisbetterthancomplex.com/tutorial/2017/03/02/how-to-crop-images-in-a-django-application.html)   
+_Project built by [Chris Guy](https://www.linkedin.com/in/gidsey/), June 2020_
