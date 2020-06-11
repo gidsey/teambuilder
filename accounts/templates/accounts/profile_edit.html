@@ -90,18 +90,18 @@
                         {% endif %}
                         <img src="{{ current_user.profile.avatar.url }}"
                              alt="{{ current_user.profile.fullname }}" class="avatar_editing">
-                        {#                    <form method="post" enctype="multipart/form-data" id="formUpload">#}
-                        {#                        {% csrf_token %}#}
-                        {#                        {{ avatar_form.non_field_errors }}#}
-                        {#                        {% for hidden_field in avatar_form.hidden_fields %}#}
-                        {#                            {{ hidden_field.errors }}#}
-                        {#                            {{ hidden_field }}#}
-                        {#                        {% endfor %}#}
-                        {#                        <div class="button">#}
-                        {#                            <span>Upload Photo</span>#}
-                        {#                            <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">#}
-                        {#                        </div>#}
-                        {#                    </form>#}
+                                            <form method="post" enctype="multipart/form-data" id="formUpload">
+                                                {% csrf_token %}
+                                                {{ avatar_form.non_field_errors }}
+                                                {% for hidden_field in avatar_form.hidden_fields %}
+                                                    {{ hidden_field.errors }}
+                                                    {{ hidden_field }}
+                                                {% endfor %}
+                                                <div class="button">
+                                                    <span>Upload Photo</span>
+                                                    <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
+                                                </div>
+                                            </form>
 
                     </div>
                 </div>

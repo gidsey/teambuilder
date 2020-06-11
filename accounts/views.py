@@ -27,7 +27,7 @@ def profile_edit(request):
     """
     Edit the User Profile.
     """
-    # Get list of pre-defined and custom skills for the current user
+    # Get list of custom skills for the current user
     try:
         user_skills = models.Skill.objects.all().filter(
             Q(type__exact='c'), skill_user__user_id=request.user
@@ -35,15 +35,12 @@ def profile_edit(request):
     except ObjectDoesNotExist:
         raise Http404
 
+    #  Combine user's custom skills with pre-defined skills into a single choices list
     skills = list(chain(user_skills, models.Skill.objects.all().filter(type__exact='p')))
+    choices = [(skill.id, skill.name) for skill in skills]
+    choices.sort(key=lambda tup: tup[1].lower())  # Order the list by skill (case insensitive)
 
-    print('skills {}'.format(skills))
-
-    predefined_skills = [(skill.id, skill.name) for skill in skills]
-    predefined_skills.sort(key=lambda tup: tup[1].lower())  # Order the list by skill
     user = request.user
-    # profile_form = forms.ProfileForm(choices=predefined_skills, prefix="profile")
-    avatar_form = forms.AvatarForm
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
@@ -52,37 +49,48 @@ def profile_edit(request):
             user.profile = models.Profile(user=request.user)
 
         profile_form = forms.ProfileForm(
-            choices=predefined_skills,
+            choices=choices,
             data=request.POST,
             instance=user.profile,
             prefix="profile",
         )
 
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
+        avatar_form = forms.AvatarForm
 
         if profile_form.is_valid() and custom_skills_formset.is_valid():
             user_profile = profile_form.save(commit=False)
-            custom_skill_list = []
 
-            db_true = set([skill.skill_id for skill in models.UserSkill.objects.all().filter(user_id=request.user.id)])
+            # form_true = the skills that need to set to true for the current user
             form_true = [int(skill) for skill in profile_form.cleaned_data['skills']]
 
+            #  Create a list of custom skills added by the user
+            custom_skill_list = []
             for custom_skill_form in custom_skills_formset:
                 skill = custom_skill_form.cleaned_data.get('name')
                 if skill:  # prevent 'None' being saved to list
                     custom_skill_list.append(skill)
 
+            #  Add the custom skills to the Skills model (if they don't already exist)
             for custom_skill in custom_skill_list:
                 obj, created = models.Skill.objects.get_or_create(
                     name=custom_skill,
                     type='c'
                 )
-                form_true.append(obj.id)
+                form_true.append(obj.id)  # Append the new custom skills to the form_true list
 
+            # Create 2 sets (form_true and db_skills):
             form_true = set(form_true)
-            set_to_false = db_true - form_true
+
+            # db_skills = all the skills associated with the current user (set either true or false)
+            db_skills = set(
+                [skill.skill_id for skill in models.UserSkill.objects.all().filter(user_id=request.user.id)])
+
+            # Use the sets to define which skills should be set to True and which to False
+            set_to_false = db_skills - form_true
             set_to_true = form_true - set_to_false
 
+            #  Update the UserSkill model
             for skill in set_to_false:
                 models.UserSkill.objects.filter(user_id=request.user.id, skill_id=skill).update(is_skill=False)
             for skill in set_to_true:
@@ -110,7 +118,14 @@ def profile_edit(request):
             user.profile = models.Profile(user=request.user)
 
         avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
+        profile_form = forms.ProfileForm(
+            choices=choices,
+            data=request.POST,
+            instance=user.profile,
+            prefix="profile",
+        )
 
+        custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
         if avatar_form.is_valid():
             avatar_form.save()
             messages.success(
@@ -124,12 +139,11 @@ def profile_edit(request):
             bio = user.profile.bio
             saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id, is_skill=True)
             saved_skills_tuple = tuple([skill.skill_id for skill in saved_skills])
-            print('saved_skills_tuple {}'.format(saved_skills_tuple))
-            print('predefined_skills {}'.format(predefined_skills))
+
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
             profile_form = forms.ProfileForm(
                 prefix='profile',
-                choices=predefined_skills,
+                choices=choices,
                 initial={
                     'fullname': fullname,
                     'bio': bio,
@@ -139,7 +153,7 @@ def profile_edit(request):
             avatar_form = forms.AvatarForm
 
         except models.Profile.DoesNotExist:
-            profile_form = forms.ProfileForm(prefix='profile', choices=predefined_skills)
+            profile_form = forms.ProfileForm(prefix='profile', choices=choices)
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
             avatar_form = forms.AvatarForm
 
