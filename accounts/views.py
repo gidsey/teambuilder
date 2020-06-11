@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
+from itertools import chain
 
 from . import forms
 from . import models
@@ -28,12 +29,15 @@ def profile_edit(request):
     """
     # Get list of pre-defined and custom skills for the current user
     try:
-        skills = models.Skill.objects.all().filter(
-            Q(type__exact='c') and Q(skill_user__user_id=request.user) |
-            Q(type__exact='p')
+        user_skills = models.Skill.objects.all().filter(
+            Q(type__exact='c'), skill_user__user_id=request.user
         )
     except ObjectDoesNotExist:
         raise Http404
+
+    skills = list(chain(user_skills, models.Skill.objects.all().filter(type__exact='p')))
+
+    print('skills {}'.format(skills))
 
     predefined_skills = [(skill.id, skill.name) for skill in skills]
     predefined_skills.sort(key=lambda tup: tup[1].lower())  # Order the list by skill
@@ -99,27 +103,29 @@ def profile_edit(request):
             )
             return HttpResponseRedirect(reverse('accounts:profile'))
 
-    # elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
-    #     try:
-    #         user.profile = request.user.profile
-    #     except models.Profile.DoesNotExist:
-    #         user.profile = models.Profile(user=request.user)
-    #
-    #     avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
-    #
-    #     if avatar_form.is_valid():
-    #         avatar_form.save()
-    #         messages.success(
-    #             request,
-    #             "Avatar added successfully."
-    #         )
-    #         return HttpResponseRedirect(reverse('accounts:profile_edit'))
+    elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
+        try:
+            user.profile = request.user.profile
+        except models.Profile.DoesNotExist:
+            user.profile = models.Profile(user=request.user)
+
+        avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
+
+        if avatar_form.is_valid():
+            avatar_form.save()
+            messages.success(
+                request,
+                "Avatar added successfully."
+            )
+            return HttpResponseRedirect(reverse('accounts:profile_edit'))
     else:
         try:
             fullname = user.profile.fullname
             bio = user.profile.bio
             saved_skills = models.UserSkill.objects.all().filter(user_id=request.user.id, is_skill=True)
             saved_skills_tuple = tuple([skill.skill_id for skill in saved_skills])
+            print('saved_skills_tuple {}'.format(saved_skills_tuple))
+            print('predefined_skills {}'.format(predefined_skills))
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
             profile_form = forms.ProfileForm(
                 prefix='profile',
@@ -129,12 +135,13 @@ def profile_edit(request):
                     'bio': bio,
                     'skills': saved_skills_tuple,
                 },
-
             )
+            avatar_form = forms.AvatarForm
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=predefined_skills)
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
+            avatar_form = forms.AvatarForm
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
