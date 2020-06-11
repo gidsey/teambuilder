@@ -56,7 +56,7 @@ def profile_edit(request):
         )
 
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
-        avatar_form = forms.AvatarForm
+        avatar_form = forms.AvatarForm(prefix='AvatarForm')
 
         if profile_form.is_valid() and custom_skills_formset.is_valid():
             user_profile = profile_form.save(commit=False)
@@ -117,15 +117,19 @@ def profile_edit(request):
         except models.Profile.DoesNotExist:
             user.profile = models.Profile(user=request.user)
 
-        avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
+        avatar_form = forms.AvatarForm(
+            data=request.POST,
+            instance=user.profile,
+            files=request.FILES,
+        )
         profile_form = forms.ProfileForm(
             choices=choices,
             data=request.POST,
             instance=user.profile,
             prefix="profile",
         )
-
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
+
         if avatar_form.is_valid():
             avatar_form.save()
             messages.success(
@@ -150,12 +154,12 @@ def profile_edit(request):
                     'skills': saved_skills_tuple,
                 },
             )
-            avatar_form = forms.AvatarForm
+            avatar_form = forms.AvatarForm()
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=choices)
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
-            avatar_form = forms.AvatarForm
+            avatar_form = forms.AvatarForm()
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,

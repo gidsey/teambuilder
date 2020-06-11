@@ -30,7 +30,7 @@
     {% include "messages.html" %}
 
     <div class="bounds circle--page">
-        <form method="POST" action="{% url 'accounts:profile_edit' %}">
+        <form method="POST" enctype="multipart/form-data" id="formUpload" action="{% url 'accounts:profile_edit' %} ">
             <div class="circle--page--header circle--fluid">
                 <div class="circle--fluid--cell circle--fluid--primary">
                     <h2>Profile</h2>
@@ -90,18 +90,16 @@
                         {% endif %}
                         <img src="{{ current_user.profile.avatar.url }}"
                              alt="{{ current_user.profile.fullname }}" class="avatar_editing">
-                                            <form method="post" enctype="multipart/form-data" id="formUpload">
-                                                {% csrf_token %}
-                                                {{ avatar_form.non_field_errors }}
-                                                {% for hidden_field in avatar_form.hidden_fields %}
-                                                    {{ hidden_field.errors }}
-                                                    {{ hidden_field }}
-                                                {% endfor %}
-                                                <div class="button">
-                                                    <span>Upload Photo</span>
-                                                    <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
-                                                </div>
-                                            </form>
+
+                        {{ avatar_form.non_field_errors }}
+                        {% for hidden_field in avatar_form.hidden_fields %}
+                            {{ hidden_field.errors }}
+                            {{ hidden_field }}
+                        {% endfor %}
+                        <div class="button">
+                            <span>Upload Photo</span>
+                            <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
+                        </div>
 
                     </div>
                 </div>
