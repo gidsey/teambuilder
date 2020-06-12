@@ -29,7 +29,7 @@ class Profile(models.Model):
 
 class Skill(models.Model):
     """
-    Hold the list of pre-defined and custom skills.
+    Holds the list of pre-defined and custom skills.
     """
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=1, default='p')  # p (preset) or c (custom).
@@ -47,6 +47,14 @@ class UserSkill(models.Model):
     is_skill = models.BooleanField(default=False)
 
 
+class Portfolio(models.Model):
+    """
+    Model to hold the user's portfolio links
+    (labeled as 'My Projects' in the design).
+    """
+    user = models.ForeignKey(User, related_name='user_portfolio', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    url = models.URLField()
 
 
 
