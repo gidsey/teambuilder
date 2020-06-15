@@ -1,7 +1,9 @@
 from allauth.account.forms import SignupForm, LoginForm
+from django.contrib.auth.models import User
 from django import forms
-from django.forms.formsets import formset_factory
 from django.forms import widgets
+from django.forms.formsets import formset_factory
+
 from PIL import Image
 
 from . import models
@@ -101,6 +103,10 @@ class CustomSkillsForm(forms.Form):
 
 
 CustomSkillsFormSet = formset_factory(CustomSkillsForm)
+# Define the formsets for Custom Skills
+
+portfolio_inline_formset = forms.inlineformset_factory(User, models.Portfolio, extra=1, fields=('name', 'url'))
+#  Define the formsets for Custom Skills fpr Profile Portfolios (My Projects)
 
 
 class AvatarForm(forms.ModelForm):

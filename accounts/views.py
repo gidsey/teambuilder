@@ -57,8 +57,9 @@ def profile_edit(request):
 
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
         avatar_form = forms.AvatarForm(prefix='AvatarForm')
+        dynamic_formset = forms.portfolio_inline_formset(data=request.POST, instance=user, prefix='folio-items')
 
-        if profile_form.is_valid() and custom_skills_formset.is_valid():
+        if profile_form.is_valid() and custom_skills_formset.is_valid() and dynamic_formset.is_valid():
             user_profile = profile_form.save(commit=False)
 
             # form_true = the skills that need to set to true for the current user
@@ -104,7 +105,7 @@ def profile_edit(request):
                     models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
 
             user_profile.save()
-
+            dynamic_formset.save()
             messages.success(
                 request,
                 "Profile saved successfully."
@@ -129,6 +130,7 @@ def profile_edit(request):
             prefix="profile",
         )
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
+        dynamic_formset = forms.portfolio_inline_formset(data=request.POST, instance=user, prefix='folio-items')
 
         if avatar_form.is_valid():
             avatar_form.save()
@@ -155,15 +157,18 @@ def profile_edit(request):
                 },
             )
             avatar_form = forms.AvatarForm()
+            dynamic_formset = forms.portfolio_inline_formset(instance=user, prefix='folio-items')
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=choices)
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
             avatar_form = forms.AvatarForm()
+            dynamic_formset = forms.portfolio_inline_formset(instance=user, prefix='folio-items')
 
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
         'custom_skills_formset': custom_skills_formset,
+        'dynamic_formset': dynamic_formset,
     })
