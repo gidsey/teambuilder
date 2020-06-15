@@ -17,8 +17,12 @@ def profile(request):
         skill_user__user=request.user,
         skill_user__is_skill=True
     ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
+    user_portfolios = models.Portfolio.objects.all().filter(
+        user_id=request.user
+    )
     return render(request, 'accounts/profile.html', {
         'user_skills': user_skills,
+        'user_portfolios': user_portfolios,
     })
 
 
