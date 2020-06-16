@@ -11,7 +11,11 @@
             <form method="post">
                 {% csrf_token %}
                 <button class="button-primary" type="submit">Log out</button>
-                <button><a href="{% url "accounts:profile" %}">Go back</a></button>
+                <input
+                        onclick="window.history.go(-1); return false;"
+                        type="submit"
+                        value="Cancel"
+                />
             </form>
         </div>
     </div>
