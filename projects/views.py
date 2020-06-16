@@ -42,6 +42,7 @@ def project_detail(request, pk):
         project = models.Project.objects.get(id=pk)
     except ObjectDoesNotExist:
         raise Http404
+
     return render(request, 'projects/project_detail.html', {
         'project': project
     })

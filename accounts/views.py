@@ -27,6 +27,27 @@ def profile(request):
 
 
 @login_required
+def user_profile(request, username):
+    try:
+        current_user = models.User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    current_user_skills = models.Skill.objects.all().filter(
+        skill_user__user=current_user,
+        skill_user__is_skill=True
+    ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
+    current_user_portfolios = models.Portfolio.objects.all().filter(
+        user_id=current_user
+    )
+    return render(request, 'accounts/profile.html', {
+        'current_user': current_user,
+        'current_user_skills': current_user_skills,
+        'current_user_portfolios': current_user_portfolios,
+    })
+
+
+@login_required
 def profile_edit(request):
     """
     Edit the User Profile.
