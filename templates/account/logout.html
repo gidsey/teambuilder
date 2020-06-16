@@ -11,6 +11,7 @@
             <form method="post">
                 {% csrf_token %}
                 <button class="button-primary" type="submit">Log out</button>
+                <button><a href="{% url "accounts:profile" %}">Go back</a></button>
             </form>
         </div>
     </div>
