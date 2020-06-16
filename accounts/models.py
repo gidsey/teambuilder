@@ -1,11 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-
-def user_directory_path(instance, filename):
-    """Get the user directory path"""
-    # file will be uploaded to MEDIA_ROOT/avatars/user/<filename>
-    return 'avatars/{0}/{1}'.format(instance.user, filename)
+from .utils import user_directory_path
 
 
 class Profile(models.Model):
