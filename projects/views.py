@@ -16,13 +16,16 @@ def project_listing(request):
 @login_required
 def project_new(request):
     if request.method == 'POST':
-        project_form = forms.ProjectForm(data=request.POST, instance=request.user)
+        user = request.user
+        user.project = models.Project(owner=request.user)
+        project_form = forms.ProjectForm(data=request.POST, instance=user.project)
 
         if project_form.is_valid():
+            print(project_form.cleaned_data['title'])
             project_form.save()
             messages.success(
                 request,
-                "Profile saved successfully."
+                "Project created successfully."
             )
             return HttpResponseRedirect(reverse('projects:project_detail'))
     else:

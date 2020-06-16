@@ -71,8 +71,7 @@ class ProfileForm(forms.ModelForm):
     })
 
     bio.widget.attrs.update(
-        {'class': 'teambuilder_textarea',
-         'placeholder': 'Tell us about yourself...'
+        {'placeholder': 'Tell us about yourself...'
          })
 
     class Meta:

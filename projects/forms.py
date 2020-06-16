@@ -23,3 +23,13 @@ class ProjectForm(forms.ModelForm):
             'timeline',
             'requirements'
         )
+
+    title.widget.attrs.update({
+        'class': 'circle--input--h1',
+        'placeholder': 'Project Title',
+    })
+
+    description.widget.attrs.update(
+        {
+         'placeholder': 'Position description...'
+         })

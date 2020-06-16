@@ -2,21 +2,23 @@
 {% load static %}
 {% block title %} {{ block.super }} | New Project {% endblock %}
 {% block body %}
+    <form method="POST" action="{% url 'projects:project_new' %}">
+        <div class="circle--actions--bar">
 
-    <div class="circle--actions--bar">
-        <div class="bounds">
-            <div class="grid-100">
-{#                <a class="button button-primary" href="{% url 'projects:project_detail' %}">Save Project</a>#}
-                <input type="submit" name="save_project" class="button-primary" value="Save Project">
-                <a class="button button-text" href="{% url 'projects:project_listing' %}">Discard</a>
+            <div class="bounds">
+
+                <div class="grid-100">
+                    {#                <a class="button button-primary" href="{% url 'projects:project_detail' %}">Save Project</a>#}
+                    <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
+                    <a class="button button-text" href="{% url 'projects:project_listing' %}">Discard</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="bounds circle--page">
-        {% include "messages.html" %}
-        <div class="bounds circle--page circle--article">
-            <form method="POST" action="{% url 'projects:project_new' %} ">
+        <div class="bounds circle--page">
+            {% include "messages.html" %}
+            <div class="bounds circle--page circle--article">
                 <div class="grid-70">
+                    {% csrf_token %}
                     <div class="circle--article--body">
 
 
@@ -39,7 +41,7 @@
                             </li>
                         </ul>
 
-{#                        <a class="button button-primary" href="project.html">Save Changes</a>#}
+                        {#                        <a class="button button-primary" href="project.html">Save Changes</a>#}
                         <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
                     </div>
                 </div>
@@ -57,7 +59,9 @@
                     </div>
 
                 </div>
-            </form>
+
+            </div>
+
         </div>
-    </div>
+    </form>
 {% endblock %}

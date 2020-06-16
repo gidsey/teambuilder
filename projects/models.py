@@ -6,7 +6,7 @@ class Project(models.Model):
     """"
     Model to hold the Project data.
     """
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='owner_project', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     timeline = models.TextField(blank=True)
