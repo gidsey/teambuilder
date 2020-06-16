@@ -102,11 +102,20 @@ class CustomSkillsForm(forms.Form):
     )
 
 
-CustomSkillsFormSet = formset_factory(CustomSkillsForm)
 # Define the formsets for Custom Skills
+CustomSkillsFormSet = formset_factory(CustomSkillsForm)
 
-portfolio_inline_formset = forms.inlineformset_factory(User, models.Portfolio, extra=1, fields=('name', 'url'))
+
 #  Define the formsets for Custom Skills fpr Profile Portfolios (My Projects)
+portfolio_inline_formset = forms.inlineformset_factory(
+    User,
+    models.Portfolio,
+    extra=1,
+    fields=('name', 'url'),
+    widgets={
+        'name': forms.TextInput(attrs={'placeholder': 'Project Name'}),
+        'url': forms.URLInput(attrs={'placeholder': 'Project URL'},)}
+)
 
 
 class AvatarForm(forms.ModelForm):

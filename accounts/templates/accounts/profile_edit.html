@@ -10,7 +10,8 @@
                 deleteText: 'Remove',
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
-                formCssClass: "circle--clone--list--custom--skills"
+                formCssClass: "circle--clone--list--custom--skills",
+                hideLastAddForm: "True"
             });
             $('#portfolio_dynamic_formset  p').formset({
                 prefix: 'folio-items',
@@ -18,7 +19,8 @@
                 deleteText: 'Remove',
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
-                hideLastAddForm: "True"
+                hideLastAddForm: "True",
+                formCssClass: "portfolio-forms",
             });
         });
     </script>
@@ -141,19 +143,13 @@
                     <div class="circle--clone--list">
                     <div id="portfolio_dynamic_formset">
                         {% for portfolio_form in dynamic_formset %}
-                            <p>{{ portfolio_form }}</p>
-                        {% endfor %}
+                        <p>{{ portfolio_form }}</p>
+                        {%  endfor %}
+
                     </div>
                     </div>
                     {{ dynamic_formset.management_form }}
-{#                    <ul class="circle--clone--list">#}
-{#                        <li>#}
-{#                            <input type="text" placeholder="Project Name"/>#}
-{#                            <input type="text" placeholder="Project URL"/>#}
-{#                            <a class="circle--clone--add">Add Project</a>#}
-{#                            <a class="circle--clone--remove">Remove</a>#}
-{#                        </li>#}
-{#                    </ul>#}
+
         </form>
     </div>
 {% endblock %}
