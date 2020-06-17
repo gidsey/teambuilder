@@ -7,7 +7,7 @@
         <nav class="bounds">
             <ul class="circle--pill--list">
                 <li><a href="applications.html">Applications</a></li>
-                <li><a class="selected" href="{% url "accounts:profile" %}">Profile</a></li>
+                <li><a class="selected" href="{% url "accounts:user_profile" username=profile_user %}">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -20,18 +20,16 @@
                 <h2>Profile</h2>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
-            <p>user: {{ user }}</p>
-            <p>current_user: {{ current_user }}</p>
-                {%  if user == current_user %}
-                <a class="button icon-on-left" href="{% url "accounts:profile_edit" %}">Edit</a>
+                {%  if user == profile_user %}
+                <a class="button icon-on-left" href="{% url "accounts:user_profile_edit" username=user %}">Edit</a>
                 {%  endif %}
             </div>
         </div>
 
         <div class="grid-70">
-            <h1>{{ current_user.profile.fullname }} ({{ current_user.id }})</h1>
+            <h1>{{ profile_user.profile.fullname }} ({{ profile_user.id }})</h1>
             <div class="circle--article--body">
-                <p>{{ current_user.profile.bio|markdown_to_html }}</p>
+                <p>{{ profile_user.profile.bio|markdown_to_html }}</p>
             </div>
 
             <h2>Past Projects</h2>
@@ -67,21 +65,21 @@
 
             <div class="circle--secondary--module">
                 <div class="circle--primary--avatar">
-                    {% if not current_user.profile.avatar.url %}
+                    {% if not profile_user.profile.avatar.url %}
                         <img src="/media/placeholder/default.jpg" class="avatar"
                              alt="Default Avatar">
                     {% else %}
-                        <img src="{{ current_user.profile.avatar.url }}"
-                             alt="{{ current_user.profile.fullname }}" class="avatar">
+                        <img src="{{ profile_user.profile.avatar.url }}"
+                             alt="{{ profile_user.profile.fullname }}" class="avatar">
                     {% endif %}
                 </div>
             </div>
 
             <div class="circle--secondary--module">
                 <h4>My Skills</h4>
-                {% if current_user_skills %}
+                {% if profile_user_skills %}
                     <ul class="unloaded">
-                        {% for skill in current_user_skills %}
+                        {% for skill in profile_user_skills %}
                             <li>{{ skill }}</li>
                         {% endfor %}
                     </ul>
@@ -90,9 +88,9 @@
 
             <div class="circle--secondary--module">
                 <h4>My Projects</h4>
-                {% if current_user_portfolios %}
+                {% if profile_user_portfolios %}
                     <ul class="circle--link--list">
-                        {% for portfolio in current_user_portfolios %}
+                        {% for portfolio in profile_user_portfolios %}
                             <li><a href="{{ portfolio.url }}" target="_blank">{{ portfolio }}</a></li>
                         {% endfor %}
                 {% endif %}

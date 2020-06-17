@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
@@ -29,26 +29,26 @@ def profile(request):
 @login_required
 def user_profile(request, username):
     try:
-        current_user = models.User.objects.get(username=username)
+        profile_user = models.User.objects.get(username=username)
     except ObjectDoesNotExist:
         raise Http404
 
-    current_user_skills = models.Skill.objects.all().filter(
-        skill_user__user=current_user,
+    profile_user_skills = models.Skill.objects.all().filter(
+        skill_user__user=profile_user,
         skill_user__is_skill=True
     ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
-    current_user_portfolios = models.Portfolio.objects.all().filter(
-        user_id=current_user
+    profile_user_portfolios = models.Portfolio.objects.all().filter(
+        user_id=profile_user
     )
     return render(request, 'accounts/profile.html', {
-        'current_user': current_user,
-        'current_user_skills': current_user_skills,
-        'current_user_portfolios': current_user_portfolios,
+        'profile_user': profile_user,
+        'profile_user_skills': profile_user_skills,
+        'profile_user_portfolios': profile_user_portfolios,
     })
 
 
 @login_required
-def profile_edit(request):
+def profile_edit(request, username):
     """
     Edit the User Profile.
     """
@@ -66,6 +66,10 @@ def profile_edit(request):
     choices.sort(key=lambda tup: tup[1].lower())  # Order the list by skill (case insensitive)
 
     user = request.user
+
+    #  Only allow users to edit their own profile
+    if username != user.username:
+        raise PermissionDenied
 
     if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
         try:
@@ -85,7 +89,7 @@ def profile_edit(request):
         dynamic_formset = forms.portfolio_inline_formset(data=request.POST, instance=user, prefix='folio-items')
 
         if profile_form.is_valid() and custom_skills_formset.is_valid() and dynamic_formset.is_valid():
-            user_profile = profile_form.save(commit=False)
+            user_profile_form = profile_form.save(commit=False)
 
             # form_true = the skills that need to set to true for the current user
             form_true = [int(skill) for skill in profile_form.cleaned_data['skills']]
@@ -129,13 +133,13 @@ def profile_edit(request):
                 except ObjectDoesNotExist:
                     models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
 
-            user_profile.save()
+            user_profile_form.save()
             dynamic_formset.save()
             messages.success(
                 request,
                 "Profile saved successfully."
             )
-            return HttpResponseRedirect(reverse('accounts:profile'))
+            return HttpResponseRedirect(reverse('accounts:user_profile', args={username: user}))
 
     elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
         try:
@@ -163,7 +167,7 @@ def profile_edit(request):
                 request,
                 "Avatar added successfully."
             )
-            return HttpResponseRedirect(reverse('accounts:profile_edit'))
+            return HttpResponseRedirect(reverse('accounts:user_profile', args={username: user}))
     else:
         try:
             fullname = user.profile.fullname

@@ -32,7 +32,7 @@
         <nav class="bounds">
             <ul class="circle--pill--list">
                 <li><a href="applications.html">Applications</a></li>
-                <li><a class="selected" href="{% url "accounts:profile" %}">Profile</a></li>
+                <li><a class="selected" href="{% url "accounts:user_profile" username=user %}">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -40,7 +40,7 @@
     {% include "messages.html" %}
 
     <div class="bounds circle--page">
-        <form method="POST" enctype="multipart/form-data" id="formUpload" action="{% url 'accounts:profile_edit' %} ">
+        <form method="POST" enctype="multipart/form-data" id="formUpload" action=""">
             <div class="circle--page--header circle--fluid">
                 <div class="circle--fluid--cell circle--fluid--primary">
                     <h2>Profile</h2>
