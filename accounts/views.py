@@ -11,19 +11,19 @@ from . import forms
 from . import models
 
 
-@login_required
-def profile(request):
-    user_skills = models.Skill.objects.all().filter(
-        skill_user__user=request.user,
-        skill_user__is_skill=True
-    ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
-    user_portfolios = models.Portfolio.objects.all().filter(
-        user_id=request.user
-    )
-    return render(request, 'accounts/profile.html', {
-        'user_skills': user_skills,
-        'user_portfolios': user_portfolios,
-    })
+# @login_required
+# def profile(request):
+#     user_skills = models.Skill.objects.all().filter(
+#         skill_user__user=request.user,
+#         skill_user__is_skill=True
+#     ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
+#     user_portfolios = models.Portfolio.objects.all().filter(
+#         user_id=request.user
+#     )
+#     return render(request, 'accounts/profile.html', {
+#         'user_skills': user_skills,
+#         'user_portfolios': user_portfolios,
+#     })
 
 
 @login_required
@@ -48,7 +48,16 @@ def user_profile(request, username):
 
 
 @login_required
-def profile_edit(request, username):
+def profile_edit_redirect(request):
+    """
+    Redirect the user on first login to
+    their profile edit page
+    """
+    return HttpResponseRedirect(reverse('accounts:user_profile_edit', args={request.user}))
+
+
+@login_required
+def user_profile_edit(request, username):
     """
     Edit the User Profile.
     """
@@ -139,7 +148,7 @@ def profile_edit(request, username):
                 request,
                 "Profile saved successfully."
             )
-            return HttpResponseRedirect(reverse('accounts:user_profile', args={username: user}))
+            return HttpResponseRedirect(reverse('accounts:user_profile', args={username}))
 
     elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
         try:
@@ -167,7 +176,7 @@ def profile_edit(request, username):
                 request,
                 "Avatar added successfully."
             )
-            return HttpResponseRedirect(reverse('accounts:user_profile', args={username: user}))
+            return HttpResponseRedirect(reverse('accounts:user_profile', args={username}))
     else:
         try:
             fullname = user.profile.fullname

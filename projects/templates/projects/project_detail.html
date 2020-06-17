@@ -3,26 +3,30 @@
 {% block title %} {{ block.super }} | Project Detail {% endblock %}
 {% block body %}
 
-    <div class="circle--actions--bar">
-        <div class="bounds">
-            <div class="grid-100">
-                <a class="button" href="project_edit.html">Edit Project</a>
-                <a class="button button-text" href="index.html">Delete Project</a>
+    {% if user == project.owner %}
+        <div class="circle--actions--bar">
+            <div class="bounds">
+                <div class="grid-100">
+                    <a class="button" href="project_edit.html">Edit Project</a>
+                    <a class="button button-text" href="index.html">Delete Project</a>
+                </div>
             </div>
         </div>
-    </div>
-
+    {% endif %}
     <div class="bounds circle--page circle--article">
         {% include "messages.html" %}
         <div class="grid-70">
             <div class="circle--article--header">
                 <h4 class="circle--article--section">Project</h4>
                 <h1 class="circle--article--title">{{ project.title }}</h1>
-                <p class="circle--article--byline">Project Owner: <a href="{% url 'accounts:profile' %}">{{ project.owner.profile }}</a></p>
+                <p class="circle--article--byline">
+                    Project Owner:
+                    <a href="{% url 'accounts:user_profile' username=project.owner %}">{{ project.owner.profile }}</a>
+                </p>
             </div>
 
             <div class="circle--article--body">
-           {{ project.description }}
+                {{ project.description }}
             </div>
 
             <div class="circle--project--positions">
@@ -63,12 +67,12 @@
 
             <div class="circle--secondary--module">
                 <h3>Project Timeline</h3>
-                <p>10 hours</p>
+                <p>{{ project.timeline }}</p>
             </div>
 
             <div class="circle--secondary--module">
                 <h3>Applicant Requirements</h3>
-                <p>Applicants are required to work from our headquarters located in Antarctica.</p>
+                <p>{{ project.requirements }}</p>
             </div>
 
         </div>
