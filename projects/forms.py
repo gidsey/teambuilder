@@ -31,5 +31,15 @@ class ProjectForm(forms.ModelForm):
 
     description.widget.attrs.update(
         {
-         'placeholder': 'Position description...'
-         })
+            'class': 'generic-textarea',
+            'placeholder': 'Project description...'
+        })
+
+    timeline.widget.attrs.update({
+        'class': 'circle--textarea--input',
+        'placeholder': 'Time estimate',
+    })
+
+    requirements.widget.attrs.update({
+        'class': 'circle--textarea--input',
+    })

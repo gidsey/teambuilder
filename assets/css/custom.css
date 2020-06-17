@@ -36,3 +36,7 @@
 .portfolio-forms label {
     display: none;
 }
+
+.generic-textarea {
+    height: 202px;
+}
