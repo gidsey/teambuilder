@@ -25,8 +25,7 @@
         });
     </script>
 {% endblock %}
-
-{% block title %} {{block.super}} | Edit Profile {% endblock %}
+{% block title %} {{ block.super }} | Edit Profile {% endblock %}
 {% block body %}
     <div class="circle--actions--bar">
         <nav class="bounds">
@@ -40,116 +39,117 @@
     {% include "messages.html" %}
 
     <div class="bounds circle--page">
-        <form method="POST" enctype="multipart/form-data" id="formUpload" action=""">
-            <div class="circle--page--header circle--fluid">
-                <div class="circle--fluid--cell circle--fluid--primary">
-                    <h2>Profile</h2>
-                </div>
-
-                <div class="circle--fluid--cell circle--fluid--secondary">
-                    <input type="submit" name="update_profile" class="button-primary" value="Save Changes">
-                </div>
+        <form method="POST" enctype="multipart/form-data" id="formUpload" action=""
+        ">
+        <div class="circle--page--header circle--fluid">
+            <div class="circle--fluid--cell circle--fluid--primary">
+                <h2>Profile</h2>
             </div>
 
-            <div class="grid-70">
-                {% csrf_token %}
-                {{ profile_form.fullname }}
-                {{ profile_form.bio }}
-                <p class="help_text">
-                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
-                        Markdown is accepted</a></p>
-                <div class="circle--article--body">
-                </div>
-                <h2>Past Projects</h2>
-                <table class="u-full-width circle--table">
-                    <thead>
-                    <tr>
-                        <th>Project Title</th>
-                        <th class="circle--cell--right">Project Needs</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="clickable-row" data-href="project.html">
-                        <td>
-                            <h3>Invoice Delivery Tool</h3>
-                        </td>
-                        <td class="circle--cell--right">
-                            <span class="secondary-label">Rails Developer</span>
-                        </td>
-                    </tr>
-                    <tr class="clickable-row" data-href="project.html">
-                        <td>
-                            <h3>Twitter Client</h3>
-                        </td>
-                        <td class="circle--cell--right">
-                            <span class="secondary-label">Designer</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
+            <div class="circle--fluid--cell circle--fluid--secondary">
+                <input type="submit" name="update_profile" class="button-primary" value="Save Changes">
             </div>
-            <div class="grid-25 grid-push-5">
+        </div>
 
-                <div class="circle--secondary--module">
-                    <div class="circle--primary--avatar">
+        <div class="grid-70">
+            {% csrf_token %}
+            {{ profile_form.fullname }}
+            {{ profile_form.bio }}
+            <p class="help_text">
+                <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
+                    Markdown is accepted</a></p>
+            <div class="circle--article--body">
+            </div>
+            <h2>Past Projects</h2>
+            <table class="u-full-width circle--table">
+                <thead>
+                <tr>
+                    <th>Project Title</th>
+                    <th class="circle--cell--right">Project Needs</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="clickable-row" data-href="project.html">
+                    <td>
+                        <h3>Invoice Delivery Tool</h3>
+                    </td>
+                    <td class="circle--cell--right">
+                        <span class="secondary-label">Rails Developer</span>
+                    </td>
+                </tr>
+                <tr class="clickable-row" data-href="project.html">
+                    <td>
+                        <h3>Twitter Client</h3>
+                    </td>
+                    <td class="circle--cell--right">
+                        <span class="secondary-label">Designer</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-                        {% if not current_user.profile.avatar.url %}
-                            <img src="/media/placeholder/default.jpg" class="avatar_editing"
-                                 alt="Default Avatar">
-                        {% endif %}
-                        <img src="{{ current_user.profile.avatar.url }}"
-                             alt="{{ current_user.profile.fullname }}" class="avatar_editing">
+        </div>
+        <div class="grid-25 grid-push-5">
 
-                        {{ avatar_form.non_field_errors }}
-                        {% for hidden_field in avatar_form.hidden_fields %}
-                            {{ hidden_field.errors }}
-                            {{ hidden_field }}
-                        {% endfor %}
-                        <div class="button">
-                            <span>Upload Photo</span>
-                            <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
-                        </div>
+            <div class="circle--secondary--module">
+                <div class="circle--primary--avatar">
 
-                    </div>
-                </div>
-                {% include "accounts/image_editor_modal.html" %}
-                <div class="circle--secondary--module">
-                    <h4>My Skills</h4>
+                    {% if not current_user.profile.avatar.url %}
+                        <img src="/media/placeholder/default.jpg" class="avatar_editing"
+                             alt="Default Avatar">
+                    {% endif %}
+                    <img src="{{ current_user.profile.avatar.url }}"
+                         alt="{{ current_user.profile.fullname }}" class="avatar_editing">
 
-                    {% for checkbox in profile_form.skills %}
-                        <div>
-                            {{ checkbox }}
-                        </div>
+                    {{ avatar_form.non_field_errors }}
+                    {% for hidden_field in avatar_form.hidden_fields %}
+                        {{ hidden_field.errors }}
+                        {{ hidden_field }}
                     {% endfor %}
-
-                    <div class="circle--clone--list">
-                        <div id="custom-skills-forms">
-                            {% for form in custom_skills_formset %}
-                                <div id="{{ form.prefix }}-row">
-                                    {{ form }}
-                                </div>
-                            {% endfor %}
-                        </div>
+                    <div class="button">
+                        <span>Upload Photo</span>
+                        <input id="id_avatar" type="file" name="avatar" accept="image/*" class="upload">
                     </div>
 
-                    {{ custom_skills_formset.management_form }}
+                </div>
+            </div>
+            {% include "accounts/image_editor_modal.html" %}
+            <div class="circle--secondary--module">
+                <h4>My Skills</h4>
 
+                {% for checkbox in profile_form.skills %}
+                    <div>
+                        {{ checkbox }}
+                    </div>
+                {% endfor %}
+
+                <div class="circle--clone--list">
+                    <div id="custom-skills-forms">
+                        {% for form in custom_skills_formset %}
+                            <div id="{{ form.prefix }}-row">
+                                {{ form }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <div class="circle--secondary--module">
-                    <h4>My Projects</h4>
+                {{ custom_skills_formset.management_form }}
 
-                    <div class="circle--clone--list">
+            </div>
+
+            <div class="circle--secondary--module">
+                <h4>My Projects</h4>
+
+                <div class="circle--clone--list">
                     <div id="portfolio_dynamic_formset">
                         {% for portfolio_form in dynamic_formset %}
-                        <p>{{ portfolio_form }}</p>
-                        {%  endfor %}
+                            <p>{{ portfolio_form }}</p>
+                        {% endfor %}
 
                     </div>
-                    </div>
-                    {{ dynamic_formset.management_form }}
+                </div>
+                {{ dynamic_formset.management_form }}
 
-        </form>
-    </div>
+                </form>
+            </div>
 {% endblock %}

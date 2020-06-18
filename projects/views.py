@@ -23,9 +23,8 @@ def project_new(request):
 
         if project_form.is_valid() and positions_formset.is_valid():
 
-            project = project_form.save(commit=False)
+            project = project_form.save()
             positions_formset.save()
-            project.save()
 
             messages.success(
                 request,
@@ -35,7 +34,7 @@ def project_new(request):
     else:
         user = request.user
         project_form = forms.ProjectForm()
-        positions_formset = forms.position_inline_formset(instance=user.project, prefix='position-items')
+        positions_formset = forms.position_inline_formset(prefix='position-items')
 
     return render(request, 'projects/project_new.html', {
         'project_form': project_form,

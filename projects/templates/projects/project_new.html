@@ -1,6 +1,20 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block title %} {{ block.super }} | New Project {% endblock %}
+{% block extrahead %}
+    <script type="text/javascript">
+        $(function () {
+            $('#positions_formset  li').formset({
+                prefix: 'position-items',
+                addText: 'Add Position',
+                deleteText: 'Remove',
+                {#addCssClass: "circle--clone--add",#}
+                {#deleteCssClass: "circle--clone--remove",#}
+                formCssClass: "position-forms"
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
     <form method="POST" action="{% url 'projects:project_new' %}">
         <div class="circle--actions--bar">
@@ -20,18 +34,22 @@
                 <div class="grid-70">
                     {% csrf_token %}
                     <div class="circle--article--body">
-
-
                         {{ project_form.title }}
                         {{ project_form.description }}
-
-{#                        <input type="text" class="circle--input--h1" placeholder="Project Title"/>#}
-{#                        <textarea placeholder="Project description..."></textarea>#}
                     </div>
 
                     <div class="circle--project--positions">
                         <h2>Positions</h2>
 
+
+                    <ul class="circle--group--list circle--clone--list">
+                        <div id="positions_formset">
+                            {%  for position_form in positions_formset %}
+                            <li>{{ position_form }}</li>
+                            {% endfor %}
+                        </div>
+                        </ul>
+                        {{ positions_formset.management_form }}
                         <ul class="circle--group--list circle--clone--list">
                             <li>
                                 <input type="text" class="circle--input--h3" placeholder="Position Title"/>
@@ -41,7 +59,16 @@
                             </li>
                         </ul>
 
-                        {#                        <a class="button button-primary" href="project.html">Save Changes</a>#}
+{#                         <div class="circle--clone--list">#}
+{#                    <div id="portfolio_dynamic_formset">#}
+{#                        {% for portfolio_form in dynamic_formset %}#}
+{#                            <p>{{ portfolio_form }}</p>#}
+{#                        {% endfor %}#}
+{##}
+{#                    </div>#}
+{#                </div>#}
+{#                {{ dynamic_formset.management_form }}#}
+
                         <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
                     </div>
                 </div>
@@ -51,13 +78,11 @@
                     <div class="circle--secondary--module">
                         <h3>Project Timeline</h3>
                         {{ project_form.timeline }}
-{#                        <textarea placeholder="Time estimate" class="circle--textarea--input"></textarea>#}
                     </div>
 
                     <div class="circle--secondary--module">
                         <h3>Applicant Requirements</h3>
                         {{ project_form.requirements }}
-{#                        <textarea></textarea>#}
                     </div>
 
                 </div>
