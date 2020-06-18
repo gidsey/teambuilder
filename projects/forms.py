@@ -51,6 +51,7 @@ position_inline_formset = forms.inlineformset_factory(
     extra=1,
     fields=('title', 'description'),
     widgets={
-        'name': forms.TextInput(attrs={'placeholder': 'Position Title'}),
-        'url': forms.Textarea(attrs={'placeholder': 'Position description...'},)}
+        'title': forms.TextInput(attrs={'placeholder': 'Position Title', 'class': 'circle--input--h3'}),
+        'description': forms.Textarea(attrs={'placeholder': 'Position description...'},)}
 )
+

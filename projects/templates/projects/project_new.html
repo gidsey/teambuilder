@@ -8,8 +8,8 @@
                 prefix: 'position-items',
                 addText: 'Add Position',
                 deleteText: 'Remove',
-                {#addCssClass: "circle--clone--add",#}
-                {#deleteCssClass: "circle--clone--remove",#}
+                addCssClass: "circle--clone--add",
+                deleteCssClass: "circle--clone--remove",
                 formCssClass: "position-forms"
             });
         });
@@ -40,35 +40,12 @@
 
                     <div class="circle--project--positions">
                         <h2>Positions</h2>
-
-
-                    <ul class="circle--group--list circle--clone--list">
-                        <div id="positions_formset">
-                            {%  for position_form in positions_formset %}
-                            <li>{{ position_form }}</li>
+                        <ul class="circle--group--list circle--clone--list" id="positions_formset">
+                            {% for position_form in positions_formset %}
+                                <li>{{ position_form }}</li>
                             {% endfor %}
-                        </div>
                         </ul>
                         {{ positions_formset.management_form }}
-                        <ul class="circle--group--list circle--clone--list">
-                            <li>
-                                <input type="text" class="circle--input--h3" placeholder="Position Title"/>
-                                <textarea placeholder="Position description..."></textarea>
-                                <a class="circle--clone--add">Add Position</a>
-                                <a class="circle--clone--remove">Remove</a>
-                            </li>
-                        </ul>
-
-{#                         <div class="circle--clone--list">#}
-{#                    <div id="portfolio_dynamic_formset">#}
-{#                        {% for portfolio_form in dynamic_formset %}#}
-{#                            <p>{{ portfolio_form }}</p>#}
-{#                        {% endfor %}#}
-{##}
-{#                    </div>#}
-{#                </div>#}
-{#                {{ dynamic_formset.management_form }}#}
-
                         <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
                     </div>
                 </div>
