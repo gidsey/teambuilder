@@ -3,6 +3,8 @@
 {% load account %}
 {% block title %} {{block.super}} | Profile {% endblock %}
 {% block body %}
+
+    {%  if profile_user == request.user %}
     <div class="circle--actions--bar">
         <nav class="bounds">
             <ul class="circle--pill--list">
@@ -11,6 +13,7 @@
             </ul>
         </nav>
     </div>
+    {%  endif %}
 
     <div class="bounds circle--page">
         {% include "messages.html" %}
