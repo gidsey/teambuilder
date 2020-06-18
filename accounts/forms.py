@@ -101,11 +101,11 @@ class CustomSkillsForm(forms.Form):
     )
 
 
-# Define the formsets for Custom Skills
+# Define the formset for user's Custom Skills
 CustomSkillsFormSet = formset_factory(CustomSkillsForm)
 
 
-#  Define the formsets for Custom Skills fpr Profile Portfolios (My Projects)
+#  Define the formset for user's Profile Portfolios (My Projects)
 portfolio_inline_formset = forms.inlineformset_factory(
     User,
     models.Portfolio,

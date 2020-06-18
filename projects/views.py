@@ -19,20 +19,27 @@ def project_new(request):
         user = request.user
         user.project = models.Project(owner=request.user)
         project_form = forms.ProjectForm(data=request.POST, instance=user.project)
+        positions_formset = forms.position_inline_formset(data=request.POST, instance=user.project, prefix='position-items')
 
-        if project_form.is_valid():
-            print(project_form.cleaned_data['title'])
-            project = project_form.save()
+        if project_form.is_valid() and positions_formset.is_valid():
+
+            project = project_form.save(commit=False)
+            positions_formset.save()
+            project.save()
+
             messages.success(
                 request,
                 "Project created successfully."
             )
             return redirect('projects:project_detail', pk=project.pk)
     else:
+        user = request.user
         project_form = forms.ProjectForm()
+        positions_formset = forms.position_inline_formset(instance=user.project, prefix='position-items')
 
     return render(request, 'projects/project_new.html', {
-        'project_form': project_form
+        'project_form': project_form,
+        'positions_formset': positions_formset,
     })
 
 

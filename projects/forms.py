@@ -29,11 +29,10 @@ class ProjectForm(forms.ModelForm):
         'placeholder': 'Project Title',
     })
 
-    description.widget.attrs.update(
-        {
-            'class': 'generic-textarea',
-            'placeholder': 'Project description...'
-        })
+    description.widget.attrs.update({
+        'class': 'generic-textarea',
+        'placeholder': 'Project description...'
+    })
 
     timeline.widget.attrs.update({
         'class': 'circle--textarea--input',
@@ -43,3 +42,15 @@ class ProjectForm(forms.ModelForm):
     requirements.widget.attrs.update({
         'class': 'circle--textarea--input',
     })
+
+
+#  Define the formset for Positions attached to a Project
+position_inline_formset = forms.inlineformset_factory(
+    models.Project,
+    models.Position,
+    extra=1,
+    fields=('title', 'description'),
+    widgets={
+        'name': forms.TextInput(attrs={'placeholder': 'Position Title'}),
+        'url': forms.Textarea(attrs={'placeholder': 'Position description...'},)}
+)
