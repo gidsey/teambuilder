@@ -49,6 +49,11 @@ def project_detail(request, pk):
     except ObjectDoesNotExist:
         raise Http404
 
+    project_positions = models.Position.objects.all().filter(
+        project_id=project.id
+    )
+
     return render(request, 'projects/project_detail.html', {
-        'project': project
+        'project': project,
+        'project_positions': project_positions,
     })
