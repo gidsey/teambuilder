@@ -8,7 +8,7 @@
                 <h2>Projects</h2>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
-                <a class="button button-primary icon-on-left" href="{%  url 'projects:project_new' %}">
+                <a class="button button-primary icon-on-left" href="{% url 'projects:project_new' %}">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                          x="0px"
                          y="0px" viewBox="0 0 13 13" style="enable-background:new 0 0 13 13;" xml:space="preserve"
@@ -41,7 +41,6 @@
             <table class="u-full-width circle--table">
 
 
-
                 <thead>
                 <tr>
                     <th>Project Title</th>
@@ -50,35 +49,42 @@
                 </thead>
                 <tbody>
 
-                {%  for project in projects %}
-                <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
-                    <td>
-                        <h3>{{ project.title }}</h3>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Rails Developer</span>
-                    </td>
-                </tr>
-
-                {%  endfor %}
+                {% for project in projects %}
 
 
-                <tr class="clickable-row" data-href="project.html">
-                    <td>
-                        <h3>Invoice Delivery Tool</h3>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Rails Developer</span>
-                    </td>
-                </tr>
-                <tr class="clickable-row" data-href="project.html">
-                    <td>
-                        <h3>Twitter Client</h3>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Designer</span>
-                    </td>
-                </tr>
+                    <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
+                        <td class="project_title">
+                            <h3>{{ project.title }}</h3>
+                        </td>
+
+                        <td class="circle--cell--right">
+                            {% for position in project %}
+                                <ul>
+                                    <li class="secondary-label no-bullets">{{ project.position }}</li>
+                                </ul>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+
+                {#                <tr class="clickable-row" data-href="project.html">#}
+                {#                    <td>#}
+                {#                        <h3>Invoice Delivery Tool</h3>#}
+                {#                    </td>#}
+                {#                    <td class="circle--cell--right">#}
+                {#                        <span class="secondary-label">Rails Developer</span>#}
+                {#                    </td>#}
+                {#                </tr>#}
+                {#                <tr class="clickable-row" data-href="project.html">#}
+                {#                    <td>#}
+                {#                        <h3>Twitter Client</h3>#}
+                {#                    </td>#}
+                {#                    <td class="circle--cell--right">#}
+                {#                        <span class="secondary-label">Designer</span>#}
+                {#                    </td>#}
+                {#                </tr>#}
                 </tbody>
             </table>
         </div>

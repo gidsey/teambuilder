@@ -44,3 +44,7 @@
 textarea {
     resize: vertical!important;
 }
+
+.project_title {
+    vertical-align: top;
+}
