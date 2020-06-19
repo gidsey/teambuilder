@@ -40,3 +40,7 @@
 .generic-textarea {
     height: 202px;
 }
+
+textarea {
+    resize: vertical!important;
+}

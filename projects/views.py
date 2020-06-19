@@ -10,7 +10,10 @@ from . import models
 
 
 def project_listing(request):
-    return render(request, 'projects/project_listing.html')
+    projects = models.Project.objects.all()
+    return render(request, 'projects/project_listing.html', {
+        'projects': projects,
+    })
 
 
 @login_required
