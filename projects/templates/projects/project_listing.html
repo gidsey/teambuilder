@@ -58,9 +58,9 @@
                         </td>
 
                         <td class="circle--cell--right">
-                            {% for position in project %}
+                            {% for position in project.positions.all %}
                                 <ul>
-                                    <li class="secondary-label no-bullets">{{ project.position }}</li>
+                                    <li class="secondary-label no-bullets">{{ position }}</li>
                                 </ul>
                             {% endfor %}
                         </td>
@@ -68,23 +68,6 @@
 
                 {% endfor %}
 
-
-                {#                <tr class="clickable-row" data-href="project.html">#}
-                {#                    <td>#}
-                {#                        <h3>Invoice Delivery Tool</h3>#}
-                {#                    </td>#}
-                {#                    <td class="circle--cell--right">#}
-                {#                        <span class="secondary-label">Rails Developer</span>#}
-                {#                    </td>#}
-                {#                </tr>#}
-                {#                <tr class="clickable-row" data-href="project.html">#}
-                {#                    <td>#}
-                {#                        <h3>Twitter Client</h3>#}
-                {#                    </td>#}
-                {#                    <td class="circle--cell--right">#}
-                {#                        <span class="secondary-label">Designer</span>#}
-                {#                    </td>#}
-                {#                </tr>#}
                 </tbody>
             </table>
         </div>
