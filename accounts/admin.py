@@ -1,7 +1,13 @@
 from django.contrib import admin
-from . import models
+from .models import Skill, Profile
 
 admin.site.site_header = 'Teambuilder Admin Area'
 
-admin.site.register(models.Profile)
-admin.site.register(models.Skill)
+
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ['name', 'type']
+    ordering = ['-type']
+
+
+admin.site.register(Profile)
+admin.site.register(Skill, SkillAdmin)
