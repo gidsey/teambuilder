@@ -55,3 +55,7 @@ position_inline_formset = forms.inlineformset_factory(
         'description': forms.Textarea(attrs={'placeholder': 'Position description...'},)}
 )
 
+
+class DeleteProjectForm(forms.Form):
+    class Meta:
+        fields = ('title',)

@@ -109,3 +109,38 @@ def project_detail(request, pk):
         'project': project,
         'project_positions': project_positions,
     })
+
+
+@login_required
+def project_delete(request, pk):
+    """
+    Delete the Project.
+    """
+    try:
+        project = models.Project.objects.get(id=pk)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    #  Only allow users to edit their own projects
+    if request.user != project.owner:
+        raise PermissionDenied
+
+    # delete_form = forms.DeleteProjectForm(instance=project)
+
+    if request.method == 'POST':
+        delete_form = forms.DeleteProjectForm(data=request.POST)
+        if delete_form.is_valid():
+            project.delete()
+            messages.success(
+                request,
+                "Project deleted successfully."
+            )
+            return redirect('projects:project_listing')
+    else:
+        delete_form = forms.DeleteProjectForm()
+
+    return render(request, 'projects/project_delete.html', {
+        'project': project,
+        'delete_form': delete_form,
+    })
+
