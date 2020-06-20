@@ -12,8 +12,10 @@ from . import models
 from projects.models import Project
 
 
-@login_required
 def user_profile(request, username):
+    """
+    Show the user profile page
+    """
     try:
         profile_user = models.User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -39,7 +41,7 @@ def user_profile(request, username):
 def profile_edit_redirect(request):
     """
     Redirect the user on first login to
-    their profile edit page
+    their profile edit page.
     """
     return HttpResponseRedirect(reverse('accounts:user_profile_edit', args={request.user}))
 
