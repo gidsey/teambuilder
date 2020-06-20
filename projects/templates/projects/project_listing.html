@@ -39,8 +39,6 @@
 
         <div class="grid-70 grid-push-5">
             <table class="u-full-width circle--table">
-
-
                 <thead>
                 <tr>
                     <th>Project Title</th>
@@ -48,10 +46,7 @@
                 </tr>
                 </thead>
                 <tbody>
-
                 {% for project in projects %}
-
-
                     <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
                         <td class="project_title">
                             <h3>{{ project.title }}</h3>
@@ -65,12 +60,11 @@
                             {% endfor %}
                         </td>
                     </tr>
-
                 {% endfor %}
-
                 </tbody>
             </table>
         </div>
+
     </div>
 
 {% endblock %}

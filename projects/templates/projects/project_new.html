@@ -22,7 +22,6 @@
             <div class="bounds">
 
                 <div class="grid-100">
-                    {#                <a class="button button-primary" href="{% url 'projects:project_detail' %}">Save Project</a>#}
                     <input type="submit" name="save_changes" class="button-primary mb-0" value="Save Project">
                     <a class="button button-text" href="{% url 'projects:project_listing' %}">Discard</a>
                 </div>
@@ -36,6 +35,9 @@
                     <div class="circle--article--body">
                         {{ project_form.title }}
                         {{ project_form.description }}
+                        <p class="help_text">
+                            <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
+                                Markdown is accepted</a></p>
                     </div>
 
                     <div class="circle--project--positions">
