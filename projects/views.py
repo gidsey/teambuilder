@@ -42,7 +42,8 @@ def project_new(request):
         project_form = forms.ProjectForm()
         positions_formset = forms.position_inline_formset(prefix='position-items')
 
-    return render(request, 'projects/project_new.html', {
+    return render(request, 'projects/project_new_edit.html', {
+        'mode': 'create',
         'project_form': project_form,
         'positions_formset': positions_formset,
     })
@@ -82,16 +83,12 @@ def project_edit(request, pk):
         project_form = forms.ProjectForm(instance=project)
         positions_formset = forms.position_inline_formset(instance=project, prefix='position-items')
 
-    return render(request, 'projects/project_new.html', {
+    return render(request, 'projects/project_new_edit.html', {
+        'pk': pk,
+        'mode': 'edit',
         'project_form': project_form,
         'positions_formset': positions_formset,
     })
-
-
-
-
-
-
 
 
 def project_detail(request, pk):

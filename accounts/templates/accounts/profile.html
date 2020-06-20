@@ -40,7 +40,7 @@
                 <thead>
                 <tr>
                     <th>Project Title</th>
-                    <th class="circle--cell--right">Project Needs</th>
+                    <th class="circle--cell--right pl-5">Project Needs</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,7 +53,7 @@
                         <td class="circle--cell--right">
                             {% for position in project.positions.all %}
                                 <ul>
-                                    <li class="secondary-label no-bullets">{{ position }}</li>
+                                    <li class="secondary-label no-bullets pl-5">{{ position }}</li>
                                 </ul>
                             {% endfor %}
                         </td>
