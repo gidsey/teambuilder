@@ -69,22 +69,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="clickable-row" data-href="project.html">
-                    <td>
-                        <h3>Invoice Delivery Tool</h3>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Rails Developer</span>
-                    </td>
-                </tr>
-                <tr class="clickable-row" data-href="project.html">
-                    <td>
-                        <h3>Twitter Client</h3>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Designer</span>
-                    </td>
-                </tr>
+                {% for project in profile_projects %}
+                    <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
+                        <td class="project_title">
+                            <h3>{{ project.title }}</h3>
+                        </td>
+
+                        <td class="circle--cell--right">
+                            {% for position in project.positions.all %}
+                                <ul>
+                                    <li class="secondary-label no-bullets">{{ position }}</li>
+                                </ul>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
 

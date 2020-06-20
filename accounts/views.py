@@ -191,10 +191,12 @@ def user_profile_edit(request, username):
             avatar_form = forms.AvatarForm()
             dynamic_formset = forms.portfolio_inline_formset(instance=user, prefix='folio-items')
 
+    profile_projects = Project.objects.prefetch_related('positions').filter(owner=user)
     return render(request, 'accounts/profile_edit.html', {
         'current_user': request.user,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
         'custom_skills_formset': custom_skills_formset,
         'dynamic_formset': dynamic_formset,
+        'profile_projects': profile_projects,
     })
