@@ -38,7 +38,6 @@ def project_new(request):
             )
             return redirect('projects:project_detail', pk=project.pk)
     else:
-        user = request.user
         project_form = forms.ProjectForm()
         positions_formset = forms.position_inline_formset(prefix='position-items')
 

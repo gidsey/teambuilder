@@ -9,21 +9,7 @@ from itertools import chain
 
 from . import forms
 from . import models
-
-
-# @login_required
-# def profile(request):
-#     user_skills = models.Skill.objects.all().filter(
-#         skill_user__user=request.user,
-#         skill_user__is_skill=True
-#     ).extra(select={'lower_name': 'lower(name)'}).order_by('lower_name')
-#     user_portfolios = models.Portfolio.objects.all().filter(
-#         user_id=request.user
-#     )
-#     return render(request, 'accounts/profile.html', {
-#         'user_skills': user_skills,
-#         'user_portfolios': user_portfolios,
-#     })
+from projects.models import Project
 
 
 @login_required
@@ -40,10 +26,12 @@ def user_profile(request, username):
     profile_user_portfolios = models.Portfolio.objects.all().filter(
         user_id=profile_user
     )
+    profile_projects = Project.objects.prefetch_related('positions').filter(owner=profile_user)
     return render(request, 'accounts/profile.html', {
         'profile_user': profile_user,
         'profile_user_skills': profile_user_skills,
         'profile_user_portfolios': profile_user_portfolios,
+        'profile_projects': profile_projects,
     })
 
 
