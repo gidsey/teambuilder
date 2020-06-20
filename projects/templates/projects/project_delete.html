@@ -11,14 +11,18 @@
 
             <div class="grid-75">
                 <form method="POST" action="">
-                    {%  csrf_token %}
+                    {% csrf_token %}
 
                     <div class="hidden">{{ delete_form.title }}</div>
                     <h2>Are you sure?</h2>
                     <p>Delete <strong>'{{ project }}'</strong>. This action cannot be undone.</p>
                     <p>
                         <input type="submit" name="delete" class="button-primary" value="Delete">
-                        <a href="{% url 'projects:project_listing' %}" class="button button-primary button-inactive">Cancel</a>
+                        <input
+                                onclick="window.history.go(-1); return false;"
+                                type="submit"
+                                value="Cancel"
+                        />
                     </p>
 
                 </form>
