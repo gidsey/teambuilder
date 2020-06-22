@@ -6,6 +6,7 @@
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
                 <h2>Projects</h2>
+                <div class="mt-1"><span class="secondary-label">{{ num_projects }} in total</span></div>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <a class="button button-primary icon-on-left" href="{% url 'projects:project_new' %}">
@@ -24,9 +25,9 @@
             <div class="circle--filter circle--secondary--module">
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
-                    <li><a class="selected">All Needs</a></li>
+                    <li><a href="{% url 'projects:project_listing' %}" class="selected">All Needs</a></li>
                     {% for need in project_needs %}
-                        <li>{{ need }}</li>
+                        <li><a href="{% url 'projects:project_listing_filtered' needs_filter=need %}">{{ need }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

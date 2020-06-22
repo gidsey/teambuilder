@@ -11,21 +11,25 @@ from . import models
 
 
 def project_listing(request):
-    skill = 'all'
     projects = models.Project.objects.prefetch_related('positions')
     project_needs = get_project_needs(projects)
+    num_projects = len(projects)
+    return render(request, 'projects/project_listing.html', {
+        'projects': projects,
+        'project_needs': project_needs,
+        'num_projects': num_projects,
+    })
 
-    if skill == 'all':
-        return render(request, 'projects/project_listing.html', {
-            'projects': projects,
-            'project_needs': project_needs,
-        })
-    else:
-        filtered_projects = projects.filter(positions__icontains='designer')
-        return render(request, 'projects/project_listing.html', {
-            'projects': filtered_projects,
-            'project_needs': project_needs,
-        })
+
+def project_listing_filtered(request, needs_filter):
+    projects = models.Project.objects.prefetch_related('positions')
+    project_needs = get_project_needs(projects)
+    num_projects = len(projects)
+    return render(request, 'projects/project_listing.html', {
+        'projects': projects,
+        'project_needs': project_needs,
+        'num_projects': num_projects,
+    })
 
 
 @login_required
