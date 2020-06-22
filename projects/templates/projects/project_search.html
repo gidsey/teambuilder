@@ -1,11 +1,13 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% block title %} {{ block.super }} | Search {% endblock %}
 {% block body %}
     <div class="bounds circle--page">
         {% include "messages.html" %}
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
-                <h2>Projects</h2>
+                <h2>Search</h2>
+                <p>Search results for: <span class="secondary-label">{{ term }}</span></p>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <a class="button button-primary icon-on-left" href="{% url 'projects:project_new' %}">
@@ -41,7 +43,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for project in projects %}
+                {% for project in search_results %}
                     <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
                         <td class="project_title">
                             <h3>{{ project.title }}</h3>

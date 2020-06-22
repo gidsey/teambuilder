@@ -1,18 +1,32 @@
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db.models import Q
 
+from .utils import get_project_needs
 from . import forms
 from . import models
 
 
 def project_listing(request):
+    skill = 'all'
     projects = models.Project.objects.prefetch_related('positions')
-    return render(request, 'projects/project_listing.html', {
-        'projects': projects,
-    })
+    project_needs = get_project_needs(projects)
+
+    if skill == 'all':
+        return render(request, 'projects/project_listing.html', {
+            'projects': projects,
+            'project_needs': project_needs,
+        })
+    else:
+        filtered_projects = projects.filter(positions__icontains='designer')
+        return render(request, 'projects/project_listing.html', {
+            'projects': filtered_projects,
+            'project_needs': project_needs,
+        })
+
 
 
 @login_required
@@ -20,7 +34,6 @@ def project_new(request):
     if request.method == 'POST':
         user = request.user
         user.project = models.Project(owner=request.user)
-        print('user.project {}'.format(user.project))
         project_form = forms.ProjectForm(data=request.POST, instance=user.project)
         positions_formset = forms.position_inline_formset(
             data=request.POST,
@@ -95,7 +108,6 @@ def project_detail(request, pk):
     """
     Show the project detail page
     """
-
     try:
         project = models.Project.objects.get(id=pk)
     except ObjectDoesNotExist:
@@ -125,8 +137,6 @@ def project_delete(request, pk):
     if request.user != project.owner:
         raise PermissionDenied
 
-    # delete_form = forms.DeleteProjectForm(instance=project)
-
     if request.method == 'POST':
         delete_form = forms.DeleteProjectForm(data=request.POST)
         if delete_form.is_valid():
@@ -144,3 +154,23 @@ def project_delete(request, pk):
         'delete_form': delete_form,
     })
 
+
+def project_search(request):
+    """
+    Search Project based on words in
+    their title or description.
+    """
+    term = request.GET.get('q')
+    projects = models.Project.objects.prefetch_related('positions')
+    project_needs = get_project_needs(projects)
+    search_results = projects.filter(
+        Q(title__icontains=term) |
+        Q(description__icontains=term)
+    )
+
+    return render(request, 'projects/project_search.html', {
+        'projects': projects,
+        'project_needs': project_needs,
+        'term': term,
+        'search_results': search_results,
+    })

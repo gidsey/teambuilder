@@ -68,8 +68,9 @@
                                                       href="{% url "projects:project_listing" %}">Circle</a></h1>
             </div>
             <div class="circle--fluid--cell circle--fluid--primary">
+               <form action="{%  url 'projects:project_search' %}" method="GET">
                 <div class="circle--search">
-                    <input type="text" placeholder="Search Projects..."/>
+                    <input type="text" placeholder="Search Projects..." name="q"/>
                     <button>
                         <svg version="1.1" class="search" xmlns="http://www.w3.org/2000/svg"
                              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12"
@@ -79,6 +80,7 @@
               </svg>
                     </button>
                 </div>
+
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <nav>
