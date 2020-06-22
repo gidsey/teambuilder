@@ -7,7 +7,8 @@
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
                 <h2>Search</h2>
-                <p>Search results for: <span class="secondary-label">{{ term }}</span></p>
+                <p>{{ num_results }} result{{ num_results|pluralize }} for:
+                    <span class="secondary-label">{{ term }}</span></p>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <a class="button button-primary icon-on-left" href="{% url 'projects:project_new' %}">
@@ -35,31 +36,39 @@
         </div>
 
         <div class="grid-70 grid-push-5">
-            <table class="u-full-width circle--table">
-                <thead>
-                <tr>
-                    <th>Project Title</th>
-                    <th class="circle--cell--right pl-5">Project Needs</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for project in search_results %}
-                    <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
-                        <td class="project_title">
-                            <h3>{{ project.title }}</h3>
-                        </td>
-
-                        <td class="circle--cell--right">
-                            {% for position in project.positions.all %}
-                                <ul>
-                                    <li class="secondary-label no-bullets pl-5">{{ position }}</li>
-                                </ul>
-                            {% endfor %}
-                        </td>
+            {% if search_results %}
+                <table class="u-full-width circle--table">
+                    <thead>
+                    <tr>
+                        <th>Project Title</th>
+                        <th class="circle--cell--right pl-5">Project Needs</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for project in search_results %}
+                        <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
+                            <td class="project_title">
+                                <h3>{{ project.title }}</h3>
+                            </td>
+
+                            <td class="circle--cell--right">
+                                {% for position in project.positions.all %}
+                                    <ul>
+                                        <li class="secondary-label no-bullets pl-5">{{ position }}</li>
+                                    </ul>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="grid-70 grid-push-5">
+                    <h3>Sorry there are no results for '{{ term }}'.</h3>
+                    <p>Please try another search.</p>
+                </div>
+
+        {%  endif %}
         </div>
     </div>
 {% endblock %}

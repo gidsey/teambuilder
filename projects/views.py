@@ -28,7 +28,6 @@ def project_listing(request):
         })
 
 
-
 @login_required
 def project_new(request):
     if request.method == 'POST':
@@ -42,7 +41,6 @@ def project_new(request):
         )
 
         if project_form.is_valid() and positions_formset.is_valid():
-
             project = project_form.save()
             positions_formset.save()
 
@@ -167,10 +165,12 @@ def project_search(request):
         Q(title__icontains=term) |
         Q(description__icontains=term)
     )
+    num_results = len(search_results)
 
     return render(request, 'projects/project_search.html', {
         'projects': projects,
         'project_needs': project_needs,
         'term': term,
         'search_results': search_results,
+        'num_results': num_results,
     })
