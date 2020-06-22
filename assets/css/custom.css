@@ -48,3 +48,8 @@ textarea {
 .project_title {
     vertical-align: top;
 }
+
+.search_form {
+    padding: 0;
+    margin: 0;
+}

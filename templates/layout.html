@@ -67,21 +67,24 @@
                 <h1 class="hide-text circle--logo"><a class="logo"
                                                       href="{% url "projects:project_listing" %}">Circle</a></h1>
             </div>
+
             <div class="circle--fluid--cell circle--fluid--primary">
-               <form action="{%  url 'projects:project_search' %}" method="GET">
                 <div class="circle--search">
-                    <input type="text" placeholder="Search Projects..." name="q"/>
-                    <button>
-                        <svg version="1.1" class="search" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12"
-                             xml:space="preserve">
+                    <form action="{% url 'projects:project_search' %}" method="GET" class="search_form">
+                        <input type="text" placeholder="Search Projects..." name="q"/>
+                        <button>
+                            <svg version="1.1" class="search" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12"
+                                 xml:space="preserve">
                 <path d="M12,10.6L8.3,6.9C8.7,6.2,9,5.4,9,4.5C9,2,7,0,4.5,0S0,2,0,4.5S2,9,4.5,9c0.9,0,1.7-0.3,2.4-0.7l3.7,3.7L12,10.6z M2,4.5
                 C2,3.1,3.1,2,4.5,2S7,3.1,7,4.5C7,5.9,5.9,7,4.5,7S2,5.9,2,4.5z"/>
               </svg>
-                    </button>
+                        </button>
+                    </form>
                 </div>
-               </form>
             </div>
+
+
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <nav>
                     <ul class="circle--inline">
@@ -90,13 +93,15 @@
                             <li><a href="{% url "account_login" %}">Sign In</a></li>
                         {% else %}
                             <li>{% if not user.profile.avatar.url %}
-                                <a href="{% url "accounts:user_profile" username=user %}"><img src="/media/placeholder/default.jpg"
-                                                                            class="avatar_header"
-                                                                            alt="Default Avatar"></a>
+                                <a href="{% url "accounts:user_profile" username=user %}"><img
+                                        src="/media/placeholder/default.jpg"
+                                        class="avatar_header"
+                                        alt="Default Avatar"></a>
                             {% else %}
-                                <a href="{% url "accounts:user_profile" username=user %}"><img src="{{ user.profile.avatar.url }}"
-                                                                            alt="{{ user.profile.fullname }}"
-                                                                            class="avatar_header"></a></li>
+                                <a href="{% url "accounts:user_profile" username=user %}"><img
+                                        src="{{ user.profile.avatar.url }}"
+                                        alt="{{ user.profile.fullname }}"
+                                        class="avatar_header"></a></li>
                             {% endif %}
                             <li><a href="{% url "account_logout" %}">Logout</a></li>
                         {% endif %}
