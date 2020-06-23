@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
-
 from .utils import get_project_needs, get_search_term
 from . import forms
 from . import models
@@ -196,4 +195,20 @@ def project_search(request):
         'term': term,
         'search_results': search_results,
         'num_results': num_results,
+    })
+
+
+@login_required
+def applications(request, username):
+    try:
+        profile_user = models.User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    #  Only allow users to view their own applications page
+    if request.user != profile_user:
+        raise PermissionDenied
+
+    return render(request, 'projects/applications.html', {
+        'profile_user': profile_user,
     })
