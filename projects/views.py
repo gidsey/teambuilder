@@ -35,7 +35,7 @@ def project_listing_filtered(request, needs_filter):
     project_needs = get_project_needs(all_projects)
     search_term = get_search_term(needs_filter, project_needs)
 
-    projects = all_projects.filter(
+    projects = all_projects.order_by('-created_date').filter(
         positions__title=search_term
     )
     num_projects = len(projects)
