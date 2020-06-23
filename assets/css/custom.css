@@ -69,3 +69,7 @@ textarea {
   display: inline-block;
   vertical-align: middle;
 }
+
+.tight {
+    line-height: 0;
+}

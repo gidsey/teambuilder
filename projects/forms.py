@@ -55,10 +55,13 @@ class BaseArticleFormset(forms.BaseInlineFormSet):
         for form in self.forms:
             if self.can_delete and self._should_delete_form(form):
                 continue
-            title = form.cleaned_data.get('title')
 
-            if title in titles:
+            title = form.cleaned_data.get('title')
+            title = str(title).lower()
+
+            if str(title).lower() in titles:
                 raise forms.ValidationError("Error: positions on a project must have distinct titles.")
+
             titles.append(title)
 
 
