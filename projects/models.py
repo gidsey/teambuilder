@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
@@ -11,6 +12,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     timeline = models.TextField(blank=True)
     requirements = models.TextField(blank=True)
+    created_date = models.DateTimeField(default=timezone.now)  # Auto-set Field
 
     def __str__(self):
         return self.title

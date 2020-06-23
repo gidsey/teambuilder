@@ -16,7 +16,7 @@ def project_listing(request):
     Return a list of all Projects
     and Project Needs.
     """
-    projects = models.Project.objects.prefetch_related('positions')
+    projects = models.Project.objects.order_by('-created_date').prefetch_related('positions')
     project_needs = get_project_needs(projects)
     num_projects = len(projects)
     return render(request, 'projects/project_listing.html', {
