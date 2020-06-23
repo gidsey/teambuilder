@@ -44,15 +44,34 @@ class ProjectForm(forms.ModelForm):
     })
 
 
+class BaseArticleFormset(forms.BaseInlineFormSet):
+    def clean(self):
+        """
+        Checks that no two positions have the same title.
+        """
+        if any(self.errors):
+            return
+        titles = []
+        for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            title = form.cleaned_data.get('title')
+
+            if title in titles:
+                raise forms.ValidationError("Error: positions on a project must have distinct titles.")
+            titles.append(title)
+
+
 #  Define the formset for Positions attached to a Project
 position_inline_formset = forms.inlineformset_factory(
     models.Project,
     models.Position,
+    formset=BaseArticleFormset,
     extra=1,
     fields=('title', 'description'),
     widgets={
         'title': forms.TextInput(attrs={'placeholder': 'Position Title', 'class': 'circle--input--h3'}),
-        'description': forms.Textarea(attrs={'placeholder': 'Position description...'},)}
+        'description': forms.Textarea(attrs={'placeholder': 'Position description...'},)},
 )
 
 

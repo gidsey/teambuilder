@@ -53,3 +53,19 @@ textarea {
     padding: 0;
     margin: 0;
 }
+
+.error_red {
+    text-align: center;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    background-color: #dc3545;
+    border-radius: 6px;
+    color: #FFF;
+    margin-bottom: 20px;
+}
+
+.error_red span {
+  display: inline-block;
+  vertical-align: middle;
+}

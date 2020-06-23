@@ -59,9 +59,19 @@
                         <li>{{ position_form }}</li>
                     {% endfor %}
                 </ul>
+                {% if positions_formset.non_form_errors %}
+                    <div class="error_red">
+                    <span>
+                        {% for error in positions_formset.non_form_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                    </div>
+                {% endif %}
                 {{ positions_formset.management_form }}
                 <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
             </div>
+
         </div>
 
         <div class="grid-25 grid-push-5">
