@@ -5,12 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
-from .utils import get_project_needs
+
+from .utils import get_project_needs, get_search_term
 from . import forms
 from . import models
 
 
 def project_listing(request):
+    """
+    Return a list of all Projects
+    and Project Needs.
+    """
     projects = models.Project.objects.prefetch_related('positions')
     project_needs = get_project_needs(projects)
     num_projects = len(projects)
@@ -22,8 +27,17 @@ def project_listing(request):
 
 
 def project_listing_filtered(request, needs_filter):
-    projects = models.Project.objects.prefetch_related('positions')
-    project_needs = get_project_needs(projects)
+    """
+    Return the filtered list of Projects
+    based on Project Needs.
+    """
+    all_projects = models.Project.objects.prefetch_related('positions')
+    project_needs = get_project_needs(all_projects)
+    search_term = get_search_term(needs_filter, project_needs)
+
+    projects = all_projects.filter(
+        positions__title=search_term
+    )
     num_projects = len(projects)
     return render(request, 'projects/project_listing.html', {
         'projects': projects,
@@ -34,6 +48,10 @@ def project_listing_filtered(request, needs_filter):
 
 @login_required
 def project_new(request):
+    """
+    Create a new Project
+    and associated Positions.
+    """
     if request.method == 'POST':
         user = request.user
         user.project = models.Project(owner=request.user)
@@ -67,7 +85,8 @@ def project_new(request):
 @login_required
 def project_edit(request, pk):
     """
-    Edit the Project.
+    Edit a Project
+    and associated Positions.
     """
     try:
         project = models.Project.objects.get(id=pk)
@@ -108,7 +127,7 @@ def project_edit(request, pk):
 
 def project_detail(request, pk):
     """
-    Show the project detail page
+    Show the project detail page.
     """
     try:
         project = models.Project.objects.get(id=pk)

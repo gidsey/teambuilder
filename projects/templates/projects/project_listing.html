@@ -26,8 +26,8 @@
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
                     <li><a href="{% url 'projects:project_listing' %}" class="selected">All Needs</a></li>
-                    {% for need in project_needs %}
-                        <li><a href="{% url 'projects:project_listing_filtered' needs_filter=need %}">{{ need }}</a></li>
+                    {% for slug, need in project_needs %}
+                        <li><a href="{% url 'projects:project_listing_filtered' needs_filter=slug %}">{{ need }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

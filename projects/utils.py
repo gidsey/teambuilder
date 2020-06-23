@@ -1,14 +1,31 @@
+from django.utils.text import slugify
+from django.http import Http404
+
 
 def get_project_needs(projects):
     """
-    Return a sorted list of Project Needs
-    associated with the Projects QuerySet
+    Return a sorted list of tuples containing the
+    slugified and normal version of the Project Needs
+    associated with the Projects QuerySet. e.g.
+    ('project_needs', 'Project Needs')
     """
     project_needs = []
     for project in projects:
         for position in project.positions.all():
-            if position.title not in project_needs:
-                project_needs.append(position.title)
-    project_needs = sorted(project_needs, key=str.casefold)
+            if (slugify(position.title), position.title) not in project_needs:
+                project_needs.append((slugify(position.title), position.title))
+    project_needs.sort(key=lambda tup: tup[0].lower())
     return project_needs
 
+
+def get_search_term(needs_filter, project_needs):
+    """
+    Return the de-slugified search term
+    from the project_needs list(above)
+    - if it exists, else return a 404.
+    """
+    try:
+        search_term = [item[1] for item in project_needs if needs_filter in item][0]
+    except IndexError:
+        raise Http404
+    return search_term
