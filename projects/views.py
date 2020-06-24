@@ -209,6 +209,18 @@ def applications(request, username):
     if request.user != profile_user:
         raise PermissionDenied
 
+    user_projects = models.Project.objects.prefetch_related('positions').filter(owner=profile_user)
+
+    project_needs = []
+    for project in user_projects:
+        for position in project.positions.all():
+            if position.title not in project_needs:
+                project_needs.append(position.title)
+    project_needs = sorted(project_needs, key=str.casefold)
+    print(project_needs)
+
     return render(request, 'projects/applications.html', {
         'profile_user': profile_user,
+        'user_projects': user_projects,
+        'project_needs': project_needs,
     })
