@@ -39,9 +39,26 @@
                             <h3>{{ position.title }}</h3>
                             <p>{{ position.description|markdown_to_html }}</p>
 
-                            <form method="POST" action="{%  url 'projects:project_detail' pk=project.pk %}">
+                            <form method="POST" action="{% url 'projects:project_detail' pk=project.pk %}">
                                 {% csrf_token %}
-                                {{ application_form }}
+
+                                <input type="text"
+                                       name="user"
+                                       id="id_user"
+                                       value="{{ user.id }}">
+
+
+                                <input type="text"
+                                       name="position"
+                                       id="id_position"
+                                       value="{{ position.id }}">
+
+                                <input type="text"
+                                       name="status"
+                                       id="id_status"
+                                       value="u">
+                                {{ application_form.errors}}
+
                                 <input type="submit" name="application" class="button-primary" value="Application Form">
                             </form>
 

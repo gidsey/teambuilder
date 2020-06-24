@@ -84,12 +84,9 @@ class DeleteProjectForm(forms.Form):
 
 
 class ApplicationForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        position = kwargs.pop('position')
-        super(ApplicationForm, self).__init__(*args, **kwargs)
-        self.fields['user'] = user
-        self.fields['position'] = position
+    # user = forms.HiddenInput()
+    # position = forms.HiddenInput()
+    # status = forms.HiddenInput
 
     class Meta:
         model = models.UserApplication

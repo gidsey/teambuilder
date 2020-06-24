@@ -141,8 +141,16 @@ def project_detail(request, pk):
     application_form = forms.ApplicationForm()
 
     if request.method == 'POST':
-        application_form = forms.ApplicationForm(data=request.POST, instance=request.user, user=request.user, position=position.pk)
+        application_form = forms.ApplicationForm(
+            data=request.POST,
+            instance=request.user,
+        )
         if application_form.is_valid():
+            # application = application_form.save(commit=False)
+            # application.user = request.user
+            print(application_form.cleaned_data['user'])
+            print(application_form.cleaned_data['position'])
+            print(application_form.cleaned_data['status'])
             application_form.save()
             messages.success(
                 request,
