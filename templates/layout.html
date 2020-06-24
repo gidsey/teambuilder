@@ -101,6 +101,7 @@
                                 <a href="{% url "accounts:user_profile" username=user %}"><img
                                         src="{{ user.profile.avatar.url }}"
                                         alt="{{ user.profile.fullname }}"
+                                        title="{{ user.profile.fullname }}"
                                         class="avatar_header"></a></li>
                             {% endif %}
                             <li><a href="{% url "account_logout" %}">Logout</a></li>

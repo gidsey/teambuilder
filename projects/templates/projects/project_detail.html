@@ -9,7 +9,8 @@
             <div class="bounds">
                 <div class="grid-100">
                     <a class="button" href="{% url 'projects:project_edit' pk=project.id %}">Edit Project</a>
-                    <a class="button button-text" href="{% url 'projects:project_delete' pk=project.id %}">Delete Project</a>
+                    <a class="button button-text" href="{% url 'projects:project_delete' pk=project.id %}">Delete
+                        Project</a>
                 </div>
             </div>
         </div>
@@ -32,13 +33,14 @@
 
             <div class="circle--project--positions">
                 <h2>Positions</h2>
-
                 <ul class="circle--group--list">
-                    {% for project in project_positions %}
+                    {% for position in project_positions %}
                         <li>
-                            <h3>{{ project.title }}</h3>
-                            <p>{{ project.description|markdown_to_html }}</p>
-                            <a class="button button-primary">Apply</a>
+                            <h3>{{ position.title }}</h3>
+                            <p>{{ position.description|markdown_to_html }}</p>
+                            {% if user != project.owner %}
+                                <a class="button button-primary">Apply</a>
+                            {% endif %}
                             <a class="button button-primary button-inactive">Position Filled</a>
                         </li>
                     {% endfor %}

@@ -124,6 +124,7 @@ def project_edit(request, pk):
     })
 
 
+@login_required
 def project_detail(request, pk):
     """
     Show the project detail page.
