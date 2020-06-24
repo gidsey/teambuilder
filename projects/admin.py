@@ -10,9 +10,9 @@ class ProjectAdmin(admin.ModelAdmin):
         'description',
         'timeline',
         'requirements',
-        'created_date',
+        'created_at',
     ]
-    ordering = ['-created_date']
+    ordering = ['-created_at']
 
 
 class PositionAdmin(admin.ModelAdmin):

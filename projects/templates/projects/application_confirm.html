@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load account_extras %}
+{% block title %} {{ block.super }} | Application Confirmation{% endblock %}
+{% block body %}
+
+    <div class="container">
+        <div class="bounds">
+            <h1>Application received</h1>
+
+            <p>Thank you for your application for the {{ user }}.</p>
+
+
+        </div>
+    </div>
+{% endblock %}

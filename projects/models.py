@@ -12,7 +12,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     timeline = models.TextField(blank=True)
     requirements = models.TextField(blank=True)
-    created_date = models.DateTimeField(default=timezone.now)  # Auto-set Field
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.title
@@ -28,3 +28,19 @@ class Position(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserApplication(models.Model):
+    """
+    Holds the applications for each position.
+    Status can be:
+    a - approved
+    r - rejected
+    u - undecided
+    """
+    user = models.ForeignKey(User, related_name='application', on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, related_name='position', on_delete=models.CASCADE)
+    status = models.CharField(max_length=1, default='u')
+    created_at = models.DateTimeField(default=timezone.now)
+
+

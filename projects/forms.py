@@ -81,3 +81,4 @@ position_inline_formset = forms.inlineformset_factory(
 class DeleteProjectForm(forms.Form):
     class Meta:
         fields = ('title',)
+

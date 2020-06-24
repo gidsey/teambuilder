@@ -39,7 +39,8 @@
                             <h3>{{ position.title }}</h3>
                             <p>{{ position.description|markdown_to_html }}</p>
                             {% if user != project.owner %}
-                                <a class="button button-primary">Apply</a>
+                                <a href="{% url 'projects:application_confirm' username=user position_id=position.id %}"
+                                   class="button button-primary">Apply</a>
                             {% endif %}
                             <a class="button button-primary button-inactive">Position Filled</a>
                         </li>

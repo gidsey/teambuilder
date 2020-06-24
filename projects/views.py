@@ -15,7 +15,7 @@ def project_listing(request):
     Return a list of all Projects
     and Project Needs.
     """
-    projects = models.Project.objects.order_by('-created_date').prefetch_related('positions')
+    projects = models.Project.objects.order_by('-created_at').prefetch_related('positions')
     project_needs = get_project_needs(projects)
     num_projects = len(projects)
     return render(request, 'projects/project_listing.html', {
@@ -210,7 +210,8 @@ def applications(request, username):
     if request.user != profile_user:
         raise PermissionDenied
 
-    user_projects = models.Project.objects.prefetch_related('positions').filter(owner=profile_user)
+    user_projects = models.Project.objects.all(
+    ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
 
     project_needs = []
     for project in user_projects:
@@ -225,3 +226,23 @@ def applications(request, username):
         'user_projects': user_projects,
         'project_needs': project_needs,
     })
+
+
+@login_required
+def application_confirm(request, username, position_id):
+    """
+    Log the application and
+    Show the Application confirmation page.
+    """
+    print(position_id)
+    position = models.Position.objects.get(id=position_id)
+    application = models.UserApplication.objects.create(
+        user=request.user,
+        position=position,
+        status='a'
+    )
+
+    application.save()
+
+    return render(request, 'projects/application_confirm.html',
+                  )
