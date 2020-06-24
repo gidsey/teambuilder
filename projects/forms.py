@@ -82,3 +82,20 @@ class DeleteProjectForm(forms.Form):
     class Meta:
         fields = ('title',)
 
+
+class ApplicationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        position = kwargs.pop('position')
+        super(ApplicationForm, self).__init__(*args, **kwargs)
+        self.fields['user'] = user
+        self.fields['position'] = position
+
+    class Meta:
+        model = models.UserApplication
+
+        fields = (
+            'user',
+            'position',
+            'status',
+        )

@@ -138,9 +138,22 @@ def project_detail(request, pk):
         project_id=project.id
     )
 
+    application_form = forms.ApplicationForm()
+
+    if request.method == 'POST':
+        application_form = forms.ApplicationForm(data=request.POST, instance=request.user, user=request.user, position=position.pk)
+        if application_form.is_valid():
+            application_form.save()
+            messages.success(
+                request,
+                "Application received."
+            )
+            return redirect('projects:application_confirm')
+
     return render(request, 'projects/project_detail.html', {
         'project': project,
         'project_positions': project_positions,
+        'application_form': application_form,
     })
 
 
@@ -219,7 +232,6 @@ def applications(request, username):
             if position.title not in project_needs:
                 project_needs.append(position.title)
     project_needs = sorted(project_needs, key=str.casefold)
-    print(project_needs)
 
     return render(request, 'projects/applications.html', {
         'profile_user': profile_user,
@@ -229,20 +241,10 @@ def applications(request, username):
 
 
 @login_required
-def application_confirm(request, username, position_id):
+def application_confirm(request):
     """
-    Log the application and
     Show the Application confirmation page.
     """
-    print(position_id)
-    position = models.Position.objects.get(id=position_id)
-    application = models.UserApplication.objects.create(
-        user=request.user,
-        position=position,
-        status='a'
-    )
-
-    application.save()
 
     return render(request, 'projects/application_confirm.html',
                   )

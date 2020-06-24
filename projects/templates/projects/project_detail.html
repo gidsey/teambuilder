@@ -38,8 +38,16 @@
                         <li>
                             <h3>{{ position.title }}</h3>
                             <p>{{ position.description|markdown_to_html }}</p>
+
+                            <form method="POST" action="{%  url 'projects:project_detail' pk=project.pk %}">
+                                {% csrf_token %}
+                                {{ application_form }}
+                                <input type="submit" name="application" class="button-primary" value="Application Form">
+                            </form>
+
+
                             {% if user != project.owner %}
-                                <a href="{% url 'projects:application_confirm' username=user position_id=position.id %}"
+                                <a href="{% url 'projects:application_confirm' %}"
                                    class="button button-primary">Apply</a>
                             {% endif %}
                             <a class="button button-primary button-inactive">Position Filled</a>
