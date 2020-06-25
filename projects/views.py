@@ -2,41 +2,30 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.db.models import Q
+from django.urls import reverse
 
 from .utils import get_project_needs, get_search_term
 from . import forms
 from . import models
 
 
-def project_listing(request):
-    """
-    This is the homepage.
-    Return a list of all Projects and Project Needs.
-    """
-    projects = models.Project.objects.order_by('-created_at').prefetch_related('positions')
-    project_needs = get_project_needs(projects)
-    num_projects = len(projects)
-    return render(request, 'projects/project_listing.html', {
-        'projects': projects,
-        'project_needs': project_needs,
-        'num_projects': num_projects,
-    })
-
-
-def project_listing_filtered(request, needs_filter):
+def project_listing(request, needs_filter):
     """
     Return the filtered list of Projects
     based on Project Needs.
     """
     all_projects = models.Project.objects.prefetch_related('positions')
     project_needs = get_project_needs(all_projects)
-    search_term = get_search_term(needs_filter, project_needs)
 
-    projects = all_projects.order_by('-created_at').filter(
-        positions__title=search_term
-    )
+    if needs_filter == 'all':
+        projects = all_projects
+    else:
+        search_term = get_search_term(needs_filter, project_needs)
+        projects = all_projects.order_by('-created_at').filter(
+            positions__title=search_term
+        )
     num_projects = len(projects)
     return render(request, 'projects/project_listing.html', {
         'projects': projects,
@@ -189,7 +178,7 @@ def project_delete(request, pk):
                 request,
                 "Project deleted successfully."
             )
-            return redirect('projects:project_listing')
+            return redirect('projects:project_listing', {'needs_filter': 'all'})
     else:
         delete_form = forms.DeleteProjectForm()
 

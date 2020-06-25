@@ -29,7 +29,7 @@
         {% if mode == 'create' %}
             <div class="grid-100">
                 <input type="submit" name="save_changes" class="button-primary mb-0" value="Save Project">
-                <a class="button button-text" href="{% url 'projects:project_listing' %}">Discard</a>
+                <a class="button button-text" href="{% url 'projects:project_listing' needs_filter='all' %}">Discard</a>
             </div>
         {% elif mode == 'edit' %}
             <div class="grid-100">

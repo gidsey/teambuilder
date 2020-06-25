@@ -4,5 +4,6 @@ from django.http import HttpResponseRedirect
 
 
 def index(request):
-    return HttpResponseRedirect(reverse("projects:project_listing"))
+    url = reverse('projects:project_listing', kwargs={'needs_filter': 'all'})
+    return HttpResponseRedirect(url)
 

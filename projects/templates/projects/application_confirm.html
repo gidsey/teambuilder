@@ -10,7 +10,7 @@
                 <h1>Application received</h1>
                 <p>Thank you for your application for the role of <span class="secondary-label">{{ position }}</span>.</p>
 
-                <a class="button button-primary" href="{% url 'projects:project_listing' %}">Continue</a>
+                <a class="button button-primary" href="{% url 'projects:project_listing' needs_filter='all' %}">Continue</a>
 
             </div>
         </div>
