@@ -8,9 +8,9 @@
         <div class="container">
             <div class="bounds">
                 <h1>Application received</h1>
+                <p>Thank you for your application for the role of <span class="secondary-label">{{ position }}</span>.</p>
 
-                <p>Thank you for your application {{ user }}, for the .</p>
-
+                <a class="button button-primary" href="{% url 'projects:project_listing' %}">Continue</a>
 
             </div>
         </div>

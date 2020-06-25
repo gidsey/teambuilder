@@ -146,13 +146,16 @@ def project_detail(request, pk):
                 position_id=application_form.data['position'])
             if not entry:  # Don't allow duplicate entries
                 application = application_form.save(commit=False)
+                position = application_form.cleaned_data['position']
                 application.user = request.user
                 application_form.save()
                 messages.success(
                     request,
                     "Application received."
                 )
-                return redirect('projects:application_confirm')
+                return render(request, 'projects/application_confirm.html', {
+                    'position': position,
+                })
 
     else:
         application_form = forms.ApplicationForm()
@@ -245,13 +248,3 @@ def applications(request, username):
         'user_projects': user_projects,
         'project_needs': project_needs,
     })
-
-
-@login_required
-def application_confirm(request):
-    """
-    Show the Application confirmation page.
-    """
-
-    return render(request, 'projects/application_confirm.html',
-                  )
