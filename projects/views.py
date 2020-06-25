@@ -243,8 +243,11 @@ def applications(request, username):
                 project_needs.append(position.title)
     project_needs = sorted(project_needs, key=str.casefold)
 
+    all_applications = models.UserApplication.objects.all().filter(position__project__owner=request.user)
+
     return render(request, 'projects/applications.html', {
         'profile_user': profile_user,
         'user_projects': user_projects,
         'project_needs': project_needs,
+        'all_applications': all_applications,
     })

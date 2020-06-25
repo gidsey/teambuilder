@@ -38,8 +38,8 @@ class UserApplication(models.Model):
     r - rejected
     u - undecided
     """
-    user = models.ForeignKey(User, related_name='application', on_delete=models.CASCADE)
-    position = models.ForeignKey(Position, related_name='position', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='application_user', on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, related_name='application_position', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, default='u')
     created_at = models.DateTimeField(default=timezone.now)
 

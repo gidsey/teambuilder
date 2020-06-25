@@ -64,26 +64,28 @@
                     <th class="circle--cell--right">Applicant Position</th>
                 </tr>
                 </thead>
+                {% for application in all_applications %}
                 <tbody>
-                <tr class="clickable-row" data-href="profile.html">
+                <tr class="clickable-row" data-href="{% url 'accounts:user_profile' username=application.user %}">
                     <td>
-                        <h3>Jim Horton</h3>
-                        <p>Currency Calculator</p>
+                        <h3>{{ application.user.profile.fullname }}</h3>
+                        <p>{{ application.position.project}}</p>
                     </td>
                     <td class="circle--cell--right">
-                        <span class="secondary-label">Rails Developer</span>
+                        <span class="secondary-label">{{ application.position }}</span>
                     </td>
                 </tr>
-                <tr class="clickable-row" data-href="profile.html">
-                    <td>
-                        <h3>Jenny McMann</h3>
-                        <p>Currency Calculator</p>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">Designer</span>
-                    </td>
-                </tr>
+{#                <tr class="clickable-row" data-href="profile.html">#}
+{#                    <td>#}
+{#                        <h3>Jenny McMann</h3>#}
+{#                        <p>Currency Calculator</p>#}
+{#                    </td>#}
+{#                    <td class="circle--cell--right">#}
+{#                        <span class="secondary-label">Designer</span>#}
+{#                    </td>#}
+{#                </tr>#}
                 </tbody>
+                {% endfor %}
             </table>
 
         </div>
