@@ -9,7 +9,8 @@
             <nav class="bounds">
                 <ul class="circle--pill--list">
                     <li><a class="selected"
-                           href="{% url 'projects:applications' username=profile_user %}">Applications</a></li>
+                           href="{% url 'projects:applications' username=profile_user status='all' %}">Applications</a>
+                    </li>
                     <li><a href="{% url "accounts:user_profile" username=profile_user %}">Profile</a></li>
                 </ul>
             </nav>
@@ -27,10 +28,22 @@
             <div class="circle--filter circle--secondary--module">
                 <h4>Status</h4>
                 <ul class="circle--filter--list">
-                    <li><a class="selected">All Applications</a></li>
-                    <li><a>New Applications</a></li>
-                    <li><a>Accepted</a></li>
-                    <li><a>Rejected</a></li>
+                    <li>
+                        <a href="{% url 'projects:applications' username=profile_user status='all' %}"
+                           class="selected">All Applications</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'projects:applications' username=profile_user status='u' %}"
+                           class="selected">New Applications</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'projects:applications' username=profile_user status='a' %}"
+                           class="selected">Accepted</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'projects:applications' username=profile_user status='r' %}"
+                           class="selected">Rejected</a>
+                    </li>
                 </ul>
             </div>
 
@@ -65,26 +78,25 @@
                 </tr>
                 </thead>
                 {% for application in all_applications %}
-                <tbody>
-                <tr class="clickable-row" data-href="{% url 'accounts:user_profile' username=application.user %}">
-                    <td>
-                        <h3>{{ application.user.profile.fullname }}</h3>
-                        <p>{{ application.position.project}}</p>
-                    </td>
-                    <td class="circle--cell--right">
-                        <span class="secondary-label">{{ application.position }}</span>
-                    </td>
-                </tr>
-{#                <tr class="clickable-row" data-href="profile.html">#}
-{#                    <td>#}
-{#                        <h3>Jenny McMann</h3>#}
-{#                        <p>Currency Calculator</p>#}
-{#                    </td>#}
-{#                    <td class="circle--cell--right">#}
-{#                        <span class="secondary-label">Designer</span>#}
-{#                    </td>#}
-{#                </tr>#}
-                </tbody>
+                    <tbody>
+                    <tr class="clickable-row" data-href="{% url 'accounts:user_profile' username=application.user %}">
+                        <td>
+                            <h3>{{ application.user.profile.fullname }}</h3>
+                            <p>{{ application.position.project }}</p>
+                        </td>
+                        <td class="circle--cell--right">
+                            <span class="secondary-label">{{ application.position }}</span>
+                        </td>
+                        <td>
+                             <form method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="text" name="position" id="id_position" value="{{ application.position.id }}">
+                                    <input type="text" name="status" id="id_status" value="a">
+                                    <input type="submit" name="application" class="button-primary" value="Accept">
+                                </form>
+                        </td>
+                    </tr>
+                    </tbody>
                 {% endfor %}
             </table>
 

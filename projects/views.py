@@ -139,7 +139,7 @@ def project_detail(request, pk):
                 application = application_form.save(commit=False)
                 position = application_form.cleaned_data['position']
                 application.user = request.user
-                application_form.save()
+                application.save()
                 messages.success(
                     request,
                     "Application received."
@@ -214,7 +214,7 @@ def project_search(request):
 
 
 @login_required
-def applications(request, username):
+def applications(request, username, status):
     try:
         profile_user = models.User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -223,6 +223,13 @@ def applications(request, username):
     #  Only allow users to view their own applications page
     if request.user != profile_user:
         raise PermissionDenied
+
+    if status == 'all':
+        all_applications = models.UserApplication.objects.all().filter(
+            position__project__owner=request.user)
+    else:
+        all_applications = models.UserApplication.objects.all().filter(
+            position__project__owner=request.user).filter(status__exact=status)
 
     user_projects = models.Project.objects.all(
     ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
@@ -234,11 +241,33 @@ def applications(request, username):
                 project_needs.append(position.title)
     project_needs = sorted(project_needs, key=str.casefold)
 
-    all_applications = models.UserApplication.objects.all().filter(position__project__owner=request.user)
+    if request.method == 'POST':
+        #  This needs to update, not create a new DB entry
+        #  Switch to simple form and process data.
+        accept_form = forms.AcceptApplicationForm(data=request.POST)
+        if accept_form.is_valid():
+
+            accept = accept_form.save(commit=False)
+
+            accept.user = request.user
+            accept.save()
+            messages.success(
+                request,
+                "Application Accepted."
+            )
+            return render(request, 'projects/applications.html', {
+                'username': request.user,
+                'status': status,
+            })
+
+    else:
+        accept_form = forms.AcceptApplicationForm()
+
 
     return render(request, 'projects/applications.html', {
         'profile_user': profile_user,
         'user_projects': user_projects,
         'project_needs': project_needs,
         'all_applications': all_applications,
+        'accept_form': accept_form,
     })
