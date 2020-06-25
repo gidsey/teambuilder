@@ -21,6 +21,7 @@ def project_listing(request, needs_filter):
 
     if needs_filter == 'all':
         projects = all_projects
+        search_term = 'all'
     else:
         search_term = get_search_term(needs_filter, project_needs)
         projects = all_projects.order_by('-created_at').filter(
@@ -31,6 +32,7 @@ def project_listing(request, needs_filter):
         'projects': projects,
         'project_needs': project_needs,
         'num_projects': num_projects,
+        'search_term': search_term,
     })
 
 
