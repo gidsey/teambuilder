@@ -138,24 +138,22 @@ def project_detail(request, pk):
         project_id=project.id
     )
 
-    application_form = forms.ApplicationForm()
-
     if request.method == 'POST':
-        application_form = forms.ApplicationForm(
-            data=request.POST,
-            # instance=request.user,
-        )
+        application_form = forms.ApplicationForm(data=request.POST)
         if application_form.is_valid():
-            application = application_form.save(commit=False)
-            application.user = request.user
-            print(application_form.cleaned_data['position'])
-            print(application_form.cleaned_data['status'])
-            application_form.save()
-            messages.success(
-                request,
-                "Application received."
-            )
-            return redirect('projects:application_confirm')
+            entry = models.UserApplication.objects.filter(
+                user_id=request.user,
+                position_id=application_form.data['position'])
+            if not entry:  # Don't allow duplicate entries
+                application = application_form.save(commit=False)
+                application.user = request.user
+                application_form.save()
+                messages.success(
+                    request,
+                    "Application received."
+                )
+                return redirect('projects:application_confirm')
+
     else:
         application_form = forms.ApplicationForm()
 
