@@ -12,8 +12,8 @@ from . import models
 
 def project_listing(request):
     """
-    Return a list of all Projects
-    and Project Needs.
+    This is the homepage.
+    Return a list of all Projects and Project Needs.
     """
     projects = models.Project.objects.order_by('-created_at').prefetch_related('positions')
     project_needs = get_project_needs(projects)
@@ -34,7 +34,7 @@ def project_listing_filtered(request, needs_filter):
     project_needs = get_project_needs(all_projects)
     search_term = get_search_term(needs_filter, project_needs)
 
-    projects = all_projects.order_by('-created_date').filter(
+    projects = all_projects.order_by('-created_at').filter(
         positions__title=search_term
     )
     num_projects = len(projects)
