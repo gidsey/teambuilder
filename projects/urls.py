@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 
-app_name = "projects"  # required when using namespace in URLS
+app_name = "projects"
 
 urlpatterns = [
     path('needs/<needs_filter>/', views.project_listing, name='project_listing'),
