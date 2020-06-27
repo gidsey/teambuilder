@@ -247,22 +247,21 @@ def applications(request, username, status):
         accept_form = forms.AcceptApplicationForm(data=request.POST)
         if accept_form.is_valid():
 
-            accept = accept_form.save(commit=False)
+            print('accept_form.cleaned_data {}'.format(accept_form.cleaned_data))
 
-            accept.user = request.user
-            accept.save()
             messages.success(
                 request,
                 "Application Accepted."
             )
             return render(request, 'projects/applications.html', {
-                'username': request.user,
-                'status': status,
+                'profile_user': profile_user,
+                'user_projects': user_projects,
+                'project_needs': project_needs,
+                'all_applications': all_applications,
+                'accept_form': accept_form,
             })
-
     else:
         accept_form = forms.AcceptApplicationForm()
-
 
     return render(request, 'projects/applications.html', {
         'profile_user': profile_user,

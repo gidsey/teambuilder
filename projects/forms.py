@@ -95,10 +95,11 @@ class ApplicationForm(forms.ModelForm):
         )
 
 
-#  This should not be a model form
-class AcceptApplicationForm(forms.ModelForm):
+class AcceptApplicationForm(forms.Form):
+    position = forms.CharField()
+    status = forms.CharField()
+
     class Meta:
-        model = models.UserApplication
         fields = (
             'position',
             'status',
