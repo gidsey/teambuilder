@@ -88,12 +88,14 @@
                             <span class="secondary-label">{{ application.position }}</span>
                         </td>
                         <td>
-                             <form method="POST" name="accept" action="">
-                                    {% csrf_token %}
-                                    <input type="text" name="position" id="id_position" value="{{ application.position.id }}">
-                                    <input type="text" name="status" id="id_status" value="a">
-                                    <input type="submit" name="application" class="button-primary" value="Accept">
-                                </form>
+                            <form method="POST" name="accept" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="applicant" id="id_applicant" value="{{ application.user_id }}">
+                                <input type="hidden" name="position" id="id_position"
+                                       value="{{ application.position.id }}">
+                                <input type="hidden" name="status" id="id_status" value="a">
+                                <input type="submit" name="application" class="button-primary" value="Accept">
+                            </form>
                         </td>
                     </tr>
                     </tbody>

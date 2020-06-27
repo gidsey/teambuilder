@@ -242,12 +242,20 @@ def applications(request, username, status):
     project_needs = sorted(project_needs, key=str.casefold)
 
     if request.method == 'POST':
-        #  This needs to update, not create a new DB entry
-        #  Switch to simple form and process data.
         accept_form = forms.AcceptApplicationForm(data=request.POST)
         if accept_form.is_valid():
+            applicant = accept_form.cleaned_data['applicant']
+            position_sought = accept_form.cleaned_data['position']
+            status = accept_form.cleaned_data['status']
+            try:
+                app = models.UserApplication.objects.filter(
+                    user_id=applicant,
+                    position_id=position_sought,
+                )
+            except ObjectDoesNotExist:
+                raise Http404
 
-            print('accept_form.cleaned_data {}'.format(accept_form.cleaned_data))
+            app.update(status=status)
 
             messages.success(
                 request,
