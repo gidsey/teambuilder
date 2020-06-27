@@ -262,6 +262,10 @@ def applications(request, username, status):
 
             app.update(status=status)
 
+            if status == 'a':
+                filled = models.Position.objects.filter(id=position_sought)
+                filled.update(filled=True)
+
             messages.success(
                 request,
                 msg

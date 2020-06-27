@@ -19,7 +19,7 @@ class PositionAdmin(admin.ModelAdmin):
     list_display = [
         'project',
         'title',
-        'description',
+        'filled',
     ]
     ordering = ['title']
 
