@@ -98,12 +98,10 @@ class ApplicationForm(forms.ModelForm):
 class AcceptApplicationForm(forms.Form):
     applicant = forms.CharField()
     position = forms.CharField()
-    status = forms.CharField()
 
     class Meta:
         fields = (
             'applicant,'
             'position',
-            'status',
         )
 

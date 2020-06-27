@@ -226,10 +226,10 @@ def applications(request, username, status):
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user)
+            position__project__owner=request.user).order_by('-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user).filter(status__exact=status)
+            position__project__owner=request.user).filter(status__exact=status).order_by('-created_at')
 
     user_projects = models.Project.objects.all(
     ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
@@ -246,7 +246,12 @@ def applications(request, username, status):
         if accept_form.is_valid():
             applicant = accept_form.cleaned_data['applicant']
             position_sought = accept_form.cleaned_data['position']
-            status = accept_form.cleaned_data['status']
+            if request.POST.get("accept"):
+                status = 'a'
+                msg = "Application accepted"
+            elif request.POST.get("reject"):
+                status = 'r'
+                msg = "Application rejected"
             try:
                 app = models.UserApplication.objects.filter(
                     user_id=applicant,
@@ -259,7 +264,7 @@ def applications(request, username, status):
 
             messages.success(
                 request,
-                "Application Accepted."
+                msg
             )
             return render(request, 'projects/applications.html', {
                 'profile_user': profile_user,
