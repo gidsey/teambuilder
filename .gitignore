@@ -3,3 +3,14 @@ venv
 README.txt
 *.log
 avatars
+
+.DS_Store
+ __pycache__/
+accounts/__pycache__/
+accounts/migrations/__pycache__/
+accounts/templatetags/__pycache__/
+assets/css/.DS_Store
+assets/js/.DS_Store
+projects/__pycache__/
+projects/migrations/__pycache__/
+teambuilder/__pycache__/
