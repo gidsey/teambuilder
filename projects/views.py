@@ -127,7 +127,7 @@ def project_detail(request, pk):
 
     project_positions = models.Position.objects.all().filter(
         project_id=project.id
-    )
+    ).order_by('filled')
 
     if request.method == 'POST':
         application_form = forms.ApplicationForm(data=request.POST)
