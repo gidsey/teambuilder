@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
-{% load account_extras %}
+{% load project_extras %}
 {% block title %} {{ block.super }} | Applications{% endblock %}
 {% block body %}
 
@@ -52,7 +52,7 @@
                 <ul class="circle--filter--list">
                     <li><a class="selected">All Projects</a></li>
                     {% for project in user_projects %}
-                        <li><a>{{ project }}</a></li>
+                        <li><a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request project=project %}">{{ project }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -62,7 +62,7 @@
                 <ul class="circle--filter--list">
                     <li><a class="selected">All Needs</a></li>
                     {% for need in project_needs %}
-                        <li><a href="/?{% url need %}">{{ need }}</a></li>
+                        <li><a href="#">{{ need }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -78,45 +78,47 @@
                     <th class="circle--cell--right">Status</th>
                 </tr>
                 </thead>
-                {%  if not all_applications %}
-                <tbody>
-                <tr>
-                    <td><span class="red_text">No applications.</span></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
-                {% else %}
-                {% for application in all_applications %}
+                {% if not all_applications %}
                     <tbody>
-                    <tr class="clickable-row" data-href="{% url 'accounts:user_profile' username=application.user %}">
-                        <td>
-                            <h3>{{ application.user.profile.fullname }}</h3>
-                            <p>{{ application.position.project }}</p>
-                        </td>
-                        <td>
-                            <span class="secondary-label">{{ application.position }}</span>
-                        </td>
-                        <td class="circle--cell--right">
-                            {% if application.position.filled %}
-                                <a class="button button-primary button-inactive">Position Filled</a>
-                            {% else %}
-
-                                <form method="POST" name="accept" action="">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="applicant" id="id_applicant"
-                                           value="{{ application.user_id }}">
-                                    <input type="hidden" name="position" id="id_position"
-                                           value="{{ application.position.id }}">
-                                    <input type="submit" name="accept" class="button-primary button_small" value="Accept">
-                                    <input type="submit" name="reject" class="button button_small" value="Reject">
-                                </form>
-                            {% endif %}
-                        </td>
+                    <tr>
+                        <td><span class="red_text">No applications.</span></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     </tbody>
-                {% endfor %}
-            {% endif %}
+                {% else %}
+                    {% for application in all_applications %}
+                        <tbody>
+                        <tr class="clickable-row"
+                            data-href="{% url 'accounts:user_profile' username=application.user %}">
+                            <td>
+                                <h3>{{ application.user.profile.fullname }}</h3>
+                                <p>{{ application.position.project }}</p>
+                            </td>
+                            <td>
+                                <span class="secondary-label">{{ application.position }}</span>
+                            </td>
+                            <td class="circle--cell--right">
+                                {% if application.position.filled %}
+                                    <a class="button button-primary button-inactive">Position Filled</a>
+                                {% else %}
+
+                                    <form method="POST" name="accept" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="applicant" id="id_applicant"
+                                               value="{{ application.user_id }}">
+                                        <input type="hidden" name="position" id="id_position"
+                                               value="{{ application.position.id }}">
+                                        <input type="submit" name="accept" class="button-primary button_small"
+                                               value="Accept">
+                                        <input type="submit" name="reject" class="button button_small" value="Reject">
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                {% endif %}
             </table>
 
         </div>
