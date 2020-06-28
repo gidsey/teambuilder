@@ -280,6 +280,7 @@ def applications(request, username, status):
                 'project_needs': project_needs,
                 'all_applications': all_applications,
                 'accept_form': accept_form,
+                'status': status,
             })
     else:
         accept_form = forms.AcceptApplicationForm()
@@ -290,4 +291,5 @@ def applications(request, username, status):
         'project_needs': project_needs,
         'all_applications': all_applications,
         'accept_form': accept_form,
+        'status': status,
     })

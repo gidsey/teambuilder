@@ -30,19 +30,19 @@
                 <ul class="circle--filter--list">
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user status='all' %}"
-                           class="selected">All Applications</a>
+                           {% if status == 'all' %}class="selected"{% endif %}>All Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user status='u' %}"
-                           class="selected">New Applications</a>
+                           {% if status == 'u' %}class="selected"{% endif %}>New Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user status='a' %}"
-                           class="selected">Accepted</a>
+                           {% if status == 'a' %}class="selected"{% endif %}>Accepted</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user status='r' %}"
-                           class="selected">Rejected</a>
+                           {% if status == 'r' %}class="selected"{% endif %}>Rejected</a>
                     </li>
                 </ul>
             </div>
