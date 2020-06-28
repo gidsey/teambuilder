@@ -70,6 +70,17 @@ textarea {
   vertical-align: middle;
 }
 
+.red_text {
+    display: inline-block;
+    color: #dc3545;
+}
+
 .tight {
     line-height: 0;
+}
+
+.button_small {
+    /*font-size: 16px!important;*/
+    padding: 12px!important;
+    margin: 20px 0 0 0;
 }

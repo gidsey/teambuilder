@@ -74,9 +74,19 @@
                 <thead>
                 <tr>
                     <th>Applicant</th>
-                    <th class="circle--cell--right">Applicant Position</th>
+                    <th>Applicant Position</th>
+                    <th class="circle--cell--right">Status</th>
                 </tr>
                 </thead>
+                {%  if not all_applications %}
+                <tbody>
+                <tr>
+                    <td><span class="red_text">No applications.</span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+                {% else %}
                 {% for application in all_applications %}
                     <tbody>
                     <tr class="clickable-row" data-href="{% url 'accounts:user_profile' username=application.user %}">
@@ -84,22 +94,29 @@
                             <h3>{{ application.user.profile.fullname }}</h3>
                             <p>{{ application.position.project }}</p>
                         </td>
-                        <td class="circle--cell--right">
+                        <td>
                             <span class="secondary-label">{{ application.position }}</span>
                         </td>
-                        <td>
-                            <form method="POST" name="accept" action="">
-                                {% csrf_token %}
-                                <input type="hidden" name="applicant" id="id_applicant" value="{{ application.user_id }}">
-                                <input type="hidden" name="position" id="id_position"
-                                       value="{{ application.position.id }}">
-                                <input type="submit" name="accept" class="button-primary" value="Accept">
-                                <input type="submit" name="reject" class="button" value="Reject">
-                            </form>
+                        <td class="circle--cell--right">
+                            {% if application.position.filled %}
+                                <a class="button button-primary button-inactive">Position Filled</a>
+                            {% else %}
+
+                                <form method="POST" name="accept" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="applicant" id="id_applicant"
+                                           value="{{ application.user_id }}">
+                                    <input type="hidden" name="position" id="id_position"
+                                           value="{{ application.position.id }}">
+                                    <input type="submit" name="accept" class="button-primary button_small" value="Accept">
+                                    <input type="submit" name="reject" class="button button_small" value="Reject">
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                     </tbody>
                 {% endfor %}
+            {% endif %}
             </table>
 
         </div>

@@ -16,7 +16,7 @@ def project_listing(request, needs_filter):
     Return the filtered list of Projects
     based on Project Needs.
     """
-    all_projects = models.Project.objects.prefetch_related('positions')
+    all_projects = models.Project.objects.prefetch_related('positions').order_by('-created_at')
     project_needs = get_project_needs(all_projects)
 
     if needs_filter == 'all':
@@ -228,7 +228,7 @@ def applications(request, username, status):
         all_applications = models.UserApplication.objects.all().filter(
             position__project__owner=request.user).prefetch_related(
             'position', 'position__project', 'user__profile'
-        ).order_by('-created_at')
+        ).order_by('position__filled', '-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
             position__project__owner=request.user).filter(status__exact=status).prefetch_related(
