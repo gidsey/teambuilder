@@ -226,10 +226,14 @@ def applications(request, username, status):
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user).order_by('-created_at')
+            position__project__owner=request.user).prefetch_related(
+            'position', 'position__project', 'user__profile'
+        ).order_by('-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user).filter(status__exact=status).order_by('-created_at')
+            position__project__owner=request.user).filter(status__exact=status).prefetch_related(
+            'position', 'position__project', 'user__profile'
+        ).order_by('-created_at')
 
     user_projects = models.Project.objects.all(
     ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
