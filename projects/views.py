@@ -196,8 +196,9 @@ def project_search(request):
     their title or description.
     """
     term = request.GET.get('q')
-    projects = models.Project.objects.prefetch_related('positions')
+    projects = models.Project.objects.prefetch_related('positions').order_by('-created_at')
     project_needs = get_project_needs(projects)
+    search_term = 'all'
     search_results = projects.filter(
         Q(title__icontains=term) |
         Q(description__icontains=term)
@@ -210,6 +211,7 @@ def project_search(request):
         'term': term,
         'search_results': search_results,
         'num_results': num_results,
+        'search_term': search_term,
     })
 
 

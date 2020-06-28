@@ -62,7 +62,7 @@
                 <ul class="circle--filter--list">
                     <li><a class="selected">All Needs</a></li>
                     {% for need in project_needs %}
-                        <li><a>{{ need }}</a></li>
+                        <li><a href="/?{% url need %}">{{ need }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
