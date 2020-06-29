@@ -16,7 +16,7 @@ def markdown_to_html(markdown_text):
 
 
 @register.simple_tag
-def query_transform(request, **kwargs):
+def query_str(request, **kwargs):
     updated = request.GET.copy()
     for k, v in kwargs.items():
         if v is not None:
