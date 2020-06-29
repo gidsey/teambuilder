@@ -92,7 +92,7 @@
                 {% if not all_applications %}
                     <tbody>
                     <tr>
-                        <td><span class="red_text">No applications.</span></td>
+                        <td><span class="red_text">No applications</span></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -110,19 +110,21 @@
                                 <span class="secondary-label">{{ application.position }}</span>
                             </td>
                             <td class="circle--cell--right">
-                                {% if application.position.filled %}
-                                    <a class="button button-primary button-inactive">Position Filled</a>
-                                {% else %}
 
+                                {% if application.position.filled %}
+                                    <span class="btn_accepted">Accepted &#10003;</span>
+                                {% elif application.status == 'r' %}
+                                    <span class="btn_rejected">Rejected &#10007;</span>
+                                {%  else %}
                                     <form method="POST" name="accept" action="">
                                         {% csrf_token %}
                                         <input type="hidden" name="applicant" id="id_applicant"
                                                value="{{ application.user_id }}">
                                         <input type="hidden" name="position" id="id_position"
                                                value="{{ application.position.id }}">
-                                        <input type="submit" name="accept" class="button-primary button_small"
+                                        <input type="submit" name="accept" class="button-primary btn_small"
                                                value="Accept">
-                                        <input type="submit" name="reject" class="button button_small" value="Reject">
+                                        <input type="submit" name="reject" class="button btn_small" value="Reject">
                                     </form>
                                 {% endif %}
                             </td>

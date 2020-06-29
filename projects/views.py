@@ -250,7 +250,7 @@ def applications(request, username):
             Q(position__project__owner=request.user) &
             Q(position__project__in=user_projects)).prefetch_related(
             'position', 'position__project', 'user__profile'
-        ).order_by('position__filled', '-created_at')
+        ).order_by('status', '-created_at' )
     else:
         all_applications = models.UserApplication.objects.all().filter(
             Q(position__project__owner=request.user) &

@@ -79,8 +79,16 @@ textarea {
     line-height: 0;
 }
 
-.button_small {
+.btn_small {
     /*font-size: 16px!important;*/
     padding: 12px!important;
     margin: 20px 0 0 0;
+}
+
+.btn_accepted {
+    color: rgb(104, 155, 152);;
+}
+
+.btn_rejected {
+    color: #BBB;
 }
