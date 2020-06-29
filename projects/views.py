@@ -242,33 +242,32 @@ def applications(request, username, status):
 
     if proj == 'all':
         user_projects = all_user_projects
-        search_term = 'all'
+        # search_term = 'all'
     else:
         search_term = get_search_term(proj, project_list)
         user_projects = all_user_projects.filter(title=search_term)
 
-    print('user_projects {}'.format(user_projects))
+    # print('user_projects {}'.format(user_projects))
 
     filtered_project_list = []
     for project in user_projects:
         filtered_project_list.append(project.title)
 
-    print('filtered_project_list {}'.format(filtered_project_list))
+    # print('filtered_project_list {}'.format(filtered_project_list))
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user,
-            position__project__in=user_projects).prefetch_related(
+            Q(position__project__owner=request.user) &
+            Q(position__project__in=user_projects)).prefetch_related(
             'position', 'position__project', 'user__profile'
         ).order_by('position__filled', '-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user,
-            position__project__in=user_projects).filter(status__exact=status).prefetch_related(
+            Q(position__project__owner=request.user) &
+            Q(position__project__in=user_projects) &
+            Q(status__exact=status)).prefetch_related(
             'position', 'position__project', 'user__profile'
         ).order_by('-created_at')
-
-
 
     #  handle the Accept / Reject buttons
     if request.method == 'POST':
@@ -309,6 +308,7 @@ def applications(request, username, status):
                 'all_applications': all_applications,
                 'accept_form': accept_form,
                 'status': status,
+                'proj': proj,
             })
     else:
         accept_form = forms.AcceptApplicationForm()
@@ -321,4 +321,5 @@ def applications(request, username, status):
         'all_applications': all_applications,
         'accept_form': accept_form,
         'status': status,
+        'proj': proj,
     })

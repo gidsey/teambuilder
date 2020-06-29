@@ -52,11 +52,12 @@
                 <ul class="circle--filter--list">
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request p='all' %}"
-                           class="selected">All Projects</a>
+                           {% if proj == 'all' %}class="selected"{% endif %}>All Projects</a>
                     </li>
                     {% for slug, project in project_list %}
                         <li>
-                            <a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request p=slug %}">{{ project }}</a>
+                            <a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request p=slug %}"
+                               {% if proj == slug %}class="selected"{% endif %}>{{ project }}</a>
                         </li>
                     {% endfor %}
                 </ul>
