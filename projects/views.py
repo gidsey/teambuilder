@@ -215,7 +215,7 @@ def project_search(request):
 
 
 @login_required
-def applications(request, username, status):
+def applications(request, username):
     try:
         profile_user = models.User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -225,11 +225,9 @@ def applications(request, username, status):
     if request.user != profile_user:
         raise PermissionDenied
 
+    status = request.GET.get('s', 'all')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
-
-    print('proj {}'.format(proj))
-    print('need {}'.format(need))
 
     all_user_projects = models.Project.objects.all(
     ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
@@ -246,14 +244,6 @@ def applications(request, username, status):
     else:
         search_term = get_search_term(proj, project_list)
         user_projects = all_user_projects.filter(title=search_term)
-
-    # print('user_projects {}'.format(user_projects))
-
-    filtered_project_list = []
-    for project in user_projects:
-        filtered_project_list.append(project.title)
-
-    # print('filtered_project_list {}'.format(filtered_project_list))
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(

@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
-{% load account_extras %}
+{% extends "layout.html" %}s
 {% load account %}
+{% load account_extras %}
 {% block title %} {{block.super}} | Profile {% endblock %}
 {% block body %}
 
@@ -8,7 +8,7 @@
     <div class="circle--actions--bar">
         <nav class="bounds">
             <ul class="circle--pill--list">
-                <li><a href="{% url 'projects:applications' username=profile_user status='all' %}">Applications</a></li>
+                <li><a href="{% url 'projects:applications' username=profile_user %}?{% query_transform request s='all' %}">Applications</a></li>
                 <li><a class="selected" href="{% url "accounts:user_profile" username=profile_user %}">Profile</a></li>
             </ul>
         </nav>
