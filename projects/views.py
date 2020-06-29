@@ -242,15 +242,15 @@ def applications(request, username):
         user_projects = all_user_projects
         # search_term = 'all'
     else:
-        search_term = get_search_term(proj, project_list)
-        user_projects = all_user_projects.filter(title=search_term)
+        proj_term = get_search_term(proj, project_list)
+        user_projects = all_user_projects.filter(title=proj_term)
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
             Q(position__project__owner=request.user) &
             Q(position__project__in=user_projects)).prefetch_related(
             'position', 'position__project', 'user__profile'
-        ).order_by('status', '-created_at' )
+        ).order_by('-status')
     else:
         all_applications = models.UserApplication.objects.all().filter(
             Q(position__project__owner=request.user) &
