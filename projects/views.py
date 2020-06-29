@@ -250,7 +250,7 @@ def applications(request, username):
             Q(position__project__owner=request.user) &
             Q(position__project__in=user_projects)).prefetch_related(
             'position', 'position__project', 'user__profile'
-        ).order_by('-status')
+        ).order_by('status', '-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
             Q(position__project__owner=request.user) &
@@ -267,10 +267,10 @@ def applications(request, username):
             position_sought = accept_form.cleaned_data['position']
 
             if request.POST.get("accept"):
-                status = 'a'
+                status = 2
                 msg = "Application accepted"
             elif request.POST.get("reject"):
-                status = 'r'
+                status = 3
                 msg = "Application rejected"
             try:
                 app = models.UserApplication.objects.filter(
@@ -282,7 +282,7 @@ def applications(request, username):
 
             app.update(status=status)
 
-            if status == 'a':
+            if status == 2:
                 filled = models.Position.objects.filter(id=position_sought)
                 filled.update(filled=True)
 

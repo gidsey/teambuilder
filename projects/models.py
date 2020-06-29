@@ -35,13 +35,14 @@ class UserApplication(models.Model):
     """
     Holds the applications for each position.
     Status can be:
-    a - approved
-    r - rejected
-    u - undecided
+    1 - undecided
+    2 - approved
+    3 - rejected
+
     """
     user = models.ForeignKey(User, related_name='application_user', on_delete=models.CASCADE)
     position = models.ForeignKey(Position, related_name='application_position', on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, default='u')
+    status = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
 
 
