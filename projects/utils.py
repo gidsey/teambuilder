@@ -2,6 +2,21 @@ from django.utils.text import slugify
 from django.http import Http404
 
 
+def get_slugified_list(queryset):
+    """
+    Return a sorted list of tuples containing the
+    slugified and normal version of the given
+    Queryset. Example of output:
+    ('brand_new_app', 'Brand new app')
+    """
+    slugified_list = []
+    for item in queryset:
+        if (slugify(item), item) not in slugified_list:
+            slugified_list.append((slugify(item), item))
+    slugified_list.sort(key=lambda tup: tup[0].lower())
+    return slugified_list
+
+
 def get_project_needs(projects):
     """
     Return a sorted list of tuples containing the

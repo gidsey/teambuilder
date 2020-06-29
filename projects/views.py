@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.db.models import Q
 from django.urls import reverse
 
-from .utils import get_project_needs, get_search_term
+from .utils import get_slugified_list, get_search_term, get_project_needs
 from . import forms
 from . import models
 
@@ -240,18 +240,18 @@ def applications(request, username, status):
     user_projects = models.Project.objects.all(
     ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
 
-    project_needs = []
-    for project in user_projects:
-        for position in project.positions.all():
-            if position.title not in project_needs:
-                project_needs.append(position.title)
-    project_needs = sorted(project_needs, key=str.casefold)
+    project_list = get_slugified_list(user_projects)
 
+    # Get the (slugified, Display Name) list of project needs associated with the user's projects
+    project_needs = get_project_needs(user_projects)
+
+    #  handle the Accept / Reject buttons
     if request.method == 'POST':
         accept_form = forms.AcceptApplicationForm(data=request.POST)
         if accept_form.is_valid():
             applicant = accept_form.cleaned_data['applicant']
             position_sought = accept_form.cleaned_data['position']
+
             if request.POST.get("accept"):
                 status = 'a'
                 msg = "Application accepted"
@@ -280,6 +280,7 @@ def applications(request, username, status):
                 'profile_user': profile_user,
                 'user_projects': user_projects,
                 'project_needs': project_needs,
+                'project_list': project_list,
                 'all_applications': all_applications,
                 'accept_form': accept_form,
                 'status': status,
@@ -291,6 +292,7 @@ def applications(request, username, status):
         'profile_user': profile_user,
         'user_projects': user_projects,
         'project_needs': project_needs,
+        'project_list': project_list,
         'all_applications': all_applications,
         'accept_form': accept_form,
         'status': status,

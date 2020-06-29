@@ -51,8 +51,10 @@
                 <h4>My Projects</h4>
                 <ul class="circle--filter--list">
                     <li><a class="selected">All Projects</a></li>
-                    {% for project in user_projects %}
-                        <li><a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request project=project %}">{{ project }}</a></li>
+                    {% for slug, project in project_list %}
+                        <li>
+                            <a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request project=slug %}">{{ project }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -61,8 +63,10 @@
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
                     <li><a class="selected">All Needs</a></li>
-                    {% for need in project_needs %}
-                        <li><a href="#">{{ need }}</a></li>
+                    {% for slug, need in project_needs %}
+                        <li>
+                            <a href="{% url 'projects:applications' username=profile_user status=status %}?{% query_transform request need=slug %}">{{ need }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
