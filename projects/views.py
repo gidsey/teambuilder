@@ -241,15 +241,25 @@ def applications(request, username):
     print('proj: {}'.format(proj))
     print('need: {}'.format(need))
 
-    if proj == 'all' and need == 'all':
+    print('project_list: {}'.format(project_list))
+    print('project_needs: {}'.format(project_needs))
+    proj_term = get_search_term(proj, project_list)
+    need_term = get_search_term(need, project_needs)
+
+    if need == 'all':
+        user_projects = all_user_projects.filter(title=proj_term)
+
+    elif proj == 'all':
+        print('need_term {}'.format(need_term))
+        user_projects = all_user_projects.filter(positions__title='Mobile Developer')  #this is hardcoded
+        print('proj search user_projects {}'.format(user_projects))
+
+    elif proj == 'all' and need == 'all':
+        print('proj_term {}'.format(proj_term))
         user_projects = all_user_projects
-    else:
-        proj_term = get_search_term(proj, project_list)
-        need_term = get_search_term(need, project_needs)
-        user_projects = all_user_projects.filter(
-            Q(title=proj_term) |
-            Q(positions__title=need_term)
-        )
+
+    elif proj != 'all' and need != 'all':
+        user_projects = all_user_projects
 
 
     if status == 'all':

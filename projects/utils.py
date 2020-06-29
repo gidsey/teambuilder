@@ -13,6 +13,7 @@ def get_slugified_list(queryset):
     for item in queryset:
         if (slugify(item), item) not in slugified_list:
             slugified_list.append((slugify(item), item))
+    slugified_list.append(('all', 'ALL PROJECTS '))
     slugified_list.sort(key=lambda tup: tup[0].lower())
     return slugified_list
 
@@ -29,6 +30,7 @@ def get_project_needs(projects):
         for position in project.positions.all():
             if (slugify(position.title), position.title) not in project_needs:
                 project_needs.append((slugify(position.title), position.title))
+    project_needs.append(('all', 'ALL NEEDS'))
     project_needs.sort(key=lambda tup: tup[0].lower())
     return project_needs
 
