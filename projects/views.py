@@ -229,8 +229,7 @@ def applications(request, username):
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
 
-    all_user_projects = models.Project.objects.all(
-    ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
+    all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
 
     # Get the (slugified, Display Name) list of the user's projects
     project_list = get_slugified_list(all_user_projects)
@@ -238,12 +237,20 @@ def applications(request, username):
     # Get the (slugified, Display Name) list of project needs associated with the user's projects
     project_needs = get_project_needs(all_user_projects)
 
-    if proj == 'all':
+    print('status: {}'.format(status))
+    print('proj: {}'.format(proj))
+    print('need: {}'.format(need))
+
+    if proj == 'all' and need == 'all':
         user_projects = all_user_projects
-        # search_term = 'all'
     else:
         proj_term = get_search_term(proj, project_list)
-        user_projects = all_user_projects.filter(title=proj_term)
+        need_term = get_search_term(need, project_needs)
+        user_projects = all_user_projects.filter(
+            Q(title=proj_term) |
+            Q(positions__title=need_term)
+        )
+
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(

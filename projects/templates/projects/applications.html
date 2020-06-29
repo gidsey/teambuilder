@@ -34,15 +34,15 @@
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=1 %}"
-                           {% if status == 'u' %}class="selected"{% endif %}>New Applications</a>
+                           {% if status == '1' %}class="selected"{% endif %}>New Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=2 %}"
-                           {% if status == 'a' %}class="selected"{% endif %}>Accepted</a>
+                           {% if status == '2' %}class="selected"{% endif %}>Accepted</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=3 %}"
-                           {% if status == 'r' %}class="selected"{% endif %}>Rejected</a>
+                           {% if status == '3' %}class="selected"{% endif %}>Rejected</a>
                     </li>
                 </ul>
             </div>
