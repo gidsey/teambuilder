@@ -2,9 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.db.models import Q
-from django.urls import reverse
 
 from .utils import get_slugified_list, get_search_term, get_project_needs
 from . import forms
@@ -226,24 +225,50 @@ def applications(request, username, status):
     if request.user != profile_user:
         raise PermissionDenied
 
+    proj = request.GET.get('p', 'all')
+    need = request.GET.get('n', 'all')
+
+    print('proj {}'.format(proj))
+    print('need {}'.format(need))
+
+    all_user_projects = models.Project.objects.all(
+    ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
+
+    # Get the (slugified, Display Name) list of the user's projects
+    project_list = get_slugified_list(all_user_projects)
+
+    # Get the (slugified, Display Name) list of project needs associated with the user's projects
+    project_needs = get_project_needs(all_user_projects)
+
+    if proj == 'all':
+        user_projects = all_user_projects
+        search_term = 'all'
+    else:
+        search_term = get_search_term(proj, project_list)
+        user_projects = all_user_projects.filter(title=search_term)
+
+    print('user_projects {}'.format(user_projects))
+
+    filtered_project_list = []
+    for project in user_projects:
+        filtered_project_list.append(project.title)
+
+    print('filtered_project_list {}'.format(filtered_project_list))
+
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user).prefetch_related(
+            position__project__owner=request.user,
+            position__project__in=user_projects).prefetch_related(
             'position', 'position__project', 'user__profile'
         ).order_by('position__filled', '-created_at')
     else:
         all_applications = models.UserApplication.objects.all().filter(
-            position__project__owner=request.user).filter(status__exact=status).prefetch_related(
+            position__project__owner=request.user,
+            position__project__in=user_projects).filter(status__exact=status).prefetch_related(
             'position', 'position__project', 'user__profile'
         ).order_by('-created_at')
 
-    user_projects = models.Project.objects.all(
-    ).order_by('-created_at').prefetch_related('positions').filter(owner=profile_user)
 
-    project_list = get_slugified_list(user_projects)
-
-    # Get the (slugified, Display Name) list of project needs associated with the user's projects
-    project_needs = get_project_needs(user_projects)
 
     #  handle the Accept / Reject buttons
     if request.method == 'POST':

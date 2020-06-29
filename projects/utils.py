@@ -33,14 +33,14 @@ def get_project_needs(projects):
     return project_needs
 
 
-def get_search_term(needs_filter, project_needs):
+def get_search_term(slug, queryset):
     """
     Return the de-slugified search term
     from the project_needs list(above)
     - if it exists, else return a 404.
     """
     try:
-        search_term = [item[1] for item in project_needs if needs_filter in item][0]
+        search_term = [item[1] for item in queryset if slug in item][0]
     except IndexError:
         raise Http404
     return search_term
