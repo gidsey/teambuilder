@@ -245,43 +245,54 @@ def applications(request, username):
     print('proj_term {}'.format(proj_term))
     print('need_term {}'.format(need_term))
 
-    user_projects = all_user_projects
-
+    # user_projects = all_user_projects
+    search_type = 0
     if proj == 'all' and need == 'all':
-        print('1')
+        search_type = 1
+        print('search_type: {}'.format(search_type))
         #  All Projects and all Needs
         user_projects = all_user_projects
 
     elif need == 'all' and proj != 'all':
-        print('2')
+        search_type = 2
+        print('search_type: {}'.format(search_type))
         #  All Needs, filtered Projects
         user_projects = all_user_projects.filter(title=proj_term)
 
     elif need != 'all' and proj == 'all':
-        print('3')
+        search_type = 3
+        print('search_type: {}'.format(search_type))
         #  All Projects, filtered Needs
-        user_projects = all_user_projects.filter(positions__title=need_term)
+        user_projects = all_user_projects.filter(positions__title__exact=need_term)
         print('proj search user_projects {}'.format(user_projects))
 
     elif proj != 'all' and need != 'all':
-        print('4')
+        search_type = 4
+        print('search_type: {}'.format(search_type))
         # Filters Projects and filtered Needs
-        user_projects = all_user_projects
+        user_projects = all_user_projects.filter(Q
+                                                 (title=proj_term) &
+                                                 Q(positions__title=need_term))
+        # user_projects = all_user_projects.filter(positions__title=need_term)
 
-    total_num_app = len(models.UserApplication.objects.all().filter(position__project__owner=request.user))
+    user_applications = models.UserApplication.objects.filter(position__project__owner=request.user)
 
+    total_num_app = len(user_applications)
 
-
-
-    all_applications = models.UserApplication.objects.all().filter(
-        Q(position__project__owner=request.user) &
-        Q(position__project__in=user_projects) &
-        Q(status__in=status)).prefetch_related(
+    all_applications = user_applications.filter(
+        Q(status__in=status) &
+        Q(position__project__in=user_projects)
+    ).prefetch_related(
         'position', 'position__project', 'user__profile'
     ).order_by('status', '-created_at')
-    filtered_num_app = len(all_applications)
 
-   # Q(position__title__exact=need_term)
+    if search_type == 3:
+        all_applications = all_applications.filter(position__title__exact=need_term)
+
+    if search_type == 4:
+        all_applications = all_applications.filter(position__title__exact=need_term)
+
+    filtered_num_app = len(all_applications)
 
     #  handle the Accept / Reject buttons
     if request.method == 'POST':
