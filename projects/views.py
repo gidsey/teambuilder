@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -139,10 +140,20 @@ def project_detail(request, pk):
                 application = application_form.save(commit=False)
                 position = application_form.cleaned_data['position']
                 application.user = request.user
+                application.user.email
                 application.save()
                 messages.success(
                     request,
                     "Application received."
+                )
+                send_mail(
+                    'Team Builder Application received',
+                    'Dear {}, \n\nThank you for your application for the position '
+                    'of {}. \nWe will be back in touch with you shortly.\n\nBest regards,\n'
+                    'From the team at Team Builder'.format(application.user.profile.fullname, position),
+                    'admin@teambuilder.com',
+                    [application.user.email],
+                    fail_silently=False,
                 )
                 return render(request, 'projects/application_confirm.html', {
                     'position': position,
