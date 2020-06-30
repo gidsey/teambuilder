@@ -216,6 +216,7 @@ def project_search(request):
 
 @login_required
 def applications(request, username):
+    #  Get the user based on the supplied username
     try:
         profile_user = models.User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -225,44 +226,44 @@ def applications(request, username):
     if request.user != profile_user:
         raise PermissionDenied
 
+    #  Retrieve the URL query strings (set to 'all' if not supplied)
     status = request.GET.get('s', 'all')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
+    print(need)
 
+    #  Get all the projects owned by the user
     all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
 
-    # Get the (slugified, Display Name) list of the user's projects
+    # Make a (slugified, Display Name) list of the user's projects
     project_list = get_slugified_list(all_user_projects)
 
-    # Get the (slugified, Display Name) list of project needs associated with the user's projects
+    # Make a (slugified, Display Name) list of project needs associated with the user's projects
     project_needs = get_project_needs(all_user_projects)
 
-    print('status: {}'.format(status))
-    print('proj: {}'.format(proj))
-    print('need: {}'.format(need))
-
-    print('project_list: {}'.format(project_list))
-    print('project_needs: {}'.format(project_needs))
     proj_term = get_search_term(proj, project_list)
     need_term = get_search_term(need, project_needs)
     print('proj_term {}'.format(proj_term))
     print('need_term {}'.format(need_term))
 
     if proj == 'all' and need == 'all':
+        print('1')
         #  All Projects and all Needs
-
         user_projects = all_user_projects
 
     elif need == 'all' and proj != 'all':
+        print('2')
         #  All Needs, filtered Projects
         user_projects = all_user_projects.filter(title=proj_term)
 
     elif need != 'all' and proj == 'all':
+        print('3')
         #  All Projects, filtered Needs
-        user_projects = all_user_projects.filter(positions__title='Mobile Developer')  #this is hardcoded
+        user_projects = all_user_projects.filter(positions__title=need_term)
         print('proj search user_projects {}'.format(user_projects))
 
     elif proj != 'all' and need != 'all':
+        print('4')
         # Filters Projects and filtered Needs
         user_projects = all_user_projects
 
@@ -324,6 +325,7 @@ def applications(request, username):
                 'accept_form': accept_form,
                 'status': status,
                 'proj': proj,
+                'need': need,
                 'total_num_app': total_num_app,
                 'filtered_num_app': filtered_num_app,
             })
@@ -339,6 +341,7 @@ def applications(request, username):
         'accept_form': accept_form,
         'status': status,
         'proj': proj,
+        'need': need,
         'total_num_app': total_num_app,
         'filtered_num_app': filtered_num_app,
     })

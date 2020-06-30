@@ -68,9 +68,10 @@
             <div class="circle--filter circle--secondary--module">
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
-                    {% for slug, need in project_needs %}
+                    {% for slug, position in project_needs %}
                         <li>
-                            <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request n=slug %}">{{ need }}</a>
+                            <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request n=slug %}"
+                            {% if need == slug %}class="selected"{% endif %}>{{ position }}</a>
                         </li>
                     {% endfor %}
                 </ul>
