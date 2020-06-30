@@ -22,7 +22,7 @@
 
         <div class="circle--page--header grid-100">
             <h2>Applications</h2>
-            <div class="mt-1"><span class="secondary-label">{{ total_num_app }} total / {{ filtered_num_app }} selected</span>
+            <div class="mt-1"><span class="secondary-label">{{ totals.0 }} total / {{ totals.1}} selected</span>
             </div>
         </div>
 
@@ -32,19 +32,19 @@
                 <ul class="circle--filter--list">
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='123' %}"
-                           {% if status == '123'%}class="selected"{% endif %}>All Applications</a>
+                           {% if m_status.0 == '123'%}class="selected"{% endif %}>All Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=1 %}"
-                           {% if status == '1' %}class="selected"{% endif %}>New Applications</a>
+                           {% if m_status.0 == '1' %}class="selected"{% endif %}>New Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=2 %}"
-                           {% if status == '2' %}class="selected"{% endif %}>Accepted</a>
+                           {% if m_status.0 == '2' %}class="selected"{% endif %}>Accepted</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=3 %}"
-                           {% if status == '3' %}class="selected"{% endif %}>Rejected</a>
+                           {% if m_status.0 == '3' %}class="selected"{% endif %}>Rejected</a>
                     </li>
                 </ul>
             </div>
@@ -55,7 +55,7 @@
                     {% for slug, project in project_list %}
                         <li>
                             <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request p=slug %}"
-                               {% if proj == slug %}class="selected"{% endif %}>{{ project }}</a>
+                               {% if  m_status.1 == slug %}class="selected"{% endif %}>{{ project }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -67,7 +67,7 @@
                     {% for slug, position in project_needs %}
                         <li>
                             <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request n=slug %}"
-                            {% if need == slug %}class="selected"{% endif %}>{{ position }}</a>
+                            {% if  m_status.2 == slug %}class="selected"{% endif %}>{{ position }}</a>
                         </li>
                     {% endfor %}
                 </ul>

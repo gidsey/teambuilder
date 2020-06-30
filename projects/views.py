@@ -16,6 +16,7 @@ def project_listing(request, needs_filter):
     based on Project Needs.
     """
     all_projects = models.Project.objects.prefetch_related('positions').order_by('-created_at')
+    num_projects = filtered_num_projects = len(all_projects)
     project_needs = get_project_needs(all_projects)
 
     if needs_filter == 'all':
@@ -23,15 +24,15 @@ def project_listing(request, needs_filter):
         search_term = 'all'
     else:
         search_term = get_search_term(needs_filter, project_needs)
-        projects = all_projects.order_by('-created_at').filter(
-            positions__title=search_term
-        )
-    num_projects = len(projects)
+        projects = all_projects.order_by('-created_at').filter(positions__title=search_term)
+        filtered_num_projects = len(projects)
+    totals = (num_projects, filtered_num_projects)
+
     return render(request, 'projects/project_listing.html', {
         'projects': projects,
         'project_needs': project_needs,
-        'num_projects': num_projects,
         'search_term': search_term,
+        'totals': totals,
     })
 
 
@@ -230,6 +231,7 @@ def applications(request, username):
     status = request.GET.get('s', '123')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
+    m_status = [status, proj, need]
 
     #  Get all the projects owned by the user
     all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
@@ -288,6 +290,7 @@ def applications(request, username):
 
     # Count the number of filtered results
     filtered_num_app = len(all_applications)
+    totals = [total_num_app, filtered_num_app]
 
     #  Handle the Accept / Reject buttons
     if request.method == 'POST':
@@ -327,11 +330,8 @@ def applications(request, username):
                 'project_list': project_list,
                 'all_applications': all_applications,
                 'accept_form': accept_form,
-                'status': status,
-                'proj': proj,
-                'need': need,
-                'total_num_app': total_num_app,
-                'filtered_num_app': filtered_num_app,
+                'm_status': m_status,
+                'totals': totals,
             })
     else:
         accept_form = forms.AcceptApplicationForm()
@@ -343,9 +343,6 @@ def applications(request, username):
         'project_list': project_list,
         'all_applications': all_applications,
         'accept_form': accept_form,
-        'status': status,
-        'proj': proj,
-        'need': need,
-        'total_num_app': total_num_app,
-        'filtered_num_app': filtered_num_app,
+        'm_status': m_status,
+        'totals': totals,
     })

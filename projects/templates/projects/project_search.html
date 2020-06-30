@@ -27,10 +27,9 @@
             <div class="circle--filter circle--secondary--module">
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
-                    <li><a class="selected">All Needs</a></li>
-                  {% for slug, need in project_needs %}
+                    {% for slug, need in project_needs %}
                         <li><a href="{% url 'projects:project_listing' needs_filter=slug %}"
-                               {% if search_term == need %}class="selected"{% endif %}
+                               {% if slug == search_term or need == search_term %}class="selected"{% endif %}
                         >{{ need }}</a></li>
                     {% endfor %}
                 </ul>
@@ -70,7 +69,7 @@
                     <p>Please try another search.</p>
                 </div>
 
-        {%  endif %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
