@@ -226,7 +226,7 @@ def applications(request, username):
     if request.user != profile_user:
         raise PermissionDenied
 
-    #  Retrieve the URL query strings (set to 'all' if not supplied)
+    #  Retrieve the URL query strings (set to 'all' or '123' if not supplied)
     status = request.GET.get('s', '123')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
@@ -240,45 +240,42 @@ def applications(request, username):
     # Make a (slugified, Display Name) list of project needs associated with the user's projects
     project_needs = get_project_needs(all_user_projects)
 
+    # Get the search term based on the slugified term supplied in the URL query string
     proj_term = get_search_term(proj, project_list)
     need_term = get_search_term(need, project_needs)
-    print('proj_term {}'.format(proj_term))
-    print('need_term {}'.format(need_term))
 
-    # user_projects = all_user_projects
-    search_type = 0
+    # Set defaults and identify the search type (1 to 4)
+    # filter the all_user_projects queryset accordingly
+    search_type = 1
+    user_projects = all_user_projects
+
+    #  All Projects and all Needs
     if proj == 'all' and need == 'all':
         search_type = 1
-        print('search_type: {}'.format(search_type))
-        #  All Projects and all Needs
         user_projects = all_user_projects
 
+    #  All Needs, filtered Projects
     elif need == 'all' and proj != 'all':
         search_type = 2
-        print('search_type: {}'.format(search_type))
-        #  All Needs, filtered Projects
         user_projects = all_user_projects.filter(title=proj_term)
 
+    #  All Projects, filtered Needs
     elif need != 'all' and proj == 'all':
         search_type = 3
-        print('search_type: {}'.format(search_type))
-        #  All Projects, filtered Needs
         user_projects = all_user_projects.filter(positions__title__exact=need_term)
-        print('proj search user_projects {}'.format(user_projects))
 
+    # Filters Projects and filtered Needs
     elif proj != 'all' and need != 'all':
         search_type = 4
-        print('search_type: {}'.format(search_type))
-        # Filters Projects and filtered Needs
-        user_projects = all_user_projects.filter(Q
-                                                 (title=proj_term) &
-                                                 Q(positions__title=need_term))
-        # user_projects = all_user_projects.filter(positions__title=need_term)
+        user_projects = all_user_projects.filter(
+            Q(title=proj_term) &
+            Q(positions__title=need_term))
 
+    #  Get all the applications on projects owned by the user
     user_applications = models.UserApplication.objects.filter(position__project__owner=request.user)
-
     total_num_app = len(user_applications)
 
+    #  Filter the applications based on status and user_projects
     all_applications = user_applications.filter(
         Q(status__in=status) &
         Q(position__project__in=user_projects)
@@ -286,15 +283,13 @@ def applications(request, username):
         'position', 'position__project', 'user__profile'
     ).order_by('status', '-created_at')
 
-    if search_type == 3:
+    if search_type == 3 or search_type == 4:
         all_applications = all_applications.filter(position__title__exact=need_term)
 
-    if search_type == 4:
-        all_applications = all_applications.filter(position__title__exact=need_term)
-
+    # Count the number of filtered results
     filtered_num_app = len(all_applications)
 
-    #  handle the Accept / Reject buttons
+    #  Handle the Accept / Reject buttons
     if request.method == 'POST':
         accept_form = forms.AcceptApplicationForm(data=request.POST)
         if accept_form.is_valid():
