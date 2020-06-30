@@ -36,7 +36,7 @@
                 <ul class="circle--filter--list">
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='all' %}"
-                           {% if status == 'all' %}class="selected"{% endif %}>All Applications</a>
+                           {% if status != '1' and status != '2' and status != '3'%}class="selected"{% endif %}>All Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=1 %}"

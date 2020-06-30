@@ -230,7 +230,9 @@ def applications(request, username):
     status = request.GET.get('s', 'all')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
-    print(need)
+
+    if status == 'all':
+        status = [1, 2, 3]
 
     #  Get all the projects owned by the user
     all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
@@ -245,6 +247,8 @@ def applications(request, username):
     need_term = get_search_term(need, project_needs)
     print('proj_term {}'.format(proj_term))
     print('need_term {}'.format(need_term))
+
+    user_projects = all_user_projects
 
     if proj == 'all' and need == 'all':
         print('1')
@@ -270,20 +274,14 @@ def applications(request, username):
     total_num_app = len(models.UserApplication.objects.all())
     filtered_num_app = -1
 
-    if status == 'all':
-        all_applications = models.UserApplication.objects.all().filter(
-            Q(position__project__owner=request.user) &
-            Q(position__project__in=user_projects)).prefetch_related(
-            'position', 'position__project', 'user__profile'
-        ).order_by('status', '-created_at')
-    else:
-        all_applications = models.UserApplication.objects.all().filter(
-            Q(position__project__owner=request.user) &
-            Q(position__project__in=user_projects) &
-            Q(status__exact=status)).prefetch_related(
-            'position', 'position__project', 'user__profile'
-        ).order_by('-created_at')
-        filtered_num_app = len(all_applications)
+    all_applications = models.UserApplication.objects.all().filter(
+        Q(position__project__owner=request.user) &
+        Q(position__project__in=user_projects) &
+        Q(status__in=status)).prefetch_related(
+        'position', 'position__project', 'user__profile'
+    ).order_by('status', '-created_at')
+
+   # Q(position__title__exact=need_term)
 
     #  handle the Accept / Reject buttons
     if request.method == 'POST':
