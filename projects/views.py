@@ -147,10 +147,11 @@ def project_detail(request, pk):
                     "Application received."
                 )
                 send_mail(
-                    'Team Builder Application received',
-                    'Dear {}, \n\nThank you for your application for the position '
-                    'of {}. \nWe will be back in touch with you shortly.\n\nBest regards,\n'
-                    'From the team at Team Builder'.format(application.user.profile.fullname, position),
+                    'Team Builder application received',
+                    'Dear {}, \n\nThank you for applying for the position '
+                    'of {} on the {} project. \nWe will be back in touch with you shortly to let you know '
+                    'if your application has been successful.\n\nBest regards,\n'
+                    'From the team at Team Builder'.format(application.user.profile.fullname, position, project),
                     'admin@teambuilder.com',
                     [application.user.email],
                     fail_silently=False,
