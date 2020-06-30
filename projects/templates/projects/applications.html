@@ -9,7 +9,7 @@
             <nav class="bounds">
                 <ul class="circle--pill--list">
                     <li><a class="selected"
-                           href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='all' %}">Applications</a>
+                           href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='123' %}">Applications</a>
                     </li>
                     <li><a href="{% url "accounts:user_profile" username=profile_user %}">Profile</a></li>
                 </ul>
@@ -22,11 +22,7 @@
 
         <div class="circle--page--header grid-100">
             <h2>Applications</h2>
-            <div class="mt-1"><span class="secondary-label">Showing {% if filtered_num_app == -1 %}
-                {{ total_num_app }}
-            {% else %}
-                {{ filtered_num_app }}
-            {% endif %} of {{ total_num_app }}</span>
+            <div class="mt-1"><span class="secondary-label">{{ total_num_app }} total / {{ filtered_num_app }} selected</span>
             </div>
         </div>
 
@@ -35,8 +31,8 @@
                 <h4>Status</h4>
                 <ul class="circle--filter--list">
                     <li>
-                        <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='all' %}"
-                           {% if status != '1' and status != '2' and status != '3'%}class="selected"{% endif %}>All Applications</a>
+                        <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='123' %}"
+                           {% if status == '123'%}class="selected"{% endif %}>All Applications</a>
                     </li>
                     <li>
                         <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s=1 %}"

@@ -227,12 +227,9 @@ def applications(request, username):
         raise PermissionDenied
 
     #  Retrieve the URL query strings (set to 'all' if not supplied)
-    status = request.GET.get('s', 'all')
+    status = request.GET.get('s', '123')
     proj = request.GET.get('p', 'all')
     need = request.GET.get('n', 'all')
-
-    if status == 'all':
-        status = [1, 2, 3]
 
     #  Get all the projects owned by the user
     all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
@@ -271,8 +268,10 @@ def applications(request, username):
         # Filters Projects and filtered Needs
         user_projects = all_user_projects
 
-    total_num_app = len(models.UserApplication.objects.all())
-    filtered_num_app = -1
+    total_num_app = len(models.UserApplication.objects.all().filter(position__project__owner=request.user))
+
+
+
 
     all_applications = models.UserApplication.objects.all().filter(
         Q(position__project__owner=request.user) &
@@ -280,6 +279,7 @@ def applications(request, username):
         Q(status__in=status)).prefetch_related(
         'position', 'position__project', 'user__profile'
     ).order_by('status', '-created_at')
+    filtered_num_app = len(all_applications)
 
    # Q(position__title__exact=need_term)
 
