@@ -245,22 +245,29 @@ def applications(request, username):
     print('project_needs: {}'.format(project_needs))
     proj_term = get_search_term(proj, project_list)
     need_term = get_search_term(need, project_needs)
+    print('proj_term {}'.format(proj_term))
+    print('need_term {}'.format(need_term))
 
-    if need == 'all':
+    if proj == 'all' and need == 'all':
+        #  All Projects and all Needs
+
+        user_projects = all_user_projects
+
+    elif need == 'all' and proj != 'all':
+        #  All Needs, filtered Projects
         user_projects = all_user_projects.filter(title=proj_term)
 
-    elif proj == 'all':
-        print('need_term {}'.format(need_term))
+    elif need != 'all' and proj == 'all':
+        #  All Projects, filtered Needs
         user_projects = all_user_projects.filter(positions__title='Mobile Developer')  #this is hardcoded
         print('proj search user_projects {}'.format(user_projects))
 
-    elif proj == 'all' and need == 'all':
-        print('proj_term {}'.format(proj_term))
-        user_projects = all_user_projects
-
     elif proj != 'all' and need != 'all':
+        # Filters Projects and filtered Needs
         user_projects = all_user_projects
 
+    total_num_app = len(models.UserApplication.objects.all())
+    filtered_num_app = -1
 
     if status == 'all':
         all_applications = models.UserApplication.objects.all().filter(
@@ -275,6 +282,7 @@ def applications(request, username):
             Q(status__exact=status)).prefetch_related(
             'position', 'position__project', 'user__profile'
         ).order_by('-created_at')
+        filtered_num_app = len(all_applications)
 
     #  handle the Accept / Reject buttons
     if request.method == 'POST':
@@ -316,6 +324,8 @@ def applications(request, username):
                 'accept_form': accept_form,
                 'status': status,
                 'proj': proj,
+                'total_num_app': total_num_app,
+                'filtered_num_app': filtered_num_app,
             })
     else:
         accept_form = forms.AcceptApplicationForm()
@@ -329,4 +339,6 @@ def applications(request, username):
         'accept_form': accept_form,
         'status': status,
         'proj': proj,
+        'total_num_app': total_num_app,
+        'filtered_num_app': filtered_num_app,
     })
