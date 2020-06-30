@@ -84,14 +84,10 @@ class DeleteProjectForm(forms.Form):
 
 
 class ApplicationForm(forms.ModelForm):
-    position = forms.HiddenInput
-    status = forms.HiddenInput
-
     class Meta:
         model = models.UserApplication
         fields = (
             'position',
-            'status',
         )
 
 

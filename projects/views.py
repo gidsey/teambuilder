@@ -323,15 +323,7 @@ def applications(request, username):
                 request,
                 msg
             )
-            return render(request, 'projects/applications.html', {
-                'profile_user': profile_user,
-                'user_projects': user_projects,
-                'project_needs': project_needs,
-                'project_list': project_list,
-                'all_applications': all_applications,
-                'accept_form': accept_form,
-                'm_status': m_status,
-                'totals': totals,
+            return render(request, 'projects/application_confirm.html', {
             })
     else:
         accept_form = forms.AcceptApplicationForm()

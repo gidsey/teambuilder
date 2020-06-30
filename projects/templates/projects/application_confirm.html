@@ -6,11 +6,15 @@
         {% include "messages.html" %}
         <div class="container">
             <div class="bounds">
+                {%  if position %}
                 <h1>Application received</h1>
                 <p>Thank you for your application for the role of <span class="secondary-label">{{ position }}</span>.</p>
-
+                    <p>You will receive an email confirmation shortly.</p>
+                {% else %}
+                <h1>Application updated</h1>
+                <p>The applicant will be notified of your decision via email.</p>
+                {% endif %}
                 <a class="button button-primary" href="{% url 'projects:project_listing' needs_filter='all' %}">Continue</a>
-
             </div>
         </div>
     </div>

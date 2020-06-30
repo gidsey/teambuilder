@@ -43,7 +43,7 @@
                                     <form method="POST" action="{% url 'projects:project_detail' pk=project.pk %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="position" id="id_position" value="{{ position.id }}">
-                                        <input type="hidden" name="status" id="id_status" value="u">
+{#                                        <input type="text" name="status" id="id_status" value="u">#}
                                         <input type="submit" name="application" class="button-primary" value="Apply">
                                     </form>
                                 {% endif %}
