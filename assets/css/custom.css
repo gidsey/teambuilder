@@ -81,10 +81,6 @@ textarea {
     color: rgba(220,53,69,.5);
 }
 
-.tight {
-    line-height: 0;
-}
-
 .btn_small {
     /*font-size: 16px!important;*/
     padding: 12px!important;

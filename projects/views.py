@@ -2,7 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
 from django.db.models import Q
 
 from .utils import (get_slugified_list, get_search_term, get_project_needs,
@@ -52,13 +53,14 @@ def project_new(request):
         user = request.user
         user.project = models.Project(owner=request.user)
         project_form = forms.ProjectForm(data=request.POST, instance=user.project)
+        project_skills_form = forms.ProjectSkillsForm(choices=choices, data=request.POST)
         positions_formset = forms.position_inline_formset(
             data=request.POST,
             instance=user.project,
             prefix='position-items'
         )
 
-        if project_form.is_valid() and positions_formset.is_valid():
+        if project_form.is_valid() and positions_formset.is_valid() and project_skills_form.is_valid():
             project = project_form.save()
             positions_formset.save()
 
@@ -197,7 +199,7 @@ def project_delete(request, pk):
                 request,
                 "Project deleted successfully."
             )
-            return redirect('projects:project_listing', {'needs_filter': 'all'})
+            return HttpResponseRedirect(reverse('projects:project_listing', args={'all'}))
     else:
         delete_form = forms.DeleteProjectForm()
 

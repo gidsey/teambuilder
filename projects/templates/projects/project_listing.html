@@ -46,13 +46,13 @@
                 {% for project in projects %}
                     <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
                         <td class="project_title">
-                            <h3 class="tight">{{ project.title }}</h3>
+                            <h3>{{ project.title }}</h3>
                         </td>
 
                         <td class="circle--cell--right">
                             {% for position in project.positions.all %}
                                 <ul>
-                                    <li class="secondary-label no-bullets pl-5 tight">{{ position }}</li>
+                                    <li class="secondary-label no-bullets pl-5">{{ position }}</li>
                                 </ul>
                             {% endfor %}
                         </td>
