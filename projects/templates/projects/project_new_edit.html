@@ -52,6 +52,7 @@
                         Markdown is accepted</a></p>
             </div>
 
+
             <div class="circle--project--positions">
                 <h2>Positions</h2>
                 <ul class="circle--group--list circle--clone--list" id="positions_formset">
@@ -86,6 +87,16 @@
                 {{ project_form.requirements }}
             </div>
 
+            <div class="circle--secondary--module">
+                <h3>Choose all the skills needed on your project:</h3>
+                <div class="skills_list">
+                {% for checkbox in project_skills_form %}
+                    <ul class="skills_list">
+                        <li> {{ checkbox }}</li>
+                    </ul>
+                {% endfor %}
+</div>
+            </div>
         </div>
 
     </div>

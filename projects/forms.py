@@ -101,3 +101,11 @@ class AcceptApplicationForm(forms.Form):
             'position',
         )
 
+
+class ProjectSkillsForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
+        super(ProjectSkillsForm, self).__init__(*args, **kwargs)
+        self.fields['project_skills'].choices = choices
+
+    project_skills = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple)

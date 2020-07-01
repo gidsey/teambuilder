@@ -9,6 +9,7 @@ from .utils import (get_slugified_list, get_search_term, get_project_needs,
                     send_application_received_mail, send_application_result_mail)
 from . import forms
 from . import models
+from accounts.models import Skill
 
 
 def project_listing(request, needs_filter):
@@ -43,6 +44,10 @@ def project_new(request):
     Create a new Project
     and associated Positions.
     """
+    available_skills = Skill.objects.all()
+    choices = [(skill.id, skill.name) for skill in available_skills]
+    choices.sort(key=lambda tup: tup[1].lower())  # Order the list by skill (case insensitive)
+
     if request.method == 'POST':
         user = request.user
         user.project = models.Project(owner=request.user)
@@ -65,11 +70,13 @@ def project_new(request):
     else:
         project_form = forms.ProjectForm()
         positions_formset = forms.position_inline_formset(prefix='position-items')
+        project_skills_form = forms.ProjectSkillsForm(choices=choices)
 
     return render(request, 'projects/project_new_edit.html', {
         'mode': 'create',
         'project_form': project_form,
         'positions_formset': positions_formset,
+        'project_skills_form': project_skills_form,
     })
 
 
