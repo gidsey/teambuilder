@@ -1,6 +1,9 @@
 from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
 from django.http import Http404
+
+from . import models
 
 
 def get_slugified_list(queryset):
@@ -71,6 +74,43 @@ def send_application_received_mail(email_to, name, position, project):
     return mail
 
 
+def send_application_result_mail(status, applicant, position_sought):
+    """
+    Send the application success or reject email
+    :param status: accept or reject
+    :param position_sought: position_id
+    :param applicant: user_id
+    :return: mail
+    """
+    try:
+        application = models.UserApplication.objects.filter(
+            user_id=applicant,
+            position_id=position_sought
+        ).prefetch_related('position', 'position__project', 'user__profile')
+    except ObjectDoesNotExist:
+        raise Http404
 
+    for app in application:
+        if status == 'accept':
+            subject = 'Team Builder application successful'
+            body = "Dear {}, \n\nThank you for your recent application for the position of {} on the {} project. \n" \
+                   "We are delighted to inform you that your application has been successful.\n\n" \
+                   "Welcome to the team!\n\nBest regards,\nFrom the team at " \
+                   "Team Builder".format(app.user.profile.fullname, app.position, app.position.project)
+        elif status == 'reject':
+            subject = 'Team Builder application unsuccessful'
+            body = "Dear {}, \n\nThank you for your recent application for the position of {} on the {} project. \n" \
+                   "We are sorry to inform you that on this occasion your application has not been successful.\n\n" \
+                   "Better luck next time!\n\nBest regards,\nFrom the team at " \
+                   "Team Builder".format(app.user.profile.fullname, app.position, app.position.project)
 
+    from_adr = 'admin@teambuilder.com'
+    mail = send_mail(
+        subject,
+        body,
+        from_adr,
+        [app.user.email],
+        fail_silently=False,
+    )
+    return mail
 

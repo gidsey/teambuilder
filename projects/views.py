@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
-from .utils import get_slugified_list, get_search_term, get_project_needs, send_application_received_mail
+from .utils import (get_slugified_list, get_search_term, get_project_needs,
+                    send_application_received_mail, send_application_result_mail)
 from . import forms
 from . import models
 
@@ -145,9 +146,10 @@ def project_detail(request, pk):
                     "Application received."
                 )
                 send_application_received_mail(
-                    application.user.email,
-                    application.user.profile.fullname,
-                    position, project
+                    email_to=application.user.email,
+                    name=application.user.profile.fullname,
+                    position=position,
+                    project=project
                 )
                 return render(request, 'projects/application_confirm.html', {
                     'position': position,
@@ -307,9 +309,11 @@ def applications(request, username):
             if request.POST.get("accept"):
                 status = 2
                 msg = "Application accepted"
+                email_msg = 'accept'
             elif request.POST.get("reject"):
                 status = 3
                 msg = "Application rejected"
+                email_msg = 'reject'
             try:
                 app = models.UserApplication.objects.filter(
                     user_id=applicant,
@@ -328,8 +332,14 @@ def applications(request, username):
                 request,
                 msg
             )
+            send_application_result_mail(
+                status=email_msg,
+                applicant=applicant,
+                position_sought=position_sought,
+            )
             return render(request, 'projects/application_confirm.html', {
             })
+
     else:
         accept_form = forms.AcceptApplicationForm()
 
