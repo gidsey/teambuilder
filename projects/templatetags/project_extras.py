@@ -25,3 +25,11 @@ def query_str(request, **kwargs):
             updated.pop(k, 0)  # Remove or return 0 - aka, delete safely this key
     return updated.urlencode()
 
+
+@register.filter('check_application_status')
+def check_application_status(position, user):
+    for app in position.application_position.all():
+        if app.status and app.user == user:
+            return True
+        else:
+            return False

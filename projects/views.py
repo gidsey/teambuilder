@@ -126,7 +126,7 @@ def project_detail(request, pk):
     except ObjectDoesNotExist:
         raise Http404
 
-    project_positions = models.Position.objects.all().filter(
+    project_positions = models.Position.objects.prefetch_related('application_position').filter(
         project_id=project.id
     ).order_by('filled')
 
@@ -157,6 +157,11 @@ def project_detail(request, pk):
 
     else:
         application_form = forms.ApplicationForm()
+
+    # for pro in project_positions:
+    #     print(pro)
+    #     for app in pro.application_position.all():
+    #         print(app.status)
 
     return render(request, 'projects/project_detail.html', {
         'project': project,
@@ -322,16 +327,16 @@ def applications(request, username):
             except ObjectDoesNotExist:
                 raise Http404
 
+            #  Update the application status
             app.update(status=status)
 
+            #  If application successful, mark the position as filled.
             if status == 2:
                 filled = models.Position.objects.filter(id=position_sought)
                 filled.update(filled=True)
 
-            messages.success(
-                request,
-                msg
-            )
+            #  Alert the user via in-app message and email
+            messages.success(request, msg)
             send_application_result_mail(
                 status=email_msg,
                 applicant=applicant,
