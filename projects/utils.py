@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.utils.text import slugify
 from django.http import Http404
 
@@ -46,3 +47,30 @@ def get_search_term(slug, queryset):
     except IndexError:
         raise Http404
     return search_term
+
+
+def send_application_received_mail(email_to, name, position, project):
+    """
+    Send the application received email
+    :param email_to: applicant's email
+    :param name: applicant's name
+    :param position: position applied for
+    :param project: project associated with position
+    :return: mail
+    """
+    mail = send_mail(
+        'Team Builder application received',
+        'Dear {}, \n\nThank you for applying for the position '
+        'of {} on the {} project. \nWe will be back in touch with you shortly to let you know '
+        'if your application has been successful.\n\nBest regards,\n'
+        'From the team at Team Builder'.format(name, position, project),
+        'admin@teambuilder.com',
+        [email_to],
+        fail_silently=False,
+    )
+    return mail
+
+
+
+
+
