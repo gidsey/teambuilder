@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+from accounts.models import Skill
 
 class Project(models.Model):
     """"
@@ -46,3 +47,9 @@ class UserApplication(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
 
+class ProjectSkill(models.Model):
+    """
+    Add one or many skills to the project.
+    """
+    project = models.ForeignKey(Project, related_name='project_skill', on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, related_name='skill_project', on_delete=models.CASCADE)

@@ -63,6 +63,13 @@ def project_new(request):
         if project_form.is_valid() and positions_formset.is_valid() and project_skills_form.is_valid():
             project = project_form.save()
             positions_formset.save()
+            skills = project_skills_form.cleaned_data['project_skills']
+            for skill in skills:
+                skill_instance = available_skills.get(id=skill)
+                models.ProjectSkill.objects.create(project=project, skill=skill_instance)
+
+
+
 
             messages.success(
                 request,
