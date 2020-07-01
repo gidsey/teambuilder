@@ -126,7 +126,10 @@ def project_detail(request, pk):
     except ObjectDoesNotExist:
         raise Http404
 
-    project_positions = models.Position.objects.prefetch_related('application_position').filter(
+    project_positions = models.Position.objects.prefetch_related(
+        'application_position',
+        'application_position__user'
+    ).filter(
         project_id=project.id
     ).order_by('filled')
 
@@ -157,11 +160,6 @@ def project_detail(request, pk):
 
     else:
         application_form = forms.ApplicationForm()
-
-    # for pro in project_positions:
-    #     print(pro)
-    #     for app in pro.application_position.all():
-    #         print(app.status)
 
     return render(request, 'projects/project_detail.html', {
         'project': project,
