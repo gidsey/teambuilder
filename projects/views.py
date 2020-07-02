@@ -138,48 +138,39 @@ def project_detail(request, pk):
     Show the project detail page.
     """
     try:
-        project = models.Project.objects.get(id=pk)
+        project = models.Project.objects.select_related(
+            'owner__profile'
+        ).prefetch_related(
+            'positions__application_position'
+        ).get(
+            id=pk
+        )
     except ObjectDoesNotExist:
         raise Http404
-
-    project_positions = models.Position.objects.prefetch_related(
-        'application_position',
-        'application_position__user'
-    ).filter(
-        project_id=project.id
-    ).order_by('filled')
 
     if request.method == 'POST':
         application_form = forms.ApplicationForm(data=request.POST)
         if application_form.is_valid():
-            entry = models.UserApplication.objects.filter(
-                user_id=request.user,
-                position_id=application_form.data['position'])
-            if not entry:  # Don't allow duplicate entries
-                application = application_form.save(commit=False)
-                position = application_form.cleaned_data['position']
-                application.user = request.user
-                application.save()
-                messages.success(
-                    request,
-                    "Application received."
-                )
-                send_application_received_mail(
-                    email_to=application.user.email,
-                    name=application.user.profile.fullname,
-                    position=position,
-                    project=project
-                )
-                return render(request, 'projects/application_confirm.html', {
-                    'position': position,
-                })
+            application = application_form.save(commit=False)
+            position = application_form.cleaned_data['position']
+            application.user = request.user
+            application.save()
+            messages.success(request, "Application received.")
+            send_application_received_mail(
+                email_to=application.user.email,
+                name=application.user.profile.fullname,
+                position=position,
+                project=project
+            )
+            return render(request, 'projects/application_confirm.html', {
+                'position': position,
+            })
 
     else:
         application_form = forms.ApplicationForm()
 
     return render(request, 'projects/project_detail.html', {
         'project': project,
-        'project_positions': project_positions,
         'application_form': application_form,
     })
 

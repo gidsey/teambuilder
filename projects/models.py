@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from accounts.models import Skill
 
+
 class Project(models.Model):
     """"
     Model to hold the Project data.

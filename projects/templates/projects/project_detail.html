@@ -34,7 +34,7 @@
             <div class="circle--project--positions">
                 <h2>Positions</h2>
                 <ul class="circle--group--list">
-                    {% for position in project_positions %}
+                    {% for position in project.positions.all %}
                         <li>
                             <h3>{{ position.title }}</h3>
                             <p>{{ position.description|markdown_to_html }}</p>
@@ -69,7 +69,7 @@
             <div class="circle--secondary--module">
                 <h3>Project Needs</h3>
                 <ul class="circle--link--list">
-                    {% for project in project_positions %}
+                    {% for project in project.positions.all %}
                         <li><a href="#">{{ project.title }}</a></li>
                     {% endfor %}
                 </ul>
@@ -83,6 +83,17 @@
             <div class="circle--secondary--module">
                 <h3>Applicant Requirements</h3>
                 <p>{{ project.requirements }}</p>
+            </div>
+
+            <div class="circle--secondary--module">
+                {% if profile_user_skills %}
+                       <h4>My Skills</h4>
+                    <ul class="unloaded">
+                        {% for skill in profile_user_skills %}
+                            <li>{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
         </div>
