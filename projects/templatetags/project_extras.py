@@ -28,8 +28,8 @@ def query_str(request, **kwargs):
 
 @register.filter('check_application_status')
 def check_application_status(position, user):
-    for app in position.application_position.all():
-        if app.status and app.user == user:
-            return True
-        else:
-            return False
+    applicants = [app.user for app in position.application_position.all()]
+    if user in applicants:
+        return True
+    else:
+        return False
