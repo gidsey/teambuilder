@@ -27,8 +27,8 @@ def query_str(request, **kwargs):
 
 
 @register.filter('check_application_status')
-def check_application_status(position, user):
-    applicants = [app.user for app in position.application_position.all()]
+def check_application_status(applications, user):
+    applicants = [app.user for app in applications]  # Causes duplicate queries
     if user in applicants:
         return True
     else:

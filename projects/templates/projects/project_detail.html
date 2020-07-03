@@ -43,7 +43,7 @@
                                 <a class="button button-primary button-inactive">Position Filled</a>
                             {% else %}
                                 {% if user != project.owner %}
-                                    {% if position|check_application_status:user %}
+                                    {% if position.application_position.all|check_application_status:user %}
                                         <a class="button button-primary button-inactive">You have applied for this
                                             position</a>
                                     {% else %}
