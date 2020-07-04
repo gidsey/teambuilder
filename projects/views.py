@@ -141,7 +141,7 @@ def project_detail(request, pk):
         project = models.Project.objects.select_related(
             'owner__profile'
         ).prefetch_related(
-            'positions__application_position'
+            'positions__application_position__user',
         ).get(
             id=pk
         )
