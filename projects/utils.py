@@ -39,6 +39,17 @@ def get_project_needs(projects):
     return project_needs
 
 
+def get_skill_choices(available_skills):
+    """
+    Get the skills choices to pass to the checkbox form
+    :param available_skills:
+    :return: a list of tuples (skill.id, skill.name)
+    """
+    choices = [(skill.id, skill.name) for skill in available_skills]
+    choices.sort(key=lambda tup: tup[1].lower())  # Order the list by skill (case insensitive)
+    return choices
+
+
 def get_search_term(slug, queryset):
     """
     Return the de-slugified search term

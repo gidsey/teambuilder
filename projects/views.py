@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .utils import (get_slugified_list, get_search_term, get_project_needs,
-                    send_application_received_mail, send_application_result_mail)
+                    send_application_received_mail, send_application_result_mail,
+                    get_skill_choices)
 from . import forms
 from . import models
 from accounts.models import Skill
@@ -46,8 +47,7 @@ def project_new(request):
     and associated Positions.
     """
     available_skills = Skill.objects.all()
-    choices = [(skill.id, skill.name) for skill in available_skills]
-    choices.sort(key=lambda tup: tup[1].lower())  # Order the list by skill (case insensitive)
+    choices = get_skill_choices(available_skills)
 
     if request.method == 'POST':
         user = request.user
@@ -67,14 +67,7 @@ def project_new(request):
             for skill in skills:
                 skill_instance = available_skills.get(id=skill)
                 models.ProjectSkill.objects.create(project=project, skill=skill_instance)
-
-
-
-
-            messages.success(
-                request,
-                "Project created successfully."
-            )
+            messages.success(request, "Project created successfully.")
             return redirect('projects:project_detail', pk=project.pk)
     else:
         project_form = forms.ProjectForm()
@@ -104,17 +97,25 @@ def project_edit(request, pk):
     if request.user != project.owner:
         raise PermissionDenied
 
+    available_skills = Skill.objects.all().prefetch_related('skill_project__project')
+    checked_skills = models.ProjectSkill.objects.filter(project=pk)
+
+    saved_skills_tuple = tuple([skill.skill_id for skill in checked_skills])
+    choices = get_skill_choices(available_skills)
+
     if request.method == 'POST':
         project_form = forms.ProjectForm(data=request.POST, instance=project)
+        project_skills_form = forms.ProjectSkillsForm(choices=choices, data=request.POST)
         positions_formset = forms.position_inline_formset(
             data=request.POST,
             instance=project,
             prefix='position-items'
         )
 
-        if project_form.is_valid() and positions_formset.is_valid():
+        if project_form.is_valid() and positions_formset.is_valid() and project_skills_form.is_valid():
             project = project_form.save()
             positions_formset.save()
+            print(project_skills_form.cleaned_data)
             messages.success(
                 request,
                 "Project updated successfully."
@@ -123,12 +124,14 @@ def project_edit(request, pk):
     else:
         project_form = forms.ProjectForm(instance=project)
         positions_formset = forms.position_inline_formset(instance=project, prefix='position-items')
+        project_skills_form = forms.ProjectSkillsForm(choices=choices, initial={'project_skills': saved_skills_tuple})
 
     return render(request, 'projects/project_new_edit.html', {
         'pk': pk,
         'mode': 'edit',
         'project_form': project_form,
         'positions_formset': positions_formset,
+        'project_skills_form': project_skills_form,
     })
 
 
@@ -142,6 +145,7 @@ def project_detail(request, pk):
             'owner__profile'
         ).prefetch_related(
             'positions__application_position__user',
+            'project_skill__skill'
         ).get(
             id=pk
         )
