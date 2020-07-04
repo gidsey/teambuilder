@@ -54,6 +54,7 @@ class ProjectSkill(models.Model):
     """
     project = models.ForeignKey(Project, related_name='project_skill', on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, related_name='skill_project', on_delete=models.CASCADE)
+    required_skill = models.BooleanField(default=False)
 
     def __str__(self):
         return self.skill.name

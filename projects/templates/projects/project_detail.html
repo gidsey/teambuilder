@@ -89,7 +89,7 @@
             <div class="circle--secondary--module">
                        <h4>Required Skills</h4>
                     <ul class="unloaded">
-                        {% for skill in project.project_skill.all %}
+                        {% for skill in required_skills %}
                             <li>{{ skill }}</li>
                         {% endfor %}
                     </ul>

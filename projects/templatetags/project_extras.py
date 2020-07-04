@@ -15,6 +15,16 @@ def markdown_to_html(markdown_text):
     return mark_safe(html_body)
 
 
+@register.filter('order_by')
+def order_by(queryset, args):
+    """
+    Sort the queryset by supplied arg
+    """
+    args = [x.strip() for x in args.split(',')]
+    return queryset.order_by(*args)
+
+
+
 @register.simple_tag
 def query_str(request, **kwargs):
     """
