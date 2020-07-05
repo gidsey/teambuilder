@@ -29,13 +29,7 @@ def project_listing(request, needs_filter):
     elif needs_filter == 'suggested':
         if request.user.is_authenticated:
             user_skills = UserSkill.objects.all().select_related('skill').filter(user_id=request.user)
-            print(user_skills)
-            user_skillset = []
-            for user_skill in user_skills:
-                print(user_skill.skill)
-                user_skillset.append(user_skill.skill)
-                print('user_skillset {}'.format(user_skillset))
-
+            user_skillset = [skill.skill for skill in user_skills]
             projects = all_projects.order_by('-created_at').filter(positions__title__in=user_skillset)
             search_term = 'suggested'
         else:
