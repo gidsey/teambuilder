@@ -6,7 +6,8 @@
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
                 <h2>Projects</h2>
-                <div class="mt-1"><span class="secondary-label">{{ totals.0 }} total / {{ totals.1}} selected</span></div>
+                <div class="mt-1"><span class="secondary-label">{{ totals.0 }} total / {{ totals.1 }} selected</span>
+                </div>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 <a class="button button-primary icon-on-left" href="{% url 'projects:project_new' %}">
@@ -21,7 +22,19 @@
             </div>
         </div>
 
+
         <div class="grid-25">
+            {% if user.is_authenticated %}
+                <div class="circle--filter circle--secondary--module">
+                    <h4>Projects For You</h4>
+                    <ul class="circle--filter--list">
+                        <li><a href="{% url 'projects:project_listing' needs_filter='suggested' %}"
+                               {% if search_term == 'suggested' %}class="selected"{% endif %}
+                        >Suggested Projects</a></li>
+                    </ul>
+                </div>
+            {% endif %}
+
             <div class="circle--filter circle--secondary--module">
                 <h4>Project Needs</h4>
                 <ul class="circle--filter--list">
