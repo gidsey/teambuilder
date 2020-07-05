@@ -12,7 +12,7 @@
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
                 formCssClass: "circle--clone--list--custom--skills",
-                hideLastAddForm: "True"
+                {#hideLastAddForm: "False"#}
             });
             $('#portfolio_dynamic_formset  p').formset({
                 prefix: 'folio-items',
@@ -20,8 +20,8 @@
                 deleteText: 'Remove',
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
-                hideLastAddForm: "True",
                 formCssClass: "portfolio-forms",
+                {#hideLastAddForm: "True",#}
             });
         });
     </script>
