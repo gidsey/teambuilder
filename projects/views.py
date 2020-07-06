@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from .utils import (get_slugified_list, get_search_term, get_project_needs,
                     send_application_received_mail, send_application_result_mail,
-                    get_skill_choices)
+                    get_skill_choices, get_skill_sets)
 from . import forms
 from . import models
 from accounts.models import Skill, UserSkill
@@ -136,19 +136,10 @@ def project_edit(request, pk):
             project = project_form.save()
             positions_formset.save()
 
-            # form_true = the skills that need to set to true for the current project
-            form_true = [int(skill) for skill in project_skills_form.cleaned_data['project_skills']]
-
-            # Create 2 sets (form_true and db_skills):
-            form_true = set(form_true)
-
-            # db_skills = all the skills associated with the current project (set either true or false)
-            db_skills = set(
-                [skill.skill_id for skill in models.ProjectSkill.objects.all().filter(project_id=pk)])
-
-            # Use the sets to define which skills should be set to True and which to False
-            set_to_false = db_skills - form_true
-            set_to_true = form_true - set_to_false
+            # Check which skills should be set to true and which to false
+            skill_sets = get_skill_sets(project_skills_form, pk)
+            set_to_false = skill_sets[0]
+            set_to_true = skill_sets[1]
 
             #  Update the ProjectSkill model
             for skill in set_to_false:
@@ -349,9 +340,6 @@ def applications(request, username):
     #  Get all the applications on projects owned by the user
     user_applications = models.UserApplication.objects.filter(position__project__owner=request.user)
 
-    # for u in user_applications:
-    #     if u.status == 2:
-    #         print(u.status)
     total_num_app = len(user_applications)
 
     #  Filter the applications based on status and user_projects
@@ -372,8 +360,6 @@ def applications(request, username):
 
     for appl in all_applications:
         print('all_applications.status {}'.format(appl.status))
-
-
 
     #  Handle the Accept / Reject buttons
     if request.method == 'POST':
