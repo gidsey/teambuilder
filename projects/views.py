@@ -387,8 +387,20 @@ def applications(request, username):
             #  Update the application status
             app.update(status=status)
 
-            #  If application successful, mark the position as filled.
+            #  If application successful, mark the position as filled and reject any other applicants.
             if status == 2:
+                unsuccessful_applicants = user_applications.filter(position_id=position_sought, status=1)
+                print('unsuccessful_applicants {}'.format(unsuccessful_applicants))
+                if unsuccessful_applicants:
+                    unsuccessful_applicants.update(status=3)
+
+                    for rej in unsuccessful_applicants:
+                        send_application_result_mail(
+                            status='reject',
+                            applicant=rej.user.id,
+                            position_sought=position_sought,
+                            )
+
                 filled = models.Position.objects.filter(id=position_sought)
                 filled.update(filled=True)
 
