@@ -94,16 +94,16 @@ class CustomSkillsForm(forms.Form):
         self.fields['name'].label = ""
 
     name = forms.CharField(
+        required=False,
         max_length=255,
         widget=forms.TextInput(attrs={
             'placeholder': 'New skill',
-        }),
+        })
     )
 
 
 # Define the formset for user's Custom Skills
 CustomSkillsFormSet = formset_factory(CustomSkillsForm)
-
 
 #  Define the formset for user's Profile Portfolios (My Projects)
 portfolio_inline_formset = forms.inlineformset_factory(
@@ -113,7 +113,7 @@ portfolio_inline_formset = forms.inlineformset_factory(
     fields=('name', 'url'),
     widgets={
         'name': forms.TextInput(attrs={'placeholder': 'Project Name'}),
-        'url': forms.URLInput(attrs={'placeholder': 'Project URL'},)}
+        'url': forms.URLInput(attrs={'placeholder': 'Project URL'}, )}
 )
 
 
@@ -121,11 +121,11 @@ class AvatarForm(forms.ModelForm):
     """
     Capture the user's Avatar data.
     """
-    x = forms.FloatField(widget=forms.HiddenInput())
-    y = forms.FloatField(widget=forms.HiddenInput())
-    width = forms.FloatField(widget=forms.HiddenInput())
-    height = forms.FloatField(widget=forms.HiddenInput())
-    rotate = forms.FloatField(widget=forms.HiddenInput())
+    x = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    rotate = forms.FloatField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = models.Profile
@@ -162,3 +162,52 @@ class AvatarForm(forms.ModelForm):
         resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
         resized_image.save(photo.avatar.path)
         return photo
+
+# class AvatarForm(forms.ModelForm):
+#     """
+#     Capture the user's Avatar data.
+#     """
+#     x = forms.FloatField(widget=forms.TextInput(), required=False)
+#     y = forms.FloatField(widget=forms.TextInput(), required=False)
+#     width = forms.FloatField(widget=forms.TextInput(), required=False)
+#     height = forms.FloatField(widget=forms.TextInput(), required=False)
+#     rotate = forms.FloatField(widget=forms.TextInput(), required=False)
+#
+#     class Meta:
+#         model = models.Profile
+#         fields = (
+#             'avatar',
+#             'x',
+#             'y',
+#             'width',
+#             'height',
+#             'rotate',
+#         )
+#         labels = {
+#             'avatar': '',
+#         }
+#         widgets = {
+#             'avatar': forms.FileInput(attrs={
+#                 'accept': 'image/*'
+#             })
+#         }
+#
+#     def save(self):
+#         photo = super(AvatarForm, self).save()
+#         x = self.cleaned_data.get('x')
+#         y = self.cleaned_data.get('y')
+#         w = self.cleaned_data.get('width')
+#         h = self.cleaned_data.get('height')
+#         r = self.cleaned_data.get('rotate')
+#
+#         image = Image.open(photo.avatar)
+#
+#         if x:
+#             r = -r  # swap negative to positive and vise versa
+#
+#             rotated_image = image.rotate(r, expand=True)
+#             cropped_image = rotated_image.crop((x, y, w + x, h + y))
+#             resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
+#             resized_image.save(photo.avatar.path)
+#
+#         return photo

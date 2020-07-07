@@ -1,19 +1,22 @@
 {% extends "layout.html" %}s
 {% load account %}
 {% load account_extras %}
-{% block title %} {{block.super}} | Profile {% endblock %}
+{% block title %} {{ block.super }} | Profile {% endblock %}
 {% block body %}
 
-    {%  if profile_user == request.user %}
-    <div class="circle--actions--bar">
-        <nav class="bounds">
-            <ul class="circle--pill--list">
-                <li><a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='123' %}">Applications</a></li>
-                <li><a class="selected" href="{% url "accounts:user_profile" username=profile_user %}">Profile</a></li>
-            </ul>
-        </nav>
-    </div>
-    {%  endif %}
+    {% if profile_user == request.user %}
+        <div class="circle--actions--bar">
+            <nav class="bounds">
+                <ul class="circle--pill--list">
+                    <li>
+                        <a href="{% url 'projects:applications' username=profile_user %}?{% query_str request s='123' %}">Applications</a>
+                    </li>
+                    <li><a class="selected" href="{% url "accounts:user_profile" username=profile_user %}">Profile</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
 
     <div class="bounds circle--page">
         {% include "messages.html" %}
@@ -23,9 +26,9 @@
                 <h2>Profile</h2>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
-                {%  if user == profile_user %}
-                <a class="button icon-on-left" href="{% url "accounts:user_profile_edit" username=user %}">Edit</a>
-                {%  endif %}
+                {% if user == profile_user %}
+                    <a class="button icon-on-left" href="{% url "accounts:user_profile_edit" username=user %}">Edit</a>
+                {% endif %}
             </div>
         </div>
         <div class="grid-70">
@@ -34,7 +37,7 @@
                 <p>{{ profile_user.profile.bio|markdown_to_html }}</p>
             </div>
 
-            {% if profile_projects %}
+
             <h2>Past Projects</h2>
             <table class="u-full-width circle--table">
                 <thead>
@@ -43,25 +46,29 @@
                     <th class="circle--cell--right pl-5">Project Needs</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for project in profile_projects %}
-                    <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
-                        <td class="project_title">
-                            <h3>{{ project.title }}</h3>
-                        </td>
 
-                        <td class="circle--cell--right">
-                            {% for position in project.positions.all %}
-                                <ul>
-                                    <li class="secondary-label no-bullets pl-5">{{ position }}</li>
-                                </ul>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                {% if profile_projects %}
+                    {% for project in profile_projects %}
+                        <tbody>
+
+                        <tr class="clickable-row" data-href="{% url 'projects:project_detail' pk=project.pk %}">
+                            <td class="project_title">
+                                <h3>{{ project.title }}</h3>
+                            </td>
+
+                            <td class="circle--cell--right">
+                                {% for position in project.positions.all %}
+                                    <ul>
+                                        <li class="secondary-label no-bullets pl-5">{{ position }}</li>
+                                    </ul>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
-           {%  endif %}
+
         </div>
 
         <div class="grid-25 grid-push-5">
@@ -78,8 +85,8 @@
             </div>
 
             <div class="circle--secondary--module">
+                <h4>My Skills</h4>
                 {% if profile_user_skills %}
-                       <h4>My Skills</h4>
                     <ul class="unloaded">
                         {% for skill in profile_user_skills %}
                             <li>{{ skill }}</li>
@@ -89,13 +96,13 @@
             </div>
 
             <div class="circle--secondary--module">
+                <h4>My Projects</h4>
                 {% if profile_user_portfolios %}
-                       <h4>My Projects</h4>
                     <ul class="circle--link--list">
                         {% for portfolio in profile_user_portfolios %}
                             <li><a href="{{ portfolio.url }}" target="_blank">{{ portfolio }}</a></li>
                         {% endfor %}
-                        </ul>
+                    </ul>
                 {% endif %}
             </div>
         </div>

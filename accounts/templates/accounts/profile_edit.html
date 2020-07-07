@@ -12,7 +12,6 @@
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
                 formCssClass: "circle--clone--list--custom--skills",
-                {#hideLastAddForm: "False"#}
             });
             $('#portfolio_dynamic_formset  p').formset({
                 prefix: 'folio-items',
@@ -21,7 +20,6 @@
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
                 formCssClass: "portfolio-forms",
-                {#hideLastAddForm: "True",#}
             });
         });
     </script>
@@ -100,7 +98,7 @@
                     {% endif %}
                     <img src="{{ current_user.profile.avatar.url }}"
                          alt="{{ current_user.profile.fullname }}" class="avatar_editing">
-
+{#                        {{ avatar_form }}#}
                     {{ avatar_form.non_field_errors }}
                     {% for hidden_field in avatar_form.hidden_fields %}
                         {{ hidden_field.errors }}

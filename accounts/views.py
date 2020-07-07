@@ -53,9 +53,7 @@ def user_profile_edit(request, username):
     """
     # Get list of custom skills for the current user
     try:
-        user_skills = models.Skill.objects.all().filter(
-            Q(type__exact='c'), skill_user__user_id=request.user
-        )
+        user_skills = models.Skill.objects.filter(Q(type__exact='c'), skill_user__user_id=request.user)
     except ObjectDoesNotExist:
         raise Http404
 
@@ -67,10 +65,10 @@ def user_profile_edit(request, username):
     user = request.user
 
     #  Only allow users to edit their own profile
-    if username != user.username:
+    if username != request.user.username:
         raise PermissionDenied
 
-    if request.method == 'POST' and 'update_profile' in request.POST:  # Profile form submitted
+    if request.method == 'POST':
         try:
             user.profile = request.user.profile
         except models.Profile.DoesNotExist:
@@ -84,63 +82,42 @@ def user_profile_edit(request, username):
         )
 
         custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
-        avatar_form = forms.AvatarForm(prefix='AvatarForm')
         dynamic_formset = forms.portfolio_inline_formset(data=request.POST, instance=user, prefix='folio-items')
+        avatar_form = forms.AvatarForm(data=request.POST, instance=user.profile, files=request.FILES)
 
-        if profile_form.is_valid() and custom_skills_formset.is_valid() and dynamic_formset.is_valid():
+        if (profile_form.is_valid()
+                and custom_skills_formset.is_valid()
+                and dynamic_formset.is_valid()
+                and avatar_form.is_valid()):
+
+            if avatar_form.cleaned_data['x']:
+                avatar_form.save()  # only save the avatar if a new image has been uploaded
+
             user_profile_form = profile_form.save(commit=False)
 
             # Check which skills should be set to true and which to false
+
             skill_sets = get_skill_sets(request, profile_form, custom_skills_formset)
             set_to_false = skill_sets[0]
             set_to_true = skill_sets[1]
 
-            #  Update the UserSkill model
+            #  Update the UserSkill table
             for skill in set_to_false:
                 models.UserSkill.objects.filter(user_id=request.user.id, skill_id=skill).update(is_skill=False)
             for skill in set_to_true:
                 try:
                     existing = models.UserSkill.objects.get(user_id=request.user.id, skill_id=skill)
                     if not existing.is_skill:
-                        models.UserSkill.objects.filter(user_id=request.user.id, skill_id=skill).update(
-                            is_skill=True
-                        )
+                        models.UserSkill.objects.filter(user_id=request.user.id, skill_id=skill).update(is_skill=True)
                 except ObjectDoesNotExist:
                     models.UserSkill.objects.create(user_id=request.user.id, skill_id=skill, is_skill=True)
 
             user_profile_form.save()
             dynamic_formset.save()
+
             messages.success(
                 request,
                 "Profile saved successfully."
-            )
-            return HttpResponseRedirect(reverse('accounts:user_profile', args={username}))
-
-    elif request.method == 'POST' and 'update_profile' not in request.POST:  # Avatar form submitted
-        try:
-            user.profile = request.user.profile
-        except models.Profile.DoesNotExist:
-            user.profile = models.Profile(user=request.user)
-
-        avatar_form = forms.AvatarForm(
-            data=request.POST,
-            instance=user.profile,
-            files=request.FILES,
-        )
-        profile_form = forms.ProfileForm(
-            choices=choices,
-            data=request.POST,
-            instance=user.profile,
-            prefix="profile",
-        )
-        custom_skills_formset = forms.CustomSkillsFormSet(request.POST, prefix='CSForm')
-        dynamic_formset = forms.portfolio_inline_formset(data=request.POST, instance=user, prefix='folio-items')
-
-        if avatar_form.is_valid():
-            avatar_form.save()
-            messages.success(
-                request,
-                "Avatar added successfully."
             )
             return HttpResponseRedirect(reverse('accounts:user_profile', args={username}))
     else:
@@ -160,13 +137,13 @@ def user_profile_edit(request, username):
                     'skills': saved_skills_tuple,
                 },
             )
-            avatar_form = forms.AvatarForm()
+            avatar_form = forms.AvatarForm(instance=user.profile)
             dynamic_formset = forms.portfolio_inline_formset(instance=user, prefix='folio-items')
 
         except models.Profile.DoesNotExist:
             profile_form = forms.ProfileForm(prefix='profile', choices=choices)
             custom_skills_formset = forms.CustomSkillsFormSet(prefix='CSForm')
-            avatar_form = forms.AvatarForm()
+            avatar_form = forms.AvatarForm(instance=user.profile)
             dynamic_formset = forms.portfolio_inline_formset(instance=user, prefix='folio-items')
 
     profile_projects = Project.objects.prefetch_related('positions').filter(owner=user)
