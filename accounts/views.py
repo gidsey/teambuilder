@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from itertools import chain
-
+from .utils import get_skill_sets
 from . import forms
 from . import models
 from projects.models import Project
@@ -49,7 +49,7 @@ def profile_edit_redirect(request):
 @login_required
 def user_profile_edit(request, username):
     """
-    Edit the User Profile.
+    Create and/or edit the User Profile.
     """
     # Get list of custom skills for the current user
     try:
@@ -90,34 +90,10 @@ def user_profile_edit(request, username):
         if profile_form.is_valid() and custom_skills_formset.is_valid() and dynamic_formset.is_valid():
             user_profile_form = profile_form.save(commit=False)
 
-            # form_true = the skills that need to set to true for the current user
-            form_true = [int(skill) for skill in profile_form.cleaned_data['skills']]
-
-            #  Create a list of custom skills added by the user
-            custom_skill_list = []
-            for custom_skill_form in custom_skills_formset:
-                skill = custom_skill_form.cleaned_data.get('name')
-                if skill:  # prevent 'None' being saved to list
-                    custom_skill_list.append(skill)
-
-            #  Add the custom skills to the Skills model (if they don't already exist)
-            for custom_skill in custom_skill_list:
-                obj, created = models.Skill.objects.get_or_create(
-                    name=custom_skill,
-                    type='c'
-                )
-                form_true.append(obj.id)  # Append the new custom skills to the form_true list
-
-            # Create 2 sets (form_true and db_skills):
-            form_true = set(form_true)
-
-            # db_skills = all the skills associated with the current user (set either true or false)
-            db_skills = set(
-                [skill.skill_id for skill in models.UserSkill.objects.all().filter(user_id=request.user.id)])
-
-            # Use the sets to define which skills should be set to True and which to False
-            set_to_false = db_skills - form_true
-            set_to_true = form_true - set_to_false
+            # Check which skills should be set to true and which to false
+            skill_sets = get_skill_sets(request, profile_form, custom_skills_formset)
+            set_to_false = skill_sets[0]
+            set_to_true = skill_sets[1]
 
             #  Update the UserSkill model
             for skill in set_to_false:
