@@ -2,7 +2,6 @@ _design_reference
 venv
 README.txt
 *.log
-avatars
 
 .DS_Store
 __pycache__/
@@ -14,3 +13,4 @@ assets/js/.DS_Store
 projects/__pycache__/
 projects/migrations/__pycache__/
 teambuilder/__pycache__/
+.idea/dataSources.xml
