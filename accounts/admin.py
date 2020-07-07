@@ -9,5 +9,10 @@ class SkillAdmin(admin.ModelAdmin):
     ordering = ['-type']
 
 
-admin.site.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'fullname', 'bio', 'avatar']
+    ordering = ['-fullname']
+
+
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Skill, SkillAdmin)

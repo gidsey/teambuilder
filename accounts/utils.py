@@ -42,6 +42,15 @@ def get_skill_sets(request, form, formset):
     return set_to_false, set_to_true
 
 
+def get_saved_skills(user):
+    """
+    Get all the skills associated with the user
+    and return a tuple.
+    """
+    saved_skills = models.UserSkill.objects.filter(user_id=user.id, is_skill=True)
+    saved_skills_tuple = tuple([skill.skill_id for skill in saved_skills])
+    return saved_skills_tuple
+
 
 
 
