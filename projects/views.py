@@ -30,7 +30,7 @@ def project_listing(request, needs_filter):
         if request.user.is_authenticated:
             user_skills = UserSkill.objects.all().select_related('skill').filter(user_id=request.user)
             user_skillset = [skill.skill for skill in user_skills]
-            projects = all_projects.order_by('-created_at').filter(positions__title__in=user_skillset)
+            projects = set(all_projects.order_by('-created_at').filter(positions__title__in=user_skillset))
             search_term = 'suggested'
             filtered_num_projects = len(projects)
             totals = (num_projects, filtered_num_projects)
@@ -294,16 +294,12 @@ def applications(request, username):
 
     #  Get all the projects owned by the user
     all_user_projects = models.Project.objects.all().prefetch_related('positions').filter(owner=profile_user)
-    for p in all_user_projects:
-        print(p)
 
     # Make a (slugified, Display Name) list of the user's projects
     project_list = get_slugified_list(all_user_projects)
-    print('project_list {}'.format(project_list))
 
     # Make a (slugified, Display Name) list of project needs associated with the user's projects
     project_needs = get_project_needs(all_user_projects)
-    print('project_needs {}'.format(project_needs))
 
     # Get the search term based on the slugified term supplied in the URL query string
     proj_term = get_search_term(proj, project_list)
@@ -336,14 +332,12 @@ def applications(request, username):
             Q(title=proj_term) &
             Q(positions__title=need_term))
 
-    print('user_projects {}'.format(user_projects))
     #  Get all the applications on projects owned by the user
     user_applications = models.UserApplication.objects.filter(position__project__owner=request.user)
 
     total_num_app = len(user_applications)
 
     #  Filter the applications based on status and user_projects
-    print('status {}'.format(status))
     all_applications = user_applications.filter(
         Q(status__in=status) &
         Q(position__project__in=user_projects)
@@ -357,9 +351,6 @@ def applications(request, username):
     # Count the number of filtered results
     filtered_num_app = len(all_applications)
     totals = [total_num_app, filtered_num_app]
-
-    for appl in all_applications:
-        print('all_applications.status {}'.format(appl.status))
 
     #  Handle the Accept / Reject buttons
     if request.method == 'POST':
@@ -390,7 +381,6 @@ def applications(request, username):
             #  If application successful, mark the position as filled and reject any other applicants.
             if status == 2:
                 unsuccessful_applicants = user_applications.filter(position_id=position_sought, status=1)
-                print('unsuccessful_applicants {}'.format(unsuccessful_applicants))
                 if unsuccessful_applicants:
                     for unsuccessful_applicant in unsuccessful_applicants:
                         send_application_result_mail(
