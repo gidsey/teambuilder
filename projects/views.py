@@ -392,14 +392,14 @@ def applications(request, username):
                 unsuccessful_applicants = user_applications.filter(position_id=position_sought, status=1)
                 print('unsuccessful_applicants {}'.format(unsuccessful_applicants))
                 if unsuccessful_applicants:
-                    unsuccessful_applicants.update(status=3)
-
-                    for rej in unsuccessful_applicants:
+                    for unsuccessful_applicant in unsuccessful_applicants:
                         send_application_result_mail(
                             status='reject',
-                            applicant=rej.user.id,
+                            applicant=unsuccessful_applicant.user.id,
                             position_sought=position_sought,
                             )
+
+                    unsuccessful_applicants.update(status=3)
 
                 filled = models.Position.objects.filter(id=position_sought)
                 filled.update(filled=True)

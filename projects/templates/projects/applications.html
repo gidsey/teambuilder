@@ -106,7 +106,7 @@
                             </td>
                             <td class="circle--cell--right">
 
-                                {% if application.position.filled %}
+                                {% if application.status == 2 %}
                                     <span class="btn_accepted">Accepted &#10003;</span>
                                 {% elif application.status == 3 %}
                                     <span class="btn_rejected">Rejected &#10007;</span>
