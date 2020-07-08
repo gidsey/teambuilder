@@ -30,7 +30,9 @@ def project_listing(request, needs_filter):
         if request.user.is_authenticated:
             user_skills = UserSkill.objects.all().select_related('skill').filter(user_id=request.user)
             user_skillset = [skill.skill for skill in user_skills]
-            projects = set(all_projects.order_by('-created_at').filter(positions__title__in=user_skillset))
+            projects = set(all_projects.order_by('-created_at').filter(
+                Q(positions__title__in=user_skillset) &
+                ~Q(owner__exact=request.user)))
             search_term = 'suggested'
             filtered_num_projects = len(projects)
             totals = (num_projects, filtered_num_projects)
