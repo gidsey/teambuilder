@@ -15,7 +15,7 @@ class TestProfile(TestCase):
             email='testuser@test.com',
             password='testpassword',
         )
-        login = self.client.login(username='testuser', password='testpassword', )
+        self.client.login(username='testuser', password='testpassword', )
 
     def test_edit_profile(self):
         """
@@ -48,10 +48,12 @@ class TestProfile(TestCase):
         Test the portfolio inline formset on the profile edit/create page.
         """
         form_data = {
-            'folio-items-name': 'Test Website',
-            'folio-items-url': 'https://test.com',
             'folio-items-TOTAL_FORMS': 1,
             'folio-items-INITIAL_FORMS': 0,
+            'folio-items-0-name': 'Test Website',
+            'folio-items-0-url': 'https://test.com',
+            'folio-items-1-name': 'Test Different Website',
+            'folio-items-1-url': 'https://new.com',
         }
         form = forms.portfolio_inline_formset(
             data=form_data,
@@ -65,9 +67,10 @@ class TestProfile(TestCase):
         Test the custom skills formset on the profile edit/create page.
         """
         form_data = {
-            'CSForm-name': 'Tester',
             'CSForm-TOTAL_FORMS': 1,
             'CSForm-INITIAL_FORMS': 0,
+            'CSForm-0-name': 'Tester',
+            'CSForm-1-name': 'Project Manager',
         }
         form = forms.CustomSkillsFormSet(
             data=form_data,
