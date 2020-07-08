@@ -31,16 +31,43 @@ Django application that allows users to build teams to work on collaborative pro
 * Not allow users to edit other user's projects or profile pages. 
  
 
-## Specification
+## Project brief
 
-[Data structure](https://miro.com/app/board/o9J_ksjKxc4=/)  
 [User Stories](https://documentcloud.adobe.com/link/review?uri=urn%3Aaaid%3Ascds%3AUS%3A2c90ba9d-fed9-48d5-82c5-3db7170b49ad)  
 [Grading Rubric](https://documentcloud.adobe.com/link/review?uri=urn%3Aaaid%3Ascds%3AUS%3A615b178b-748c-4465-9ecd-bfc2527515e2)  
+
+## Data structure
+[Data structure diagram](https://miro.com/app/board/o9J_ksjKxc4=/)  
+
+ 
+## Running Locally (requires Python 3)
+
+```bash
+git clone https://github.com/gidsey/teambuilder.git
+```
+
+```bash
+python3 -m venv venv
+```
+  
+```bash
+pip install -r requirements.txt
+```
+  
+```bash
+ python manage.py migrate
+```
+
+```bash
+ python manage.py runserver
+```
+
 
 ## Attributions
 
 Django Formsets tutorial by [Nicole Harris](https://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html)  
 Django Dynamic Formsets by [Stanislaus Madueke](https://github.com/elo80ka/django-dynamic-formset/blob/master/docs/usage.rst)  
-Image editor based on a tutorial by [Vitor Freitas](https://simpleisbetterthancomple.com/tutorial/2017/03/02/how-to-crop-images-in-a-django-application.html)
-Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)      
-_Project built by [Chris Guy](https://www.linkedin.com/in/gidsey/), June 2020_
+Image editor based on a tutorial by [Vitor Freitas](https://simpleisbetterthancomple.com/tutorial/2017/03/02/how-to-crop-images-in-a-django-application.html)  
+Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)    
+  
+_Project built by [Chris Guy](https://www.linkedin.com/in/gidsey/), July 2020_
