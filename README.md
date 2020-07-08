@@ -43,7 +43,7 @@ Django application that allows users to build teams to work on collaborative pro
 ## Running Locally 
 Requires Python3. The DB included in the repo contains test data and user accounts. 
 Details can be found in the [wiki](https://github.com/gidsey/teambuilder/wiki/Test-User-Accounts).
-
+Note: verification and application emails are saved as log files in the 'sent_emails' directory.
 
 ```bash
 git clone https://github.com/gidsey/teambuilder.git
