@@ -1,11 +1,20 @@
-import factory
 from django.contrib.auth.models import User
+import factory
+from accounts import models
 
 
-class UserFactory(factory.django.DjangoModelFactory):
+class UserFactory(factory.Factory):
     class Meta:
         model = User
-        django_get_or_create = ('username',)
 
     username = 'john'
-    email = 'john@test.com'
+    email = factory.LazyAttribute(lambda u: '%s@example.com' % u.username)
+
+
+
+class UserProfile(factory.Factory):
+    class Meta:
+        model = models.Profile
+
+
+
