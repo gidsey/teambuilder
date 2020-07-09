@@ -30,6 +30,7 @@ Django application that allows users to build teams to work on collaborative pro
 * Mark positions as 'applied for' or 'filled' on the listing pages.
 * Not allow users to edit other user's projects or profile pages. 
 
+### Application screen shots:
 ![application screenshot](assets/images/product_screenshots.jpg)
  
 
