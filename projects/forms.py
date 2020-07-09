@@ -8,7 +8,7 @@ class ProjectForm(forms.ModelForm):
     Define the Profile Form
     """
 
-    prefix = 'profile'
+    prefix = 'project'
 
     title = forms.CharField(max_length=255, label='')
     description = forms.CharField(widget=forms.Textarea, label='', required=False)

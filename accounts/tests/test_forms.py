@@ -1,11 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.test import Client
 from django.contrib.auth.models import User
 
 from accounts import forms
-
-client = Client()
 
 
 class TestProfile(TestCase):
