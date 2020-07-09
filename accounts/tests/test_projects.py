@@ -7,6 +7,9 @@ from projects.models import Project
 class TestProjects(TestCase):
 
     def test_create_new_project(self):
+        """
+        Ensure a logged in user can create a new project
+        """
         self.user = User.objects.create_user(
             username='testuser',
             email='test.user@test.com',
@@ -34,6 +37,9 @@ class TestProjects(TestCase):
         self.assertEqual(user.owner_project.get(owner_id=self.user.id), user_project)
 
     def test_edit_project(self):
+        """
+        Ensure a logged in user can edit a project.
+        """
         self.user = User.objects.create_user(
             username='testuser',
             email='test.user@test.com',
@@ -71,4 +77,50 @@ class TestProjects(TestCase):
         self.assertEqual(user_project.title, 'Newer Project')
         self.assertEqual(user_project.description, 'This is a a change to the new project')
 
+    def test_project_detail(self):
+        """
+        Test the project detail page.
+        """
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test.user@test.com',
+            password='testpassword',
+        )
 
+        self.project = Project.objects.create(
+            owner_id=self.user.id,
+            title='New Project',
+            description='This is a new project',
+            timeline='1 Month',
+            requirements='Remote working'
+        )
+
+        self.client.login(username='testuser', password='testpassword')
+
+        response = self.client.get(reverse('projects:project_detail', args={self.project.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/project_detail.html')
+
+    def test_project_listing(self):
+        """
+        Test the project listing (home) page.
+        """
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test.user@test.com',
+            password='testpassword',
+        )
+
+        self.project = Project.objects.create(
+            owner_id=self.user.id,
+            title='New Project',
+            description='This is a new project',
+            timeline='1 Month',
+            requirements='Remote working'
+        )
+
+        self.client.login(username='testuser', password='testpassword')
+
+        response = self.client.get(reverse('projects:project_listing', args={'all'}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/project_listing.html')
