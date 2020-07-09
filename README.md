@@ -29,6 +29,8 @@ Django application that allows users to build teams to work on collaborative pro
 * Automatically generate personalised emails when a user is either accepted or rejected for a position.
 * Mark positions as 'applied for' or 'filled' on the listing pages.
 * Not allow users to edit other user's projects or profile pages. 
+
+![application screenshot](assets/images/product_screenshots.jpg)
  
 
 ## Project brief
@@ -40,8 +42,7 @@ Django application that allows users to build teams to work on collaborative pro
 [Data structure diagram](https://miro.com/app/board/o9J_ksjKxc4=/)  
 
 ## Testing
-Unit tests are written which cover
-
+Unit tests are written which cover > 80% of the codebase.
 
 
 ## Running Locally 
