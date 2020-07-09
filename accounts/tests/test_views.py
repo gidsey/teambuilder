@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-
+from accounts import models
 
 class TestEditProfile(TestCase):
 
@@ -29,5 +29,11 @@ class TestEditProfile(TestCase):
         )
 
         user = User.objects.get(id=self.user.id)
+        user_portfolio = models.Portfolio.objects.filter(user_id=self.user.id)
+        user_skills = models.UserSkill.objects.filter(user=self.user)
+
         self.assertEqual(user.profile.fullname, 'Test User')
         self.assertEqual(user.profile.bio, 'Build key demographics and try to be transparent.')
+        self.assertQuerysetEqual(user.user_portfolio.all(), user_portfolio, transform=lambda x: x)
+        self.assertQuerysetEqual(user.user_skill.all(), user_skills, transform=lambda x: x)
+
