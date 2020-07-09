@@ -58,17 +58,21 @@ git clone https://github.com/gidsey/teambuilder.git
 ```bash
 python3 -m venv venv
 ```
-  
+
+```bash
+source venv/bin/activate
+```
+
 ```bash
 pip install -r requirements.txt
 ```
   
 ```bash
- python manage.py migrate
+python manage.py migrate
 ```
 
 ```bash
- python manage.py runserver
+python manage.py runserver
 ```
 
 
