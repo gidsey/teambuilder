@@ -19,7 +19,7 @@ def project_listing(request, needs_filter):
     Return the filtered list of Projects
     based on Project Needs.
     """
-    all_projects = models.Project.objects.prefetch_related('positions', 'project_skill__skill').order_by('-created_at')
+    all_projects = models.Project.objects.prefetch_related('positions').order_by('-created_at')
     num_projects = filtered_num_projects = len(all_projects)
     project_needs = get_project_needs(all_projects)
 
@@ -28,17 +28,12 @@ def project_listing(request, needs_filter):
         search_term = 'all'
     elif needs_filter == 'suggested':
         if request.user.is_authenticated:
-            for project in all_projects:
-                print(project.project_skill.all())
-
-            user_skills = UserSkill.objects.all().select_related('skill').filter(user_id=request.user)
-
-
-            print(user_skills)
-            user_skillset = [skill.skill for skill in user_skills]
-            print(user_skillset)
+            user_skills = UserSkill.objects.filter(
+                Q(user_id=request.user) &
+                Q(is_skill=True))
+            user_skillset = [skill.skill_id for skill in user_skills]
             projects = set(all_projects.order_by('-created_at').filter(
-                Q(project_skill__skill__in=user_skills) &
+                Q(positions__key_skill__in=user_skillset) &
                 ~Q(owner__exact=request.user)))
             search_term = 'suggested'
             filtered_num_projects = len(projects)
