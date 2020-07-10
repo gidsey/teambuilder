@@ -34,13 +34,13 @@ def project_listing(request, needs_filter):
             user_skillset = [skill.skill_id for skill in user_skills]
             projects = set(all_projects.order_by('-created_at').filter(
                 Q(positions__key_skill__in=user_skillset) &
+                Q(positions__filled=False) &
                 ~Q(owner__exact=request.user)))
             search_term = 'suggested'
             filtered_num_projects = len(projects)
             totals = (num_projects, filtered_num_projects)
         else:
             raise PermissionDenied
-
     else:
         search_term = get_search_term(needs_filter, project_needs)
         projects = all_projects.order_by('-created_at').filter(positions__title=search_term)

@@ -38,7 +38,8 @@
                         <li>
                             <h3>{{ position.title }}</h3>
                             <p>{{ position.description|markdown_to_html }}</p>
-
+                            <h5>Key Skill:</h5>
+                            <div class="secondary-label pb-4">{{ position.key_skill }}</div>
                             {% if position.filled %}
                                 <a class="button button-primary button-inactive">Position Filled</a>
                             {% else %}
@@ -83,16 +84,6 @@
             <div class="circle--secondary--module">
                 <h3>Applicant Requirements</h3>
                 <p>{{ project.requirements }}</p>
-            </div>
-
-
-            <div class="circle--secondary--module">
-                       <h4>Required Skills</h4>
-                    <ul class="unloaded">
-                        {% for skill in required_skills %}
-                            <li>{{ skill }}</li>
-                        {% endfor %}
-                    </ul>
             </div>
 
         </div>
