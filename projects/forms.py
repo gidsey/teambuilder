@@ -45,6 +45,7 @@ class ProjectForm(forms.ModelForm):
 
 
 class BaseArticleFormset(forms.BaseInlineFormSet):
+
     def clean(self):
         """
         Checks that no two positions have the same title.
@@ -75,7 +76,7 @@ position_inline_formset = forms.inlineformset_factory(
     widgets={
         'title': forms.TextInput(attrs={'placeholder': 'Position Title', 'class': 'circle--input--h3'}),
         'description': forms.Textarea(attrs={'placeholder': 'Position description...'},),
-        'key_skill': forms.Select(attrs={'placeholder': 'Please select a key skill', 'class': 'full-width'})
+        'key_skill': forms.Select(attrs={'class': 'full-width'})
     },
 )
 
@@ -103,11 +104,3 @@ class AcceptApplicationForm(forms.Form):
             'position',
         )
 
-
-class ProjectSkillsForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        choices = kwargs.pop('choices')
-        super(ProjectSkillsForm, self).__init__(*args, **kwargs)
-        self.fields['project_skills'].choices = choices
-
-    project_skills = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple)
