@@ -7,8 +7,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .utils import (get_slugified_list, get_search_term, get_project_needs,
-                    send_application_received_mail, send_application_result_mail,
-                    get_skill_choices, get_skill_sets)
+                    send_application_received_mail, send_application_result_mail)
 from . import forms
 from . import models
 from accounts.models import Skill, UserSkill
@@ -61,39 +60,29 @@ def project_new(request):
     Create a new Project
     and associated Positions.
     """
-    available_skills = Skill.objects.all()
-    choices = get_skill_choices(available_skills)
-
     if request.method == 'POST':
         user = request.user
         user.project = models.Project(owner=request.user)
         project_form = forms.ProjectForm(data=request.POST, instance=user.project)
-        project_skills_form = forms.ProjectSkillsForm(choices=choices, data=request.POST)
         positions_formset = forms.position_inline_formset(
             data=request.POST,
             instance=user.project,
             prefix='position-items'
         )
 
-        if project_form.is_valid() and positions_formset.is_valid() and project_skills_form.is_valid():
+        if project_form.is_valid() and positions_formset.is_valid():
             project = project_form.save()
             positions_formset.save()
-            skills = project_skills_form.cleaned_data['project_skills']
-            for skill in skills:
-                skill_instance = available_skills.get(id=skill)
-                models.ProjectSkill.objects.create(project=project, skill=skill_instance, required_skill=True)
             messages.success(request, "Project created successfully.")
             return redirect('projects:project_detail', pk=project.pk)
     else:
         project_form = forms.ProjectForm()
         positions_formset = forms.position_inline_formset(prefix='position-items')
-        project_skills_form = forms.ProjectSkillsForm(choices=choices)
 
     return render(request, 'projects/project_new_edit.html', {
         'mode': 'create',
         'project_form': project_form,
         'positions_formset': positions_formset,
-        'project_skills_form': project_skills_form,
     })
 
 
@@ -107,8 +96,7 @@ def project_edit(request, pk):
         project = models.Project.objects.select_related(
             'owner__profile'
         ).prefetch_related(
-            'positions__application_position__user',
-            'project_skill__skill'
+            'positions__application_position__user'
         ).get(
             id=pk
         )
@@ -119,58 +107,28 @@ def project_edit(request, pk):
     if request.user != project.owner:
         raise PermissionDenied
 
-    # Get a list of all available skills to populate the skills checkboxes
-    available_skills = Skill.objects.all()
-    choices = get_skill_choices(available_skills)
-
-    # Get the initial values for the skills checkboxes
-    checked_skills = project.project_skill.filter(required_skill=True)
-    initial = tuple([skill.skill_id for skill in checked_skills])
-
     if request.method == 'POST':
         project_form = forms.ProjectForm(data=request.POST, instance=project)
-        project_skills_form = forms.ProjectSkillsForm(choices=choices, initial={'project_skills': initial}, data=request.POST)
         positions_formset = forms.position_inline_formset(
             data=request.POST,
             instance=project,
             prefix='position-items'
         )
 
-        if project_form.is_valid() and positions_formset.is_valid() and project_skills_form.is_valid():
+        if project_form.is_valid() and positions_formset.is_valid():
             project = project_form.save()
             positions_formset.save()
-
-            # Check which skills should be set to true and which to false
-            skill_sets = get_skill_sets(project_skills_form, pk)
-            set_to_false = skill_sets[0]
-            set_to_true = skill_sets[1]
-
-            #  Update the ProjectSkill model
-            for skill in set_to_false:
-                models.ProjectSkill.objects.filter(project_id=pk, skill_id=skill).update(required_skill=False)
-            for skill in set_to_true:
-                try:
-                    existing = models.ProjectSkill.objects.get(project_id=pk, skill_id=skill)
-                    if not existing.required_skill:
-                        models.ProjectSkill.objects.filter(project_id=pk, skill_id=skill).update(
-                            required_skill=True
-                        )
-                except ObjectDoesNotExist:
-                    models.ProjectSkill.objects.create(project_id=pk, skill_id=skill, required_skill=True)
-
             messages.success(request, "Project updated successfully.")
             return redirect('projects:project_detail', pk=project.pk)
     else:
         project_form = forms.ProjectForm(instance=project)
         positions_formset = forms.position_inline_formset(instance=project, prefix='position-items')
-        project_skills_form = forms.ProjectSkillsForm(choices=choices, initial={'project_skills': initial})
 
     return render(request, 'projects/project_new_edit.html', {
         'pk': pk,
         'mode': 'edit',
         'project_form': project_form,
         'positions_formset': positions_formset,
-        'project_skills_form': project_skills_form,
     })
 
 
@@ -183,15 +141,12 @@ def project_detail(request, pk):
         project = models.Project.objects.select_related(
             'owner__profile',
         ).prefetch_related(
-            'positions__application_position__user',
-            'project_skill__skill',
+            'positions__application_position__user'
         ).get(
             id=pk
         )
     except ObjectDoesNotExist:
         raise Http404
-
-    required_skills = project.project_skill.filter(required_skill=True)
 
     if request.method == 'POST':
         application_form = forms.ApplicationForm(data=request.POST)
@@ -216,7 +171,6 @@ def project_detail(request, pk):
 
     return render(request, 'projects/project_detail.html', {
         'project': project,
-        'required_skills': required_skills,
         'application_form': application_form,
     })
 

@@ -47,15 +47,3 @@ class UserApplication(models.Model):
     position = models.ForeignKey(Position, related_name='application_position', on_delete=models.CASCADE)
     status = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
-
-
-class ProjectSkill(models.Model):
-    """
-    Add one or many skills to the project.
-    """
-    project = models.ForeignKey(Project, related_name='project_skill', on_delete=models.CASCADE)
-    skill = models.ForeignKey(Skill, related_name='skill_project', on_delete=models.CASCADE)
-    required_skill = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.skill.name

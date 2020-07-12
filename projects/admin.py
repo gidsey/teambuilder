@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, Position, UserApplication, ProjectSkill
+from .models import Project, Position, UserApplication
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -34,15 +34,6 @@ class UserApplicationAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
 
 
-class ProjectSkillAdmin(admin.ModelAdmin):
-    list_display = [
-        'project_id',
-        'skill_id',
-        'required_skill',
-        ]
-
-
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Position, PositionAdmin)
 admin.site.register(UserApplication, UserApplicationAdmin)
-admin.site.register(ProjectSkill, ProjectSkillAdmin)
