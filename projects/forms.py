@@ -74,7 +74,9 @@ position_inline_formset = forms.inlineformset_factory(
     fields=('title', 'key_skill', 'description'),
     widgets={
         'title': forms.TextInput(attrs={'placeholder': 'Position Title', 'class': 'circle--input--h3'}),
-        'description': forms.Textarea(attrs={'placeholder': 'Position description...'},)},
+        'description': forms.Textarea(attrs={'placeholder': 'Position description...'},),
+        'key_skill': forms.Select(attrs={'placeholder': 'Please select a key skill', 'class': 'full-width'})
+    },
 )
 
 
