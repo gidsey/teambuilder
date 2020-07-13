@@ -57,8 +57,7 @@
                 <h2>Positions</h2>
                 <ul class="circle--group--list circle--clone--list" id="positions_formset">
                     {% for position_form in positions_formset %}
-{#                        <li>{{ position_form }}</li>#}
-{#                        <li>{{ position_form.key_skill }}</li>#}
+                        <li>{{ position_form }}</li>
                     {% endfor %}
                 </ul>
                 {% if positions_formset.non_form_errors %}

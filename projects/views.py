@@ -77,7 +77,7 @@ def project_new(request):
             return redirect('projects:project_detail', pk=project.pk)
     else:
         project_form = forms.ProjectForm()
-        positions_formset = forms.position_inline_formset(prefix='position-items')
+        positions_formset = forms.position_inline_formset(prefix='position-items',)
 
     return render(request, 'projects/project_new_edit.html', {
         'mode': 'create',

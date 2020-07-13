@@ -27,7 +27,8 @@ class Position(models.Model):
     project = models.ForeignKey(Project, related_name='positions', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
-    key_skill = models.ManyToOneRel(Skill, related_name='key_skill', on_delete=models.CASCADE)
+    key_skill = models.ForeignKey(Skill, related_name='key_skill',
+                                  help_text='Choose a key skill for this position', on_delete=models.CASCADE)
     filled = models.BooleanField(default=False)
 
     def __str__(self):

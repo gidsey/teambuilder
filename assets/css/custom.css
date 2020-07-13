@@ -95,3 +95,6 @@ textarea {
     color: rgba(220,53,69,.5);
 }
 
+.skill_selector {
+    height: 60px;
+}

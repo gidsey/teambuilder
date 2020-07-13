@@ -45,6 +45,17 @@ class ProjectForm(forms.ModelForm):
 
 
 class BaseArticleFormset(forms.BaseInlineFormSet):
+    # def add_fields(self, form, index):
+    #     # Get a list of all available skills to populate the key skills dropdown
+    #     available_skills = models.Skill.objects.all()
+    #     choices = get_skill_choices(available_skills)
+    #     choices.append((0, '--- Select a key skill ---'))
+    #     super().add_fields(form, index)
+    #     form.fields['selected_skill'] = forms.ChoiceField(choices=choices, initial=0)
+    #
+    #     form.fields['selected_skill'].widget.attrs.update({
+    #         'class': 'skill_selector',
+    #     })
 
     def clean(self):
         """
@@ -70,15 +81,16 @@ class BaseArticleFormset(forms.BaseInlineFormSet):
 position_inline_formset = forms.inlineformset_factory(
     models.Project,
     models.Position,
-    formset=BaseArticleFormset,
+    # formset=BaseArticleFormset,
     extra=1,
-    fields=('title', 'key_skill', 'description'),
+    fields=('title', 'description', 'key_skill'),
     widgets={
         'title': forms.TextInput(attrs={'placeholder': 'Position Title', 'class': 'circle--input--h3'}),
         'description': forms.Textarea(attrs={'placeholder': 'Position description...'},),
-        'key_skill': forms.Select(attrs={'class': 'full-width'})
+        'key_skill': forms.Select(attrs={'class': 'skill_selector', 'label': 'Select a key skill'}),
     },
 )
+
 
 
 class DeleteProjectForm(forms.Form):
