@@ -63,7 +63,7 @@ textarea {
 .error_red {
     text-align: center;
     display: block;
-    height: 40px;
+    height: auto;
     line-height: 40px;
     background-color: #dc3545;
     border-radius: 6px;
@@ -97,4 +97,10 @@ textarea {
 
 .skill_selector {
     height: 60px;
+}
+
+.helptext {
+    font-size: 14px;
+    padding-left: 10px;
+    font-style: italic;
 }

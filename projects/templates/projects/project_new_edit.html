@@ -12,7 +12,7 @@
                 deleteText: 'Remove',
                 addCssClass: "circle--clone--add",
                 deleteCssClass: "circle--clone--remove",
-                formCssClass: "position-forms",
+                formCssClass: "position-forms"
             });
         });
     </script>
@@ -52,43 +52,47 @@
                         Markdown is accepted</a></p>
             </div>
 
-
             <div class="circle--project--positions">
                 <h2>Positions</h2>
                 <ul class="circle--group--list circle--clone--list" id="positions_formset">
                     {% for position_form in positions_formset %}
-                        <li>{{ position_form }}</li>
+                        <li>{{ position_form }}
+                            {% if position_form.key_skill.errors %}
+                                <div class="error_red">{{ position_form.key_skill.errors.as_text|escape }}</div>
+                            {% endif %}
+                        </li>
                     {% endfor %}
                 </ul>
-                {% if positions_formset.non_form_errors %}
-                    <div class="error_red">
+            </div>
+            {% if positions_formset.non_form_errors %}
+                <div class="error_red">
                     <span>
                         {% for error in positions_formset.non_form_errors %}
                             {{ error }}
                         {% endfor %}
                     </span>
-                    </div>
-                {% endif %}
-                {{ positions_formset.management_form }}
-                <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
-            </div>
-
+                </div>
+            {% endif %}
+            {{ positions_formset.management_form }}
+            <input type="submit" name="save_changes" class="button-primary" value="Save Changes">
         </div>
 
-        <div class="grid-25 grid-push-5">
 
-            <div class="circle--secondary--module">
-                <h3>Project Timeline</h3>
-                {{ project_form.timeline }}
-            </div>
 
-            <div class="circle--secondary--module">
-                <h3>Applicant Requirements</h3>
-                {{ project_form.requirements }}
-            </div>
+    <div class="grid-25 grid-push-5">
+
+        <div class="circle--secondary--module">
+            <h3>Project Timeline</h3>
+            {{ project_form.timeline }}
         </div>
 
+        <div class="circle--secondary--module">
+            <h3>Applicant Requirements</h3>
+            {{ project_form.requirements }}
+        </div>
     </div>
+
+</div>
 
 </div>
 </form>
