@@ -24,7 +24,6 @@ def order_by(queryset, args):
     return queryset.order_by(*args)
 
 
-
 @register.simple_tag
 def query_str(request, **kwargs):
     """
