@@ -31,7 +31,7 @@ Django application that allows users to build teams to work on collaborative pro
 * Not allow users to edit other user's projects or profile pages. 
 
 ### Application screen shots:
-![application screenshot](assets/images/product_screenshots.jpg)
+![application screenshot](static/images/product_screenshots.jpg)
  
 
 ## Project brief
