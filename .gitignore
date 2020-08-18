@@ -2,6 +2,7 @@ _design_reference
 venv
 README.txt
 *.log
+.idea
 
 .DS_Store
 __pycache__/
