@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+#    command: gunicorn bookstore_project.wsgi -b 0.0.0.0:8000
+    command: python /teambuilder/manage.py runserver 0.0.0.0:8000
+    environment:
+      - ENVIRONMENT=development
+      - SECRET_KEY='^e)0@1a(u!lv%_)6u96*7bxhlh-a&!!6+s%z)k2!o=_s9&j@c9'
+      - DEBUG=1
+#      - SENDGRID_API_KEY=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
+    volumes:
+      - .:/teambuilder
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: library/postgres:12-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres_dev_db-pw
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:
