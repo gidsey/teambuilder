@@ -1,8 +1,12 @@
 from allauth.account.forms import SignupForm, LoginForm
 from django.contrib.auth.models import User
 from django import forms
+from django.core.files.storage import default_storage as storage
 from django.forms import widgets
 from django.forms.formsets import formset_factory
+import os
+from io import BytesIO as StringIO  # python3
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from PIL import Image
 
@@ -147,19 +151,30 @@ class AvatarForm(forms.ModelForm):
         }
 
     def save(self):
-        photo = super(AvatarForm, self).save()
+        user = super(AvatarForm, self).save()
         x = self.cleaned_data.get('x')
         y = self.cleaned_data.get('y')
         w = self.cleaned_data.get('width')
         h = self.cleaned_data.get('height')
-        r = self.cleaned_data.get('rotate')
+        r = -self.cleaned_data.get('rotate')
+        new_size = 400, 400
 
-        r = -r  # swap negative to positive and vise versa
-
-        image = Image.open(photo.avatar)
+        image = Image.open(user.avatar)
         rotated_image = image.rotate(r, expand=True)
         cropped_image = rotated_image.crop((x, y, w + x, h + y))
-        resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
-        resized_image.save(photo.avatar.path)
-        return photo
-
+        resized_image = cropped_image.resize(new_size, Image.ANTIALIAS)
+        filename = user.avatar.name
+        output = StringIO()
+        resized_image.save(output, format='JPEG', quality=60)
+        output.seek(0)  # Change the stream position to the given byte offset.
+        new_image = InMemoryUploadedFile(
+            output,
+            'ImageField',
+            "%s.jpg" % filename,
+            'image/jpeg',
+            output.__sizeof__(),
+            None
+        )
+        user.avatar = new_image
+        user.save()
+        return user

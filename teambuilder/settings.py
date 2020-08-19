@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'debug_toolbar',
+    'storages',
 
     # Local
     'accounts.apps.AccountsConfig',
@@ -185,6 +186,13 @@ ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm'
 }
 
+# AWS
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+DEFAULT_FILE_STORAGE = 'accounts.custom_storage.MediaStorage'
 
 INTERNAL_IPS = ['127.0.0.1', ]
 import socket
