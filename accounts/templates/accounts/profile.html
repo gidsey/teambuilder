@@ -27,7 +27,8 @@
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 {% if user == profile_user %}
-                    <a class="button icon-on-left" href="{% url "accounts:user_profile_edit" username=user %}">Edit</a>
+                    <a class="button icon-on-left space_tp" href="{% url "accounts:user_profile_edit" username=user %}">Edit profile</a>
+                    <a class="button icon-on-left space_tp" href="{% url 'account_change_password' %}">Change password</a>
                 {% endif %}
             </div>
         </div>
