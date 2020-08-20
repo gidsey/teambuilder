@@ -1,11 +1,9 @@
 from allauth.account.forms import SignupForm, LoginForm
 from django.contrib.auth.models import User
 from django import forms
-from django.core.files.storage import default_storage as storage
 from django.forms import widgets
 from django.forms.formsets import formset_factory
-import os
-from io import BytesIO as StringIO  # python3
+from io import BytesIO as StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from PIL import Image
@@ -159,8 +157,9 @@ class AvatarForm(forms.ModelForm):
         r = -self.cleaned_data.get('rotate')
         new_size = 400, 400
 
-        image = Image.open(user.avatar)
-        rotated_image = image.rotate(r, expand=True)
+        pil_image = Image.open(user.avatar)
+        rgb_im = pil_image.convert('RGB')
+        rotated_image = rgb_im.rotate(r, expand=True)
         cropped_image = rotated_image.crop((x, y, w + x, h + y))
         resized_image = cropped_image.resize(new_size, Image.ANTIALIAS)
         filename = user.avatar.name
@@ -170,10 +169,10 @@ class AvatarForm(forms.ModelForm):
         new_image = InMemoryUploadedFile(
             output,
             'ImageField',
-            "%s.jpg" % filename,
+            '{}.jpg'.format(filename),
             'image/jpeg',
             output.__sizeof__(),
-            None
+            None,
         )
         user.avatar = new_image
         user.save()
