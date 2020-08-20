@@ -23,7 +23,7 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^e)0@1a(u!lv%_)6u96*7bxhlh-a&!!6+s%z)k2!o=_s9&j@c9'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
