@@ -329,6 +329,5 @@ _design_reference
 README.txt
 
 docker-compose.yml
-got
-
+docker-compose-prod.yml
 
