@@ -12,3 +12,4 @@
     "EXPOSE 80",
     "CMD sh /usr/src/utils/run.sh"
   ]
+}
