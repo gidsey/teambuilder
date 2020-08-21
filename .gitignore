@@ -327,7 +327,8 @@ $RECYCLE.BIN/
 .idea
 _design_reference
 README.txt
-
+db.sqlite3
 docker-compose.yml
 docker-compose-prod.yml
-
+Dockerfile
+captain-definition
