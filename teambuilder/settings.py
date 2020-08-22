@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,12 +28,24 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+if ENVIRONMENT == 'production':
+    SECRET_KEY = os.environ.get("CR_SECRET_KEY") or ImproperlyConfigured("CR_SECRET_KEY not set")
+else:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+if ENVIRONMENT == 'production':
+    # allowed hosts get parsed from a comma-separated list
+    hosts = os.environ.get("CR_HOSTS") or ImproperlyConfigured("CR_HOSTS not set")
+    try:
+        ALLOWED_HOSTS = hosts.split(",")
+    except:
+        raise ImproperlyConfigured("CR_HOSTS could not be parsed")
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -93,18 +107,34 @@ WSGI_APPLICATION = 'teambuilder.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+if ENVIRONMENT == 'production':
+    name = os.environ.get("CR_DB_NAME") or ImproperlyConfigured("CR_DB_NAME not set")
+    user = os.environ.get("CR_DB_USER") or ImproperlyConfigured("CR_DB_USER not set")
+    password = os.environ.get("CR_DB_PASSWORD") or ImproperlyConfigured("CR_DB_PASSWORD not set")
+    host = os.environ.get("CR_DB_HOST") or ImproperlyConfigured("CR_DB_HOST not set")
+    port = os.environ.get("CR_DB_PORT") or ImproperlyConfigured("CR_DB_PORT not set")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres_dev_db-pw',
-        'HOST': 'db',
-        'PORT': 5432
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": name,
+            "USER": user,
+            "PASSWORD": password,
+            "HOST": host,
+            "PORT": port,
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres_dev_db-pw',
+            'HOST': 'db',
+            'PORT': 5432
+        }
+    }
 
 
 # Password validation
@@ -168,8 +198,7 @@ SITE_ID = 2
 
 LOGIN_REDIRECT_URL = "/"
 
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
 # SendGrid Email settings
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 # Toggle sandbox mode (when running in DEBUG mode)
@@ -212,10 +241,11 @@ AWS_DEFAULT_ACL = None
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 DEFAULT_FILE_STORAGE = 'accounts.custom_storage.MediaStorage'
 
-INTERNAL_IPS = ['127.0.0.1', ]
-import socket
+if ENVIRONMENT != 'production':
+    INTERNAL_IPS = ['127.0.0.1', ]
+    import socket
 
-# tricks to have debug toolbar when developing with docker
-ip = socket.gethostbyname(socket.gethostname())
-INTERNAL_IPS += [ip[:-1] + '1']
+    # tricks to have debug toolbar when developing with docker
+    ip = socket.gethostbyname(socket.gethostname())
+    INTERNAL_IPS += [ip[:-1] + '1']
 
