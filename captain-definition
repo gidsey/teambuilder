@@ -14,6 +14,6 @@
     "EXPOSE 80",
     "RUN chmod +x /usr/src/utils/run.sh",
     "ENTRYPOINT [\"/bin/sh\"]",
-    "CMD /usr/src/utils/run.sh"
+    "CMD [\"/usr/src/utils/run.sh\"]"
   ]
 }
