@@ -12,6 +12,7 @@
     "RUN pip install pipenv && pipenv install --system",
     "COPY ./utils/ /usr/src/utils/",
     "EXPOSE 80",
+    "RUN chmod +x /usr/src/utils/run.sh",
     "CMD /usr/src/utils/run.sh"
   ]
 }
