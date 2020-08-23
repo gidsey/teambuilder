@@ -1,9 +1,7 @@
 {
   "schemaVersion": 2,
   "dockerfileLines": [
-    "FROM library/python:3.6.3-alpine",
-    "RUN apk update && apk upgrade && apk add --no-cache make g++ bash git openssh postgresql-dev curl",
-    "RUN apk add --no-cache jpeg-dev zlib-dev",
+    "FROM library/python:3.8.5-slim-buster",
     "RUN mkdir -p /usr/src/app",
     "WORKDIR /usr/src/app",
     "COPY . /usr/src/app/",
@@ -12,8 +10,6 @@
     "RUN pip install pipenv && pipenv install --system",
     "COPY ./utils/ /usr/src/utils/",
     "EXPOSE 80",
-    "RUN chmod +x /usr/src/utils/run.sh",
-    "ENTRYPOINT [\"/bin/sh\"]",
-    "CMD [\"/usr/src/utils/run.sh\"]"
+    "CMD sh /usr/src/utils/run.sh"
   ]
 }
