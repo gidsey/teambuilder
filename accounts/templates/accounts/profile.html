@@ -1,6 +1,7 @@
-{% extends "layout.html" %}s
+{% extends "layout.html" %}
 {% load account %}
 {% load account_extras %}
+{% load static %}
 {% block title %} {{ block.super }} | Profile {% endblock %}
 {% block body %}
 
@@ -76,7 +77,7 @@
             <div class="circle--secondary--module">
                 <div class="circle--primary--avatar">
                     {% if not profile_user.profile.avatar.url %}
-                        <img src="/media/placeholder/default.jpg" class="avatar"
+                        <img src="{% static 'images/placeholder/default.jpg' %}" class="avatar"
                              alt="Default Avatar">
                     {% else %}
                         <img src="{{ profile_user.profile.avatar.url }}"

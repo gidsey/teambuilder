@@ -93,7 +93,7 @@
                 <div class="circle--primary--avatar">
 
                     {% if not current_user.profile.avatar.url %}
-                        <img src="/media/placeholder/default.jpg" class="avatar_editing"
+                        <img src="{% static 'images/placeholder/default.jpg' %}" class="avatar_editing"
                              alt="Default Avatar">
                     {% endif %}
                     <img src="{{ current_user.profile.avatar.url }}"

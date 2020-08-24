@@ -1,3 +1,3 @@
-teambuilder_project/static/css/* linguist-vendored
-teambuilder_project/static/js/* linguist-vendored
-teambuilder_project/staticfiles/* linguist-vendored
+static/css/* linguist-vendored
+static/js/* linguist-vendored
+staticfiles/* linguist-vendored

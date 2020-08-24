@@ -149,7 +149,7 @@ class AvatarForm(forms.ModelForm):
         }
 
     def save(self):
-        user = super(AvatarForm, self).save()
+        user = super(AvatarForm, self).save(commit=False)
         x = self.cleaned_data.get('x')
         y = self.cleaned_data.get('y')
         w = self.cleaned_data.get('width')
