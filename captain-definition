@@ -4,7 +4,7 @@
     "FROM library/python:3.8.5-slim-buster",
     "RUN mkdir -p /usr/src/app",
     "WORKDIR /usr/src/app",
-    "COPY ./teambuilder_project/ /usr/src/app/",
+    "COPY . /usr/src/app/",
     "RUN pip install --upgrade pip",
     "RUN pip install pipenv && pipenv install --system",
     "COPY ./utils/ /usr/src/utils",

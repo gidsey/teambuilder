@@ -68,7 +68,14 @@
                     <a class="logo" href="{% url "projects:project_listing" needs_filter='all' %}">Circle</a>
                 </h1>
             </div>
-
+            <div class="circle--fluid--cell">
+                <nav>
+                    <ul>
+                        <li><a href="{% url "projects:project_listing" needs_filter='all' %}">Home</a></li>
+                        <li><a href="#">About</a></li>
+                    </ul>
+                </nav>
+            </div>
             <div class="circle--fluid--cell circle--fluid--primary">
                 <div class="circle--search">
                     <form action="{% url 'projects:project_search' %}" method="GET" class="search_form">
