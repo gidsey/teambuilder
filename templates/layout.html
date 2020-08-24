@@ -102,7 +102,7 @@
                         {% else %}
                             <li>{% if not user.profile.avatar.url %}
                                 <a href="{% url "accounts:user_profile" username=user %}"><img
-                                        src="/media/placeholder/default.jpg"
+                                        src="{% static 'images/placeholder/default.jpg' %}"
                                         class="avatar_header"
                                         alt="Default Avatar"></a>
                             {% else %}
