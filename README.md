@@ -85,4 +85,3 @@ Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.co
   
 _Project built by [Chris Guy](https://www.linkedin.com/in/gidsey/), July 2020_
 
-.
