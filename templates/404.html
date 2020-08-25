@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %} {{ block.super }} | About {% endblock %}
+{% block body %}
+
+    <div class="bounds circle--page">
+        <div class="circle--page--header circle--fluid">
+            <div class="circle--fluid--cell circle--fluid--primary">
+                <h1>404 Page Not Found</h1>
+                <p><a href="{% url "pages:index" %}">Back to home</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -70,10 +70,15 @@
             </div>
             <div class="circle--fluid--cell">
                 <nav>
-                    <ul>
-                        <li><a href="{% url "projects:project_listing" needs_filter='all' %}">Home</a></li>
-                        <li><a href="{% url "pages:about" %}">About</a></li>
-                    </ul>
+                    {% with url_name=request.resolver_match.url_name %}
+                        <ul>
+                            <li><a href="{% url "projects:project_listing" needs_filter='all' %}"
+                                   {% if url_name == 'project_listing' %}class="active"{% endif %}>Home</a></li>
+                            <li><a href="{% url "pages:about" %}"
+                                   {% if url_name == 'about' %}class="active"{% endif %}>About</a>
+                            </li>
+                        </ul>
+                    {% endwith %}
                 </nav>
             </div>
             <div class="circle--fluid--cell circle--fluid--primary">
