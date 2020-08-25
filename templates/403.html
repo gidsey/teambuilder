@@ -1,14 +1,14 @@
 {% extends '_base.html' %}
 {% load static %}
 
-{% block title %} {{ block.super }} | 404 Page Not Found {% endblock %}
+{% block title %} {{ block.super }} | 403 Forbidden {% endblock %}
 {% block body %}
 
     <div class="bounds circle--page">
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
-                <h1>404</h1>
-                <h3>PAGE NOT FOUND</h3>
+                <h1>403</h1>
+                <h3>You do not have permission to access this resource</h3>
                 <p class="mt-4"><a href="{% url "pages:index" %}">Back to home</a></p>
             </div>
         </div>
