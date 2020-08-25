@@ -36,7 +36,6 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-
 if ENVIRONMENT == 'production':
     # allowed hosts get parsed from a comma-separated list
     hosts = os.environ.get("CR_HOSTS") or ImproperlyConfigured("CR_HOSTS not set")
