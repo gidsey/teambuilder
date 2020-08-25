@@ -16,10 +16,8 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
 
-from . import views
 
 urlpatterns = [
     # Django Admin
@@ -30,7 +28,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
 
     # Local apps
-    path('', views.index, name='index'),
+    path('', include('pages.urls', namespace='pages')),
     path('projects/', include('projects.urls', namespace='projects')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

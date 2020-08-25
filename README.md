@@ -1,4 +1,4 @@
-# Team Builder
+# Teambuilder
 
 ## Specification
 Django application that allows users to build teams to work on collaborative projects.
@@ -7,7 +7,7 @@ Django application that allows users to build teams to work on collaborative pro
 
 * Create an account.
 * Set up a profile including bio, avatar and portfolio projects.
-* Select from a list of skills to add to their profile, or add custom skills 
+* Select from a list of skills to add to their profile, or add custom skills. 
 * Edit their profile and associated info.
 * Create a new project, with a title, description, timeline and applicant requirements.
 * Add any number of positions to the project, with their own title and description.
@@ -15,11 +15,11 @@ Django application that allows users to build teams to work on collaborative pro
 * Review applications for project positions.
 * Filter applications by category (status, project name or project needs).
 * Accept or reject applications.
-* Edit / delete projects and positions
+* Edit or delete projects and positions
 * View a list of all projects with associated project needs.
 * Filter the list by project needs.
 * View a personalised feed of projects based on the user's skill set (logged in users only).
-* Search for a project
+* Search for a project.
 
 
 #### The application will:

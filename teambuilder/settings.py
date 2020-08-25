@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'storages',
 
     # Local
+    'pages.apps.PagesConfig',
     'accounts.apps.AccountsConfig',
     'projects.apps.ProjectsConfig',
 ]

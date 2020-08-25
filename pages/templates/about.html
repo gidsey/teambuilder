@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %} {{ block.super }} | About {% endblock %}
+{% block body %}
+
+    <div class="bounds circle--page">
+        <div class="circle--page--header circle--fluid">
+            <div class="circle--fluid--cell circle--fluid--primary">
+                <h1>About this website</h1>
+                <h2>Description</h2>
+                <p>Django application that allows users to build teams to work on collaborative projects.</p>
+                <h3>Users can</h3>
+                <ul>
+                    <li>Create an account.</li>
+                    <li>Set up a profile including bio, avatar and portfolio projects.</li>
+                    <li>Select from a list of skills to add to their profile, or add custom skills.</li>
+                    <li>Edit their profile and associated info.</li>
+                    <li>Create a new project, with a title, description, timeline and applicant requirements.</li>
+                    <li>Add any number of positions to the project, with their own title and description.</li>
+                    <li>Choose the required skills for the project.</li>
+                    <li>Review applications for project positions.</li>
+                    <li>Filter applications by category (status, project name or project needs).</li>
+                    <li>Accept or reject applications.</li>
+                    <li>Edit or delete projects and positions.</li>
+                    <li>View a list of all projects with associated project needs.</li>
+                    <li>Filter the list by project needs.</li>
+                    <li>View a personalised feed of projects based on the user's skill set (logged in users only).</li>
+                    <li>Search for a project</li>
+                </ul>
+
+                <h3>The application will</h3>
+                <ul>
+                    <li>Require email verification for each new account.</li>
+                    <li>Automatically generate account verification emails.</li>
+                    <li>Automatically generate personalised emails when a user applies for a position.</li>
+                    <li>Automatically generate personalised emails when a user is either accepted or rejected for a
+                        position.
+                    </li>
+                    <li>Mark positions as 'applied for' or 'filled' on the listing pages.</li>
+                    <li>Not allow users to edit other user's projects or profile pages.</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
