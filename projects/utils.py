@@ -78,7 +78,7 @@ def send_application_received_mail(email_to, name, position, project):
         'of {} on the {} project. \nWe will be back in touch with you shortly to let you know '
         'if your application has been successful.\n\nBest regards,\n'
         'From the team at Team Builder'.format(name, position, project),
-        'admin@teambuilder.com',
+        'admin@teambuilder.chrisguy.co',
         [email_to],
         fail_silently=False,
     )
@@ -115,7 +115,7 @@ def send_application_result_mail(status, applicant, position_sought):
                    "Better luck next time!\n\nBest regards,\nFrom the team at " \
                    "Team Builder".format(app.user.profile.fullname, app.position, app.position.project)
 
-    from_adr = 'admin@teambuilder.com'
+    from_adr = 'admin@teambuilder.chrisguy.co'
     mail = send_mail(
         subject,
         body,
@@ -125,18 +125,3 @@ def send_application_result_mail(status, applicant, position_sought):
     )
     return mail
 
-
-# def get_skill_sets(form, pk):
-#     # form_true = the skills that need to set to true for the current project
-#     form_true = [int(skill) for skill in form.cleaned_data['project_skills']]
-#
-#     # Create 2 sets (form_true and db_skills):
-#     form_true = set(form_true)
-#     # db_skills = all the skills associated with the current project (set either true or false)
-#     db_skills = set([skill.skill_id for skill in models.ProjectSkill.objects.filter(project_id=pk)])
-#
-#     # Use the sets to define which skills should be set to True and which to False
-#     set_to_false = db_skills - form_true
-#     set_to_true = form_true - set_to_false
-#
-#     return set_to_false, set_to_true
