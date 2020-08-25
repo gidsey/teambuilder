@@ -24,7 +24,7 @@
 
         <div class="circle--page--header circle--fluid">
             <div class="circle--fluid--cell circle--fluid--primary">
-                <h2>Profile</h2>
+               <h1>{{ profile_user.profile.fullname }}</h1>
             </div>
             <div class="circle--fluid--cell circle--fluid--secondary">
                 {% if user == profile_user %}
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="grid-70">
-            <h1>{{ profile_user.profile.fullname }}</h1>
+            <h2>Profile</h2>
             <div class="circle--article--body">
                 <p>{{ profile_user.profile.bio|markdown_to_html }}</p>
             </div>
