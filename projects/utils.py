@@ -78,7 +78,7 @@ def send_application_received_mail(email_to, name, position, project):
         'of {} on the {} project. \nWe will be back in touch with you shortly to let you know '
         'if your application has been successful.\n\nBest regards,\n'
         'From the team at Team Builder'.format(name, position, project),
-        'admin@teambuilder.chrisguy.co',
+        'Team Builder <admin@teambuilder.chrisguy.co>',
         [email_to],
         fail_silently=False,
     )
@@ -115,7 +115,7 @@ def send_application_result_mail(status, applicant, position_sought):
                    "Better luck next time!\n\nBest regards,\nFrom the team at " \
                    "Team Builder".format(app.user.profile.fullname, app.position, app.position.project)
 
-    from_adr = 'admin@teambuilder.chrisguy.co'
+    from_adr = 'Team Builder <admin@teambuilder.chrisguy.co>'
     mail = send_mail(
         subject,
         body,
