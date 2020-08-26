@@ -84,5 +84,3 @@ Image editor based on a tutorial by [Vitor Freitas](https://simpleisbetterthanco
 Icons: people by Wilson Joseph from the [Noun Project](https://thenounproject.com)    
   
 _Project built by [Chris Guy](https://www.linkedin.com/in/gidsey/), July 2020_
-
-.
