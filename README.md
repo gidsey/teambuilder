@@ -1,7 +1,8 @@
 # Teambuilder
 
 ## Specification
-Django application that allows users to build teams to work on collaborative projects.
+Django application that allows users to build teams to work on collaborative projects. 
+View the site at [teambuilder.chrisguy.co](https://teambuilder.chrisguy.co).
 
 #### Users can:
 
@@ -44,36 +45,6 @@ Django application that allows users to build teams to work on collaborative pro
 
 ## Testing
 Unit tests are written which cover > 80% of the codebase.
-
-
-## Running Locally 
-Requires Python3. The DB included in the repo contains test data and user accounts. 
-Details can be found in the [wiki](https://github.com/gidsey/teambuilder/wiki/Test-User-Accounts).
-Note: verification and application emails are saved as log files in the 'sent_emails' directory.
-
-```bash
-git clone https://github.com/gidsey/teambuilder.git
-```
-
-```bash
-python3 -m venv venv
-```
-
-```bash
-source venv/bin/activate
-```
-
-```bash
-pip install -r requirements.txt
-```
-  
-```bash
-python manage.py migrate
-```
-
-```bash
-python manage.py runserver
-```
 
 
 ## Attributions
