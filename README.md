@@ -1,9 +1,14 @@
 # Teambuilder
 
-## Specification
-Django application that allows users to build teams to work on collaborative projects. 
+## Description
+Django application that allows users to build teams to work on collaborative projects.  
 View the site at [teambuilder.chrisguy.co](https://teambuilder.chrisguy.co).
 
+### Application screen shots:
+![application screenshot](static/images/product_screenshots.jpg)
+ 
+ 
+## Features
 #### Users can:
 
 * Create an account.
@@ -31,9 +36,7 @@ View the site at [teambuilder.chrisguy.co](https://teambuilder.chrisguy.co).
 * Mark positions as 'applied for' or 'filled' on the listing pages.
 * Not allow users to edit other user's projects or profile pages. 
 
-### Application screen shots:
-![application screenshot](static/images/product_screenshots.jpg)
- 
+
 
 ## Project brief
 
