@@ -115,3 +115,7 @@ textarea {
     color: white!important;
     font-weight: bolder;
 }
+
+.two-thirds {
+    width: 80%;
+}
